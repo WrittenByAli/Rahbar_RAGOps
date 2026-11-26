@@ -125,3 +125,12 @@ document passed all four checks, as designed. Re-run after Batch B: 0 embedded.
 ingested together, otherwise the 2023 version is later rejected as stale. Set `CORPUS_DIR=""` for
 the permanent lake. Members: check `corpus/sidecars/` by hand; ADRs 0009 and 0010 are "Proposed".
 Still needed for A: cluster evidence and proofs.
+
+- `feature/ali-data-management` pushed (`1a399d8`); CI passed all six jobs.
+- `feature/ali-golden-dataset`: AI-drafted `golden.jsonl` (26), 12 candidates, 20+20 pairs, 42 live
+  queries. All `synthetic`, `reviewed_by` null. A script confirms each evidence phrase is on the cited
+  visible page; that does not prove an answer is right. `B.G1` passes; **`B.G2` fails**: the PDF
+  needs 8 hand-written and 8 hand-reviewed questions. The user approved generating and using AI
+  questions; that is not authorship or review. Hostel, parking and visa are kept out of golden v1
+  because they are the uncovered live-query topics. Decide before Batch B runs how `fee-structure`
+  2026-27 ground truth is scored once 2027-28 supersedes it (g007, g008, c007).
