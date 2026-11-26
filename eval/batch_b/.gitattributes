@@ -1,0 +1,3 @@
+# Uniqueness checks hash raw bytes. Keep LF line endings on every machine, so a
+# Windows checkout (core.autocrlf=true) has the same bytes as a Linux one.
+* text eol=lf

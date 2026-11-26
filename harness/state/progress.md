@@ -100,3 +100,9 @@ raw citations valid went from 1 of 5 with the old evidence layout to 4 or 5 of 5
   independent agent review**.
 - Still needed for D: real cluster traces, a trace summary result, the Batch B rail test, D5.
 - Data management is unfinished in the working tree (tests exist, `pipeline/ingest.py` does not).
+
+- `feature/ali-batch-b`: `AB.1` files and manifest. Generator run twice with identical output; the
+  12 files derived from corpus A are git-ignored; the 6 self-written documents carry a fictional
+  marker. `AB.1` is **pending a member's review and signature**. Batch B has not been ingested
+  (`AB.2` open). Members: confirm that the generator's short search phrases and own-words rewrite of
+  the grading page are acceptable in a public repository.
