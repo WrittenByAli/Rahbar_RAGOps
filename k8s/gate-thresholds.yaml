@@ -1,0 +1,48 @@
+# Release gate thresholds, mounted into the eval Job as /config/gate.yaml.
+#
+# Values are set from the two S0 baseline runs (plan step S0, requirement C2.1).
+# S0 run 1: 20261126T191531Z-s0-baseline-run1.json (seed 42, git 11475a9)
+# S0 run 2: 20261126T191740Z-s0-baseline-run2.json (seed 42, git 11475a9, same corpus A)
+#
+# After these values are committed, they are NOT changed to rescue a candidate.
+# Any candidate that fails the gate needs a code or data fix, not a threshold change.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-gate-thresholds
+  namespace: rahbar-a3
+data:
+  gate.yaml: |
+    rules:
+      recall_at_5:            # largest allowed drop from the baseline
+        limit: 0.05
+        justification: >-
+          Both S0 baseline runs scored 0.7368 (perfect reproducibility with seed 42).
+          A 5% drop is 2.5x the assignment's example value and allows for model-call
+          ordering variance; dropping more than 5 percentage points indicates a retrieval
+          regression. Set before any candidate run (C2.1).
+      faithfulness:           # minimum
+        limit: 0.80
+        justification: >-
+          S0 run 1: 0.9167, run 2: 0.8571, spread 0.060. Minimum 0.80 is two spreads
+          below the lower run; below that the judge consistently finds hallucinated claims.
+          Set before any candidate run (C2.1).
+      latency_ms_p95:         # maximum, milliseconds (answered requests)
+        limit: 8000
+        justification: >-
+          S0 p95 answered: 3717 ms (run 1) and 3589 ms (run 2). 8000 ms is 2x the worst
+          observed, giving headroom for cold-start and model loading variance. This is a
+          CPU-only laptop; a GPU would be faster. Set before any candidate run (C2.1).
+      abstention_correctness: # largest allowed drop (0 means not below the baseline)
+        limit: 0
+        justification: >-
+          S0 run 1: 0.5714, run 2: 0.7143, spread 0.143. A limit of 0 means the candidate
+          must not score lower than the baseline on the same run. This policy prevents a
+          candidate from silently becoming more trigger-happy on should-answer questions.
+          Set before any candidate run (C2.1).
+      answerable_answer_rate: # minimum
+        limit: 0.55
+        justification: >-
+          S0 run 1: 0.6316, run 2: 0.7368, spread 0.105. Minimum 0.55 is the lower run
+          minus one spread; below that the pipeline is refusing to answer questions it
+          should answer. Set before any candidate run (C2.1).

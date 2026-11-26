@@ -1,0 +1,84 @@
+{
+  "labelled": 8,
+  "agreements": 5,
+  "agreement_rate": 0.625,
+  "judge_model": "qwen2.5:3b",
+  "judge_errors": 0,
+  "run_ids": [
+    "20261126T213346Z-s1-batchb-candidate"
+  ],
+  "comparisons": [
+    {
+      "trace_id": "2ac529b4007a4ddbaeaec350fa13dc83",
+      "question_id": "g012",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "supported",
+      "judge_verdict": "supported",
+      "agree": true
+    },
+    {
+      "trace_id": "396cfac54f27477782464cea84ae47ca",
+      "question_id": "g018",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "supported",
+      "judge_verdict": "supported",
+      "agree": true
+    },
+    {
+      "trace_id": "d916f930bf8f4e6eb9459d0fc696340f",
+      "question_id": "g006",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "supported",
+      "judge_verdict": "supported",
+      "agree": true
+    },
+    {
+      "trace_id": "457ca53e9ed146d18ef2a3683e548511",
+      "question_id": "g002",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "unsupported",
+      "judge_verdict": "supported",
+      "agree": false
+    },
+    {
+      "trace_id": "2ec45b7acffd49f288d7888118cfe093",
+      "question_id": "g010",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "unsupported",
+      "judge_verdict": "supported",
+      "agree": false
+    },
+    {
+      "trace_id": "69d19eb57fd84797a9dd30bc36efc6d6",
+      "question_id": "g003",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "supported",
+      "judge_verdict": "supported",
+      "agree": true
+    },
+    {
+      "trace_id": "ef8e959965944f738eee5fdb2a071ca0",
+      "question_id": "g004",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "supported",
+      "judge_verdict": "supported",
+      "agree": true
+    },
+    {
+      "trace_id": "0a135d2c3c72470f94514592d35e603c",
+      "question_id": "g013",
+      "run_id": "20261126T213346Z-s1-batchb-candidate",
+      "labeller": "ali",
+      "human_label": "unsupported",
+      "judge_verdict": "supported",
+      "agree": false
+    }
+  ]
+}

@@ -2,21 +2,17 @@
 
 from __future__ import annotations
 
-import json
 import logging
 
 import httpx
 from pydantic import ValidationError
 
 from ...config import Settings
+from ...prompting import Prompt, build_prompt
 from ...schemas import Answer, Passage
+from .base import Generation
 
 log = logging.getLogger("rahbar.ollama")
-
-SYSTEM_PROMPT = (
-    "You are a university policy assistant. Answer ONLY from the evidence below.\n"
-    "If the answer is not in the evidence, set answered_from_context to false.\n"
-)
 
 
 class OllamaProvider:
@@ -25,39 +21,16 @@ class OllamaProvider:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
-    def _build_prompt(self, question: str, passages: list[Passage]) -> str:
-        evidence_lines = []
-        for i, p in enumerate(passages, 1):
-            evidence_lines.append(f"[{i}] {p.source} § {p.section}: {p.text}")
-        evidence = "\n".join(evidence_lines)
-        # json.dumps, not str(): an f-strung Python dict renders single-quoted
-        # True/False/None, which is not valid JSON and confuses smaller models
-        # about the expected structure (observed: citations came back as plain
-        # strings instead of {source, section, page} objects). A concrete
-        # example of the nested shape fixes that ambiguity directly.
-        schema = json.dumps(Answer.model_json_schema(), indent=2)
-        example = json.dumps({
-            "reasoning": "one sentence citing which evidence item answers this",
-            "answer": "the answer in plain text",
-            "citations": [{"source": "example.pdf", "section": "1.1 Example", "page": 1}],
-            "answered_from_context": True,
-            "confidence": "high",
-        }, indent=2)
-        return (
-            f"Evidence:\n{evidence}\n\n"
-            f"Question: {question}\n\n"
-            f"Respond with valid JSON matching this schema:\n{schema}\n\n"
-            f"Example of the expected shape (citations is a list of objects, not strings):\n{example}"
-        )
-
     def generate(self, question: str, passages: list[Passage]) -> Answer:
-        prompt = self._build_prompt(question, passages)
+        prompt = build_prompt(question, passages, self.settings.prompt_version)
+        return self.generate_detailed(question, passages, prompt).answer
+
+    def generate_detailed(
+        self, question: str, passages: list[Passage], prompt: Prompt
+    ) -> Generation:
         payload = {
             "model": self.settings.llm_model,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
+            "messages": prompt.messages(),
             # "format": "json" omitted deliberately: Ollama's grammar-constrained JSON
             # decoding crashes (500, no error body) partway through generation (~380
             # tokens in) with this model on longer, real-evidence prompts - confirmed
@@ -65,10 +38,19 @@ class OllamaProvider:
             # The prompt's own JSON-schema instruction plus Pydantic validation + retry
             # below is the actual enforcement layer; see docs/FAILURE-ANALYSIS.md.
             "stream": False,
-            "options": {"temperature": self.settings.temperature},
         }
 
-        for attempt in range(2):
+        for attempt in (1, 2):
+            # The first try always uses the configured seed, so a run can be repeated. The
+            # retry uses the next one: the identical request would likely fail the same way.
+            seed = self.settings.llm_seed + attempt - 1
+            payload["options"] = {
+                "temperature": self.settings.temperature,
+                "seed": seed,
+                "num_ctx": self.settings.llm_num_ctx,
+            }
+            raw: str | None = None
+            tokens: int | None = None
             try:
                 resp = httpx.post(
                     f"{self.settings.ollama_url}/api/chat",
@@ -76,25 +58,41 @@ class OllamaProvider:
                     timeout=120.0,
                 )
                 resp.raise_for_status()
-                content = resp.json()["message"]["content"]
-                return Answer.model_validate_json(content)
+                body = resp.json()
+                tokens = body.get("prompt_eval_count")
+                self._check_context_window(tokens)
+                raw = body["message"]["content"]
+                return Generation(Answer.model_validate_json(raw or ""), raw, attempt, seed, tokens)
             except (ValidationError, KeyError) as exc:
-                log.warning("LLM output validation failed", extra={"attempt": attempt + 1, "error": str(exc)})
-                if attempt == 1:
-                    return Answer(
-                        reasoning="Validation failed after retry",
-                        answer="I could not produce a valid answer. Please rephrase your question.",
+                log.warning("LLM output validation failed", extra={"attempt": attempt, "error": str(exc)})
+            except httpx.HTTPError as exc:
+                log.error("LLM HTTP error", extra={"error": str(exc)})
+                return Generation(
+                    Answer(
+                        reasoning="HTTP error",
+                        answer="The language model is temporarily unavailable.",
                         citations=[],
                         answered_from_context=False,
                         confidence="low",
-                    )
-            except httpx.HTTPError as exc:
-                log.error("LLM HTTP error", extra={"error": str(exc)})
-                return Answer(
-                    reasoning=f"HTTP error: {exc}",
-                    answer="The language model is temporarily unavailable.",
-                    citations=[],
-                    answered_from_context=False,
-                    confidence="low",
+                    ),
+                    attempt=attempt, seed=seed, failure=type(exc).__name__,
                 )
-        return Answer(reasoning="fallback", answer="Unavailable.", citations=[], answered_from_context=False, confidence="low")
+        return Generation(
+            Answer(
+                reasoning="Validation failed after retry",
+                answer="I could not produce a valid answer. Please rephrase your question.",
+                citations=[],
+                answered_from_context=False,
+                confidence="low",
+            ),
+            raw, attempt, seed, tokens, failure="invalid_output",
+        )
+
+    def _check_context_window(self, tokens: int | None) -> None:
+        # Ollama does not report an error for a prompt that is too long. A count this close
+        # to the window means the model may not have seen all of what the trace lists.
+        if tokens is not None and tokens >= self.settings.llm_num_ctx:
+            log.warning(
+                "prompt filled the context window; part of it may have been cut",
+                extra={"prompt_eval_count": tokens, "num_ctx": self.settings.llm_num_ctx},
+            )

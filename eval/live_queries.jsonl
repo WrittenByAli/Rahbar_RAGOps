@@ -1,0 +1,42 @@
+{"id": "lq001", "query": "my attendance is at 76 percent in one course, can i still sit the final??", "expected": "in_domain", "topic": "attendance", "authored_by": "ai-draft"}
+{"id": "lq002", "query": "cgpa dropped to 1.9 this sem what happens now", "expected": "in_domain", "topic": "academic warning", "authored_by": "ai-draft"}
+{"id": "lq003", "query": "how many warnings before they kick u out", "expected": "in_domain", "topic": "academic warning", "authored_by": "ai-draft"}
+{"id": "lq004", "query": "how many points is a B+ worth", "expected": "in_domain", "topic": "grading", "authored_by": "ai-draft"}
+{"id": "lq005", "query": "whats the diff between sgpa and cgpa", "expected": "in_domain", "topic": "grading", "authored_by": "ai-draft"}
+{"id": "lq006", "query": "if i repeat a course and get a worse grade which one counts", "expected": "in_domain", "topic": "grading", "authored_by": "ai-draft"}
+{"id": "lq007", "query": "i got an I grade, how long do i have to clear it", "expected": "in_domain", "topic": "grading", "authored_by": "ai-draft"}
+{"id": "lq008", "query": "per credit hour fee for bs cs?", "expected": "in_domain", "topic": "fees", "authored_by": "ai-draft"}
+{"id": "lq009", "query": "if i leave in the first week do i get all my money back", "expected": "in_domain", "topic": "fees", "authored_by": "ai-draft"}
+{"id": "lq010", "query": "how can i pay fee online, can i use easypaisa", "expected": "in_domain", "topic": "fees", "authored_by": "ai-draft"}
+{"id": "lq011", "query": "admission fee again for MS if i did BS from here??", "expected": "in_domain", "topic": "fees", "authored_by": "ai-draft"}
+{"id": "lq012", "query": "can i drop a course in 1st semester", "expected": "in_domain", "topic": "registration", "authored_by": "ai-draft"}
+{"id": "lq013", "query": "max courses i can take in a normal semester", "expected": "in_domain", "topic": "registration", "authored_by": "ai-draft"}
+{"id": "lq014", "query": "i want to take a semester break, what do i have to do", "expected": "in_domain", "topic": "registration", "authored_by": "ai-draft"}
+{"id": "lq015", "query": "can i study a new course in summers or only repeat ones", "expected": "in_domain", "topic": "summer semester", "authored_by": "ai-draft"}
+{"id": "lq016", "query": "requirements for registering fyp 1", "expected": "in_domain", "topic": "final year project", "authored_by": "ai-draft"}
+{"id": "lq017", "query": "missed my mid because i was in hospital, can i get a retake", "expected": "in_domain", "topic": "exams", "authored_by": "ai-draft"}
+{"id": "lq018", "query": "is a cousins wedding a valid reason for retake exam", "expected": "in_domain", "topic": "exams", "authored_by": "ai-draft"}
+{"id": "lq019", "query": "paper checking seems wrong, how to apply for rechecking", "expected": "in_domain", "topic": "exams", "authored_by": "ai-draft"}
+{"id": "lq020", "query": "what happens if i get caught cheating in a quiz", "expected": "in_domain", "topic": "academic honesty", "authored_by": "ai-draft"}
+{"id": "lq021", "query": "am i allowed to use chatgpt for my assignments", "expected": "in_domain", "topic": "generative ai", "authored_by": "ai-draft"}
+{"id": "lq022", "query": "do i have to cite ai tools if i only used them to search ideas", "expected": "in_domain", "topic": "generative ai", "authored_by": "ai-draft"}
+{"id": "lq023", "query": "what gpa do i need for deans list", "expected": "in_domain", "topic": "awards", "authored_by": "ai-draft"}
+{"id": "lq024", "query": "can i shift from karachi campus to lahore campus", "expected": "in_domain", "topic": "campus transfer", "authored_by": "ai-draft"}
+{"id": "lq025", "query": "any scholarship for students who cant afford fee", "expected": "in_domain", "topic": "scholarships", "authored_by": "ai-draft"}
+{"id": "lq026", "query": "how many books can an ms student issue at once", "expected": "in_domain", "topic": "library", "authored_by": "ai-draft"}
+{"id": "lq027", "query": "does islamabad campus have a bus for students", "expected": "in_domain", "topic": "transport", "authored_by": "ai-draft"}
+{"id": "lq028", "query": "how many students graduated from lahore campus in 2023-24", "expected": "in_domain", "topic": "annual report", "authored_by": "ai-draft"}
+{"id": "lq029", "query": "max years allowed to complete bs degree", "expected": "in_domain", "topic": "degree duration", "authored_by": "ai-draft"}
+{"id": "lq030", "query": "how to apply for hostel room as a new student", "expected": "out_of_coverage", "topic": "hostel", "authored_by": "ai-draft"}
+{"id": "lq031", "query": "hostel monthly charges for boys??", "expected": "out_of_coverage", "topic": "hostel", "authored_by": "ai-draft"}
+{"id": "lq032", "query": "what time does the hostel gate close at night", "expected": "out_of_coverage", "topic": "hostel", "authored_by": "ai-draft"}
+{"id": "lq033", "query": "can i change my roommate in the hostel", "expected": "out_of_coverage", "topic": "hostel", "authored_by": "ai-draft"}
+{"id": "lq034", "query": "is mess food included in hostel dues", "expected": "out_of_coverage", "topic": "hostel", "authored_by": "ai-draft"}
+{"id": "lq035", "query": "where can i park my bike inside campus", "expected": "out_of_coverage", "topic": "parking", "authored_by": "ai-draft"}
+{"id": "lq036", "query": "do i need a sticker for my car to enter", "expected": "out_of_coverage", "topic": "parking", "authored_by": "ai-draft"}
+{"id": "lq037", "query": "parking fee per semester for students?", "expected": "out_of_coverage", "topic": "parking", "authored_by": "ai-draft"}
+{"id": "lq038", "query": "my car got a fine for wrong parking how do i appeal", "expected": "out_of_coverage", "topic": "parking", "authored_by": "ai-draft"}
+{"id": "lq039", "query": "im from abroad, how do i get a study visa for pakistan", "expected": "out_of_coverage", "topic": "student visa", "authored_by": "ai-draft"}
+{"id": "lq040", "query": "visa extension process for international students, mine expires next month", "expected": "out_of_coverage", "topic": "student visa", "authored_by": "ai-draft"}
+{"id": "lq041", "query": "will the university send me a letter for the visa embassy", "expected": "out_of_coverage", "topic": "student visa", "authored_by": "ai-draft"}
+{"id": "lq042", "query": "can i work part time on a student visa", "expected": "out_of_coverage", "topic": "student visa", "authored_by": "ai-draft"}

@@ -1,0 +1,34 @@
+# Three claims, all ReadWriteOnce. Several pods can share one claim only because minikube has a
+# single node. Chroma's own claim comes from the StatefulSet's volumeClaimTemplates.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rahbar-datalake
+  namespace: rahbar-a3
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rahbar-traces
+  namespace: rahbar-a3
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rahbar-evaldata
+  namespace: rahbar-a3
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi

@@ -17,6 +17,10 @@ _PASSAGES = [
         section="1.1 About the stub",
         page=1,
         score=0.91,
+        doc_id="stub-handbook",
+        doc_version="stub",
+        page_start=1,
+        page_end=1,
     ),
     Passage(
         chunk_id="stub-002",
@@ -26,6 +30,10 @@ _PASSAGES = [
         section="1.2 What the stub returns",
         page=1,
         score=0.84,
+        doc_id="stub-handbook",
+        doc_version="stub",
+        page_start=1,
+        page_end=1,
     ),
     Passage(
         chunk_id="stub-003",
@@ -35,6 +43,10 @@ _PASSAGES = [
         section="1.3 Switching to Chroma",
         page=2,
         score=0.77,
+        doc_id="stub-handbook",
+        doc_version="stub",
+        page_start=2,
+        page_end=2,
     ),
 ]
 
@@ -44,3 +56,6 @@ class StubRetriever:
 
     def retrieve(self, question: str, k: int) -> list[Passage]:
         return [p.model_copy() for p in _PASSAGES[:k]]
+
+    def index_generation(self) -> str:
+        return "0"                  # there is no index to change

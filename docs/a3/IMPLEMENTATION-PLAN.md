@@ -71,7 +71,7 @@ Rules:
 | Task | Detail |
 |---|---|
 | T0.1 | Confirm `DECISIONS.md` D-02, D-03 and D-13 (D-01 is decided). Send the instructor question in D-03 now |
-| T0.2 | In the new repo: add the partner as a collaborator; create `dev`; work on `a3/<topic>` branches into it. Point the README badge and clone URL at the new repo. `cd.yml` runs on every push to `main` and its publish job needs Docker Hub secrets that a new repo does not have: add them, or limit the workflow to manual runs (record which) |
+| T0.2 | In the new repo: add the partner as a collaborator. **One branch per phase** (`phase-<n>-<topic>`), each stacked on the previous one, so a branch's own commits are exactly that phase; merge into `main` in order by pull request after the other member reviews. README badge and clone URL point at the new repo. `cd.yml` is **manual only** (the repo has no Docker Hub secrets) |
 | T0.3 | [HUMAN] Each member sets their git identity and fills `harness/members.toml` (`G.4`) |
 | T0.4 | Fix the 10 E402 lint errors in `eval/offline_eval.py` so `P.1` passes. Add `harness/tests` to CI |
 | T0.5 | Python 3.12 venv; install both `requirements-dev.txt` and `pyyaml`; run the harness tests |
@@ -150,6 +150,7 @@ re-fetched by the CronJob).
 | Task | Detail | Requirement |
 |---|---|---|
 | T3.1 | `trace.py`: schema 1, written in `finally`; keeps dropped candidates, full prompt and hash, per-stage timings, model digests, collection generation; stdout and per-pod file | `D1` |
+| T3.0 | Providers report the raw output, the attempt and the seed used. Set `LLM_NUM_CTX` explicitly and record the model's prompt token count: Ollama loaded `qwen2.5:3b` with a 4096-token context and nothing set it, so long real-corpus prompts could be cut silently, and `context[]` would then list text the model never saw | `D1`, `B.E1` |
 | T3.2 | Cache entries store `source_trace_id` | `D1`, `D2` |
 | T3.3 | `eval/trace_tool.py <trace_id>`: print context and prompt, recompute and check the hash, follow cache hits, exit non-zero if not found | `D2` |
 | T3.4 | Five metric families in `routes/metrics.py` (names fixed by the check) | `D3` |

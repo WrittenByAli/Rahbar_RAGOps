@@ -19,7 +19,7 @@ def main() -> int:
         run = subprocess.run(
             [sys.executable, str(root / "harness" / "verify.py"), "--fast", "--summary"],
             capture_output=True, text=True, encoding="utf-8", errors="replace",
-            cwd=root, timeout=60)
+            cwd=root, timeout=60, check=False)
         print(run.stdout.strip() or run.stderr.strip()[:500])
         sys.path.insert(0, str(root / "harness"))
         from loop import read_state

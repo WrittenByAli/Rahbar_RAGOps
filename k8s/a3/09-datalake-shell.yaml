@@ -1,0 +1,60 @@
+# A tool pod for kubectl cp in and out. It has no network access (default-deny applies).
+# The data lake is mounted read-only except inbox/, so a slip cannot damage the lake.
+# kubectl cp cannot read a finished Job's pod, so results are copied from here.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datalake-shell
+  namespace: rahbar-a3
+  labels:
+    app: datalake-shell
+spec:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    fsGroup: 10001
+  initContainers:
+    # Create the inbox with the right owner before the read-only mount hides the lake root.
+    - name: make-inbox
+      image: rahbar-indexer:a3
+      imagePullPolicy: IfNotPresent
+      command: ["sh", "-c", "mkdir -p /data/lake/inbox/A /data/lake/inbox/B"]
+      resources:
+        requests: {cpu: "10m", memory: "16Mi"}
+        limits: {cpu: "100m", memory: "64Mi"}
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: {drop: [ALL]}
+      volumeMounts:
+        - {name: lake, mountPath: /data/lake}
+  containers:
+    - name: shell
+      image: rahbar-indexer:a3
+      imagePullPolicy: IfNotPresent
+      command: ["sleep", "infinity"]
+      # PROVISIONAL.
+      resources:
+        requests: {cpu: "10m", memory: "16Mi"}
+        limits: {cpu: "200m", memory: "128Mi"}
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: {drop: [ALL]}
+      volumeMounts:
+        - {name: lake, mountPath: /data/lake, readOnly: true}
+        - {name: lake, mountPath: /data/lake/inbox, subPath: inbox}
+        - {name: traces, mountPath: /data/traces, readOnly: true}
+        - {name: evaldata, mountPath: /data/evaldata, readOnly: true}
+        - {name: tmp, mountPath: /tmp}
+  volumes:
+    - name: lake
+      persistentVolumeClaim: {claimName: rahbar-datalake}
+    - name: traces
+      persistentVolumeClaim: {claimName: rahbar-traces}
+    - name: evaldata
+      persistentVolumeClaim: {claimName: rahbar-evaldata}
+    - name: tmp
+      emptyDir: {}

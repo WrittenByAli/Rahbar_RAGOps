@@ -1,0 +1,147 @@
+# Default deny, then one small allow per flow. Needs a CNI that enforces policies (Calico).
+# NetworkPolicy cannot tell a read from a write: it limits who can REACH Chroma, not what they do.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: rahbar-a3
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+# Every pod may resolve names.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: rahbar-a3
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {port: 53, protocol: UDP}
+        - {port: 53, protocol: TCP}
+---
+# Chroma accepts connections only from the API, the candidate and the ingestion pods.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-chroma
+  namespace: rahbar-a3
+spec:
+  podSelector:
+    matchLabels:
+      app: chroma
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchExpressions:
+              - {key: app, operator: In, values: [api, api-candidate, indexer]}
+      ports:
+        - {port: 8000}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-redis
+  namespace: rahbar-a3
+spec:
+  podSelector:
+    matchLabels:
+      app: redis
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchExpressions:
+              - {key: app, operator: In, values: [api, api-candidate]}
+      ports:
+        - {port: 6379}
+---
+# API and candidate: out to Chroma, Redis and host Ollama; in from the eval Job.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api
+  namespace: rahbar-a3
+spec:
+  podSelector:
+    matchExpressions:
+      - {key: app, operator: In, values: [api, api-candidate]}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: rahbar-eval
+      ports:
+        - {port: 8000}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: chroma
+      ports:
+        - {port: 8000}
+    - to:
+        - podSelector:
+            matchLabels:
+              app: redis
+      ports:
+        - {port: 6379}
+    - to:
+        - ipBlock: {cidr: 0.0.0.0/0}
+      ports:
+        - {port: 11434}
+---
+# Ingestion: Chroma and Ollama only. The corpus arrives with kubectl cp, so no internet.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-indexer
+  namespace: rahbar-a3
+spec:
+  podSelector:
+    matchLabels:
+      app: indexer
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: chroma
+      ports:
+        - {port: 8000}
+    - to:
+        - ipBlock: {cidr: 0.0.0.0/0}
+      ports:
+        - {port: 11434}
+---
+# Eval Job: the API under test and Ollama (the judge and the module level use it).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-eval
+  namespace: rahbar-a3
+spec:
+  podSelector:
+    matchLabels:
+      app: rahbar-eval
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchExpressions:
+              - {key: app, operator: In, values: [api, api-candidate]}
+      ports:
+        - {port: 8000}
+    - to:
+        - ipBlock: {cidr: 0.0.0.0/0}
+      ports:
+        - {port: 11434}

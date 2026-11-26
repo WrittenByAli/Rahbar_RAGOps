@@ -1,0 +1,18 @@
+# captured: 2026-11-26T21:46:34Z
+# command: python -c "
+import requests, json
+r = requests.post('http://localhost:18990/api/retrieve',
+    json={'question': 'What is the minimum CGPA to graduate?', 'release': 'v1'},
+    timeout=30)
+data = r.json()
+print('corpus_state_id:', data.get('collection', {}).get('corpus_state_id', 'none'))
+print('index_generation:', data.get('collection', {}).get('version', 'none'))
+print('chunks returned:', len(data.get('chunks', [])))
+print('status:', r.status_code)
+"
+# exit: 0
+# git: 7bcdf9b
+corpus_state_id: none
+index_generation: 8a52048ca0214c27aa2a9385be2e7af1
+chunks returned: 0
+status: 200

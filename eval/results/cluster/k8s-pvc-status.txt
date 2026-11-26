@@ -1,0 +1,9 @@
+# captured: 2026-11-26T21:50:03Z
+# command: kubectl get pvc -n rahbar-a3
+# exit: 0
+# git: e9f6889
+NAME                   STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+chroma-data-chroma-0   Bound    pvc-0d324586-8422-4949-bbde-ea562528aed2   5Gi        RWO            standard       <unset>                 167m
+rahbar-datalake        Bound    pvc-0f5a7a2e-f561-43fd-9c43-7797a31bb16a   2Gi        RWO            standard       <unset>                 167m
+rahbar-evaldata        Bound    pvc-47be86f7-bc8f-480f-ad5c-285e699d4e97   1Gi        RWO            standard       <unset>                 167m
+rahbar-traces          Bound    pvc-4243901b-2497-413e-b612-69b3d0ff0c70   1Gi        RWO            standard       <unset>                 167m

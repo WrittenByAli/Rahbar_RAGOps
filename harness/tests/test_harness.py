@@ -18,10 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "harness"))
 sys.path.insert(0, str(ROOT / ".claude" / "hooks"))
 
-import guard  # noqa: E402
-import loop  # noqa: E402
-import verify  # noqa: E402
-from checks import FAIL, PASS, PENDING, Context, run_check  # noqa: E402
+import guard
+import loop
+import verify
+from checks import FAIL, PASS, PENDING, Context, run_check
 
 
 def write(root: Path, rel: str, content: object) -> Path:
@@ -269,7 +269,7 @@ def test_guard_process_emits_the_documented_json(tmp_path: Path) -> None:
     run = subprocess.run(
         [sys.executable, str(ROOT / ".claude" / "hooks" / "guard.py")],
         input=json.dumps(payload).encode(), capture_output=True,
-        env={**os.environ, "CLAUDE_PROJECT_DIR": str(tmp_path)})
+        env={**os.environ, "CLAUDE_PROJECT_DIR": str(tmp_path)}, check=False)
     out = json.loads(run.stdout)["hookSpecificOutput"]
     assert run.returncode == 0
     assert out["hookEventName"] == "PreToolUse"

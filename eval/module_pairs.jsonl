@@ -1,0 +1,40 @@
+{"id": "p01", "type": "paraphrase", "a": "What is the minimum CGPA needed to avoid academic warning?", "b": "How low can my cumulative GPA go before the university warns me?"}
+{"id": "p02", "type": "paraphrase", "a": "When is the semester fee due?", "b": "By what date do I have to pay tuition for the term?"}
+{"id": "p03", "type": "paraphrase", "a": "A student must repeat every failed course.", "b": "Any course you did not pass has to be taken again."}
+{"id": "p04", "type": "paraphrase", "a": "Mobile phones are not allowed in the examination hall.", "b": "You may not bring your cell phone into an exam room."}
+{"id": "p05", "type": "paraphrase", "a": "Library books must be returned by the due date or a fine is charged.", "b": "If you bring a borrowed book back late, you will have to pay a penalty."}
+{"id": "p06", "type": "paraphrase", "a": "How do I withdraw from a course?", "b": "What is the procedure for dropping out of one subject after the add and drop period?"}
+{"id": "p07", "type": "paraphrase", "a": "Plagiarism leads to disciplinary action.", "b": "Students who pass off someone else's work as their own can be punished."}
+{"id": "p08", "type": "paraphrase", "a": "The summer semester lasts eight weeks.", "b": "Summer term runs for two months of classes."}
+{"id": "p09", "type": "paraphrase", "a": "Only the latest grade counts when a course is repeated.", "b": "If you retake a subject, your CGPA uses the newest result."}
+{"id": "p10", "type": "paraphrase", "a": "Can I transfer to another campus?", "b": "Is it possible to move my studies to a different city's campus of the university?"}
+{"id": "p11", "type": "paraphrase", "a": "The security deposit is refunded when you finish your degree.", "b": "You get your deposit money back after graduating."}
+{"id": "p12", "type": "paraphrase", "a": "Students with a very high semester GPA are placed on an honours list.", "b": "Top performers in a term are recognised on a merit roll."}
+{"id": "p13", "type": "paraphrase", "a": "Attendance below the required level bars a student from the final exam.", "b": "If you miss too many classes, you cannot sit the final paper."}
+{"id": "p14", "type": "paraphrase", "a": "How can I apply for financial assistance?", "b": "What do I need to do to get help paying my fees?"}
+{"id": "p15", "type": "paraphrase", "a": "An incomplete grade must be converted before the next semester ends.", "b": "An I grade has to be cleared by the close of the following term."}
+{"id": "p16", "type": "paraphrase", "a": "Use of generative AI in labs is prohibited unless the instructor permits it.", "b": "Unless your lab teacher says so, you cannot use AI tools during lab work."}
+{"id": "p17", "type": "paraphrase", "a": "What is the maximum time to complete a bachelor's degree?", "b": "How many years can I take at most to finish my BS?"}
+{"id": "p18", "type": "paraphrase", "a": "The university provides bus service on a self-finance basis.", "b": "Students pay for the transport that the university arranges."}
+{"id": "p19", "type": "paraphrase", "a": "A final year project runs over two semesters.", "b": "The senior project is spread across two terms."}
+{"id": "p20", "type": "paraphrase", "a": "How do I get my exam paper rechecked?", "b": "What is the process for asking for my final to be re-evaluated?"}
+{"id": "uh01", "type": "unrelated", "a": "What is the minimum CGPA to avoid academic warning?", "b": "What is the minimum CGPA to win a gold medal?"}
+{"id": "uh02", "type": "unrelated", "a": "When is the semester fee due?", "b": "When is the semester fee refunded after a student leaves?"}
+{"id": "uh03", "type": "unrelated", "a": "How do I withdraw from a course?", "b": "How do I withdraw my admission from the university?"}
+{"id": "uh04", "type": "unrelated", "a": "The attendance requirement for undergraduate courses.", "b": "The procedure for reporting an error in the attendance record."}
+{"id": "uh05", "type": "unrelated", "a": "The library charges a fine for late return of books.", "b": "The library subscribes to online research databases."}
+{"id": "uh06", "type": "unrelated", "a": "Students may repeat a course to improve their grade.", "b": "Students may replace a failed course with a different course."}
+{"id": "uh07", "type": "unrelated", "a": "The admission fee is paid once at the time of admission.", "b": "Admission is granted on merit through an entry test."}
+{"id": "uh08", "type": "unrelated", "a": "Who is eligible to register for the summer semester?", "b": "Who is eligible to register for the final year project?"}
+{"id": "uh09", "type": "unrelated", "a": "A student may freeze a semester.", "b": "A student's registration may be suspended."}
+{"id": "uh10", "type": "unrelated", "a": "Scholarships cover the tuition fee of top students.", "b": "Study loans must be repaid after graduation."}
+{"id": "u01", "type": "unrelated", "a": "How is the cumulative grade point average calculated?", "b": "The campus cafeteria serves lunch on working days."}
+{"id": "u02", "type": "unrelated", "a": "Mobile phones are not allowed in the examination hall.", "b": "The annual report counts journal articles for each campus."}
+{"id": "u03", "type": "unrelated", "a": "How do I get my exam paper rechecked?", "b": "Which student societies are active in Lahore?"}
+{"id": "u04", "type": "unrelated", "a": "The security deposit is refundable.", "b": "The research office helps faculty apply for grants."}
+{"id": "u05", "type": "unrelated", "a": "What are the rules for the summer semester?", "b": "How do I connect to the library catalogue from my phone?"}
+{"id": "u06", "type": "unrelated", "a": "A repeated course is shown on the transcript.", "b": "The medical centre has a doctor available during the day."}
+{"id": "u07", "type": "unrelated", "a": "Generative AI use must follow the instructor's rules.", "b": "Buses run between the campus and parts of the city."}
+{"id": "u08", "type": "unrelated", "a": "Fees are paid at a bank using a challan.", "b": "The convocation was attended by a chief guest and graduating students."}
+{"id": "u09", "type": "unrelated", "a": "Students must wear their identity cards in the library.", "b": "The grade F carries zero grade points."}
+{"id": "u10", "type": "unrelated", "a": "Transfer between campuses is allowed on limited grounds.", "b": "The quality assurance cell reviews academic programmes."}

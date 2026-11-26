@@ -19,7 +19,7 @@ def problems(path: Path, root: Path) -> str:
     if suffix == ".py":
         run = subprocess.run(
             [sys.executable, "-m", "ruff", "check", "--no-cache", "--output-format=concise",
-             str(path)], capture_output=True, text=True, cwd=root, timeout=60)
+             str(path)], capture_output=True, text=True, cwd=root, timeout=60, check=False)
         if run.returncode == 1:        # 1 = findings; other codes mean ruff is unavailable
             return run.stdout.strip()
         return ""

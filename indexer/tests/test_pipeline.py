@@ -72,4 +72,5 @@ def test_chunk_carries_metadata() -> None:
         assert c.doc_version == "2026"
         assert c.superseded is False
         meta = c.metadata()
-        assert set(meta.keys()) == {"source", "section", "page", "doc_version", "superseded"}
+        assert set(meta.keys()) == {"doc_id", "source", "section", "page", "page_start",
+                                    "page_end", "doc_version", "superseded"}

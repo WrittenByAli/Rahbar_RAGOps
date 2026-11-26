@@ -1,0 +1,4 @@
+# Runtime dependencies of the evaluation suite, the gate and the coverage check.
+# Everything else is the standard library.
+httpx==0.28.1
+PyYAML==6.0.2

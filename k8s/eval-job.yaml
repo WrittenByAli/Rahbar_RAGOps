@@ -1,0 +1,86 @@
+# The Part B suite and the release gate as one Job.
+#   docker build -f eval/Dockerfile --build-arg GIT_SHA=<commit> -t rahbar-eval:a3 eval
+#   minikube image load rahbar-eval:a3
+#   kubectl -n rahbar-a3 delete job rahbar-eval --ignore-not-found
+#   kubectl apply -f k8s/eval-job.yaml
+# A finished Job cannot be re-run by applying it again: delete it first.
+#
+# What it does:
+#   1. run_suite.py against EVAL_TARGET; results go to /results/suite on the rahbar-evaldata PVC.
+#      Exit 2 (nothing written) fails the Job.
+#   2. If a baseline exists at /results/baseline/baseline.json, gate.py compares the new result
+#      with it using /config/gate.yaml (the rahbar-gate-thresholds ConfigMap) and writes its
+#      decision to /results/gate. The Job exits with the gate's code: 0 pass, 1 gate failed,
+#      2 invalid comparison or error. Without a baseline (the first runs) the gate is not run and
+#      the log says so.
+# backoffLimit 0 and restartPolicy Never: a failed gate is never retried until it passes.
+# To test a candidate, set EVAL_TARGET to http://api-candidate and EVAL_LABEL to a candidate name.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rahbar-eval
+  namespace: rahbar-a3
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: rahbar-eval
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: eval
+          image: rahbar-eval:a3
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              python run_suite.py --result-path-file /tmp/result-path
+              rc=$?
+              if [ "$rc" -ne 0 ]; then echo "eval: suite failed, exit $rc"; fi
+              if [ "$rc" -eq 0 ]; then
+                if [ -f "$GATE_BASELINE" ]; then
+                  python gate.py --candidate "$(cat /tmp/result-path)"
+                  rc=$?
+                  echo "eval: gate exit $rc (0 pass, 1 gate failed, 2 invalid or error)"
+                else
+                  echo "eval: no baseline at $GATE_BASELINE, gate not run"
+                fi
+              fi
+              echo "{\"msg\": \"peak memory\", \"peak_memory_mib\": $(( $(cat /sys/fs/cgroup/memory.peak 2>/dev/null || echo 0) / 1048576 ))}"
+              exit $rc
+          env:
+            - {name: EVAL_TARGET, value: "http://api"}
+            - {name: EVAL_LABEL, value: "run1"}
+            - {name: EVAL_SEED, value: "42"}
+            - {name: EVAL_OUT, value: /results/suite}
+            - {name: OLLAMA_URL, value: "http://host.minikube.internal:11434"}
+            - {name: GATE_BASELINE, value: /results/baseline/baseline.json}
+            - {name: GATE_THRESHOLDS, value: /config/gate.yaml}
+            - {name: GATE_OUT, value: /results/gate}
+          # PROVISIONAL until measured.
+          resources:
+            requests: {cpu: "100m", memory: "128Mi"}
+            limits: {cpu: "1000m", memory: "512Mi"}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: results, mountPath: /results}
+            - {name: thresholds, mountPath: /config, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: results
+          persistentVolumeClaim: {claimName: rahbar-evaldata}
+        - name: thresholds
+          configMap: {name: rahbar-gate-thresholds}
+        - name: tmp
+          emptyDir: {}

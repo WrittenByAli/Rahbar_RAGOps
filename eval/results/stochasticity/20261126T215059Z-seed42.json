@@ -1,0 +1,170 @@
+{
+  "run_ids": [
+    "20261126T191531Z-s0-baseline-run1",
+    "20261126T191740Z-s0-baseline-run2"
+  ],
+  "seed": 42,
+  "golden_sha256": "13638c6dee8bf102501bf4aba7b6fafc38fad421b25b1c3e1e15289b6777f41b",
+  "corpus_state_id": "2c5e752d37c4cfadb9061a15b83698da5844989904745683e928bbbe0f3ae913",
+  "release_id": "v1",
+  "git_shas": [
+    "11475a9a119c0fbbde5297bf2f573ad863cc1458",
+    "11475a9a119c0fbbde5297bf2f573ad863cc1458"
+  ],
+  "metrics": {
+    "component.recall_at_3": {
+      "run1": 0.7368421052631579,
+      "run2": 0.7368421052631579,
+      "diff": 0.0
+    },
+    "component.recall_at_5": {
+      "run1": 0.7368421052631579,
+      "run2": 0.7368421052631579,
+      "diff": 0.0
+    },
+    "component.mrr": {
+      "run1": 0.6557017543859649,
+      "run2": 0.6557017543859649,
+      "diff": 0.0
+    },
+    "component.ndcg_at_5": {
+      "run1": 0.6716768161654166,
+      "run2": 0.6716768161654166,
+      "diff": 0.0
+    },
+    "end_to_end.faithfulness": {
+      "run1": 0.9166666666666666,
+      "run2": 0.8571428571428571,
+      "diff": -0.059523809523809534
+    },
+    "end_to_end.abstention_correctness": {
+      "run1": 0.5714285714285714,
+      "run2": 0.7142857142857143,
+      "diff": 0.1428571428571429
+    },
+    "end_to_end.citation_validity": {
+      "run1": 0.5882352941176471,
+      "run2": 0.6216216216216216,
+      "diff": 0.03338632750397452
+    },
+    "end_to_end.latency_ms_p50": {
+      "run1": 2158.614,
+      "run2": 2055.308,
+      "diff": -103.30600000000004
+    },
+    "end_to_end.latency_ms_p95": {
+      "run1": 3068.018,
+      "run2": 3588.941,
+      "diff": 520.9229999999998
+    },
+    "module.paraphrase_mean": {
+      "run1": 0.7514379295893163,
+      "run2": 0.7514379295893163,
+      "diff": 0.0
+    },
+    "module.unrelated_mean": {
+      "run1": 0.5448950085919089,
+      "run2": 0.5448950085919089,
+      "diff": 0.0
+    },
+    "module.gap": {
+      "run1": 0.20654292099740745,
+      "run2": 0.20654292099740745,
+      "diff": 0.0
+    },
+    "module.embed_ms_per_chunk": {
+      "run1": 45.294239999202546,
+      "run2": 39.70552500031772,
+      "diff": -5.588714998884825
+    },
+    "module.determinism_max_abs_diff": {
+      "run1": 0.0,
+      "run2": 0.0,
+      "diff": 0.0
+    },
+    "end_to_end.answerable_answer_rate": {
+      "run1": 0.631578947368421,
+      "run2": 0.7368421052631579,
+      "diff": 0.10526315789473684
+    }
+  },
+  "diff_definition": "run2 minus run1; null if either value is null",
+  "changed_questions": [
+    {
+      "id": "g011",
+      "differs": [
+        "answer_sha256",
+        "answered_from_context",
+        "judge_verdict"
+      ],
+      "trace_ids": [
+        "05558000cefd49988485decad4b6f2ed",
+        "dd951052b533401bb0b6d179eb17380a"
+      ]
+    },
+    {
+      "id": "g014",
+      "differs": [
+        "answer_sha256"
+      ],
+      "trace_ids": [
+        "75d33a6c47724e66bbcf4c4f07f8406d",
+        "e170710a4f0540538b7687fd200db67d"
+      ]
+    },
+    {
+      "id": "g017",
+      "differs": [
+        "answer_sha256"
+      ],
+      "trace_ids": [
+        "d2083e1777fd405ba4ee13e7e32cc4b1",
+        "774db2d7ec324ee3806fa298f4a94495"
+      ]
+    },
+    {
+      "id": "g018",
+      "differs": [
+        "answer_sha256",
+        "answered_from_context",
+        "judge_verdict"
+      ],
+      "trace_ids": [
+        "2705705d9940439c91d56cb997980123",
+        "9a50bb7315fe464f83e3ec616239935e"
+      ]
+    },
+    {
+      "id": "g022",
+      "differs": [
+        "answer_sha256",
+        "answered_from_context"
+      ],
+      "trace_ids": [
+        "7289239e23c340f8ab77c939c5d29502",
+        "2fb330f98ec04d53be016d948ca5d81b"
+      ]
+    },
+    {
+      "id": "g024",
+      "differs": [
+        "answer_sha256"
+      ],
+      "trace_ids": [
+        "9888e7af04c3405181289e6d1a382df9",
+        "596b9136fb93420e82fbebfc56733270"
+      ]
+    },
+    {
+      "id": "g026",
+      "differs": [
+        "answer_sha256"
+      ],
+      "trace_ids": [
+        "46ef3f3a872f4c0a990560f4736c747b",
+        "9afcefd7e5f54c0e868e14259e8cb92d"
+      ]
+    }
+  ],
+  "explanation": "Component metrics (recall, MRR, nDCG) are deterministic because retrieval uses cosine similarity with a fixed seed for the random warm-up. End-to-end metrics vary because the LLM qwen2.5:3b is non-deterministic: even with temperature=0 and seed=42, Ollama's sampling path has platform-specific floating-point non-determinism. The observed variance (faithfulness 0.9167 vs 0.8571, abstention_correctness 0.5714 vs 0.7143) is within the spread used to set gate thresholds (C2.1). Retrieval metrics are fully reproducible; end-to-end metrics have ~10% variance across identical runs."
+}

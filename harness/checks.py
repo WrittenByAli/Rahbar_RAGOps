@@ -137,7 +137,8 @@ def lookup(data: Any, dotted: str) -> list[Any]:
 def _git(ctx: Context, *args: str) -> tuple[int, str]:
     try:
         run = subprocess.run(["git", "-C", str(ctx.root), *args], capture_output=True,
-                             text=True, encoding="utf-8", errors="replace", timeout=60)
+                             text=True, encoding="utf-8", errors="replace", timeout=60,
+                             check=False)
     except (OSError, subprocess.TimeoutExpired) as exc:
         return 1, str(exc)
     return run.returncode, run.stdout
@@ -158,7 +159,7 @@ def _run(ctx: Context, argv: list[str], cwd: str) -> Result:
     argv = [sys.executable if a == "{python}" else a for a in argv]
     try:
         run = subprocess.run(argv, cwd=ctx.root / cwd, capture_output=True, text=True,
-                             encoding="utf-8", errors="replace", timeout=600)
+                             encoding="utf-8", errors="replace", timeout=600, check=False)
     except (OSError, subprocess.TimeoutExpired) as exc:
         return fail(f"could not run: {exc}")
     if run.returncode == 0:
@@ -177,7 +178,7 @@ def check_tests(ctx: Context, spec: dict) -> Result:
     rel = spec["file"]
     source = _path(ctx, rel).read_text(encoding="utf-8")
     missing = [n for n in spec["names"]
-               if not re.search(rf"^\s*(async\s+)?def\s+{re.escape(n)}\s*\(", source, re.M)]
+               if not re.search(rf"^\s*(async\s+)?def\s+{re.escape(n)}\s*\(", source, re.MULTILINE)]
     need(not missing, f"{rel} lacks required tests: {', '.join(missing)}")
     if ctx.fast:
         return Result(SKIP, "tests present; not run in --fast mode")
@@ -189,7 +190,7 @@ def check_tests(ctx: Context, spec: dict) -> Result:
 
 def check_contains(ctx: Context, spec: dict) -> Result:
     text = _path(ctx, spec["path"]).read_text(encoding="utf-8")
-    missing = [p for p in spec["patterns"] if not re.search(p, text, re.I | re.M)]
+    missing = [p for p in spec["patterns"] if not re.search(p, text, re.IGNORECASE | re.MULTILINE)]
     need(not missing, f"{spec['path']} lacks: {', '.join(missing)}")
     lines = len([ln for ln in text.splitlines() if ln.strip()])
     need(lines >= spec.get("min_lines", 0),
@@ -211,7 +212,7 @@ def check_forbid(ctx: Context, spec: dict) -> Result:
 
 def check_readme_parts(ctx: Context, spec: dict) -> Result:
     text = _path(ctx, spec["path"]).read_text(encoding="utf-8")
-    sections = re.split(r"^(?=##\s)", text, flags=re.M)
+    sections = re.split(r"^(?=##\s)", text, flags=re.MULTILINE)
     missing = []
     for part in spec["parts"]:
         if not any(re.match(rf"##\s+Part\s+{part}\b", s) and "```" in s for s in sections):
@@ -500,7 +501,7 @@ def check_capture(ctx: Context, spec: dict) -> Result:
     for tag in ("# captured:", "# command:", "# exit:", "# git:"):
         need(any(line.startswith(tag) for line in head), f"{rel}: not written by harness/capture.py")
     body = "\n".join(ln for ln in text.splitlines() if not ln.startswith("# "))
-    missing = [p for p in spec.get("patterns", []) if not re.search(p, body, re.I)]
+    missing = [p for p in spec.get("patterns", []) if not re.search(p, body, re.IGNORECASE)]
     need(not missing, f"{rel}: output lacks {', '.join(missing)}")
     return ok(rel)
 

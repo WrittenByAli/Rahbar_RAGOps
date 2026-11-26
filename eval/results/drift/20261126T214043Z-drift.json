@@ -1,0 +1,1328 @@
+{
+  "before_run_id": "20261126T191531Z-s0-baseline-run1",
+  "after_run_id": "20261126T213346Z-s1-batchb-candidate",
+  "golden_sha256": "13638c6dee8bf102501bf4aba7b6fafc38fad421b25b1c3e1e15289b6777f41b",
+  "same_release": true,
+  "same_corpus_state": false,
+  "before_corpus_state_id": "2c5e752d37c4cfadb9061a15b83698da5844989904745683e928bbbe0f3ae913",
+  "before_release_id": "v1",
+  "before_git_sha": "11475a9a119c0fbbde5297bf2f573ad863cc1458",
+  "after_corpus_state_id": "228ff460df307cd3e44088fd0af8a572d8ac15d94149e29b619a8af68bad3ecb",
+  "after_release_id": "v1",
+  "after_git_sha": "b5a793a7fc51f73f23626e632689ef38b8e41d24",
+  "metric_deltas": {
+    "module.paraphrase_mean": {
+      "before": 0.7514379295893163,
+      "after": 0.7514379295893163,
+      "delta": 0.0
+    },
+    "module.unrelated_mean": {
+      "before": 0.5448950085919089,
+      "after": 0.5448950085919089,
+      "delta": 0.0
+    },
+    "module.gap": {
+      "before": 0.20654292099740745,
+      "after": 0.20654292099740745,
+      "delta": 0.0
+    },
+    "module.embed_ms_per_chunk": {
+      "before": 45.294239999202546,
+      "after": 38.58891499985475,
+      "delta": -6.705324999347795
+    },
+    "module.determinism_max_abs_diff": {
+      "before": 0.0,
+      "after": 0.0,
+      "delta": 0.0
+    },
+    "component.recall_at_3": {
+      "before": 0.7368421052631579,
+      "after": 0.8421052631578947,
+      "delta": 0.10526315789473684
+    },
+    "component.recall_at_5": {
+      "before": 0.7368421052631579,
+      "after": 0.8421052631578947,
+      "delta": 0.10526315789473684
+    },
+    "component.mrr": {
+      "before": 0.6557017543859649,
+      "after": 0.7609649122807017,
+      "delta": 0.10526315789473684
+    },
+    "component.ndcg_at_5": {
+      "before": 0.6716768161654166,
+      "after": 0.7769399740601535,
+      "delta": 0.10526315789473684
+    },
+    "end_to_end.faithfulness": {
+      "before": 0.9166666666666666,
+      "after": 1.0,
+      "delta": 0.08333333333333337
+    },
+    "end_to_end.abstention_correctness": {
+      "before": 0.5714285714285714,
+      "after": 0.7142857142857143,
+      "delta": 0.1428571428571429
+    },
+    "end_to_end.citation_validity": {
+      "before": 0.5882352941176471,
+      "after": 0.5675675675675675,
+      "delta": -0.020667726550079535
+    },
+    "end_to_end.latency_ms_p50": {
+      "before": 2158.614,
+      "after": 2325.435,
+      "delta": 166.8209999999999
+    },
+    "end_to_end.latency_ms_p95": {
+      "before": 3068.018,
+      "after": 3841.877,
+      "delta": 773.8589999999999
+    },
+    "end_to_end.answerable_answer_rate": {
+      "before": 0.631578947368421,
+      "after": 0.8421052631578947,
+      "delta": 0.21052631578947367
+    },
+    "end_to_end.latency_ms_p50_answered": {
+      "before": 2163.033,
+      "after": 2325.435,
+      "delta": 162.40200000000004
+    },
+    "end_to_end.latency_ms_p95_answered": {
+      "before": 3717.351,
+      "after": 9140.284,
+      "delta": 5422.932999999999
+    },
+    "component.corpus_a_subset.recall_at_3": {
+      "before": 0.9333333333333333,
+      "after": 0.8,
+      "delta": -0.1333333333333333
+    },
+    "component.corpus_a_subset.recall_at_5": {
+      "before": 0.9333333333333333,
+      "after": 0.8,
+      "delta": -0.1333333333333333
+    },
+    "component.corpus_a_subset.mrr": {
+      "before": 0.8305555555555555,
+      "after": 0.6972222222222222,
+      "delta": -0.1333333333333333
+    },
+    "component.corpus_a_subset.ndcg_at_5": {
+      "before": 0.8507906338095277,
+      "after": 0.7174573004761944,
+      "delta": -0.1333333333333333
+    }
+  },
+  "per_question_changes": [
+    {
+      "id": "g001",
+      "question": "Under the June 2026 Undergraduate Academic Rules handbook, how much absence can the HoD condone, and what grade does a student get for failing the attendance requirement?",
+      "category": "answerable",
+      "before_trace_id": "97650ad754f742ab95839e05c54e6dd2",
+      "after_trace_id": "199383e75da64e159e5e7e05fbcd0672",
+      "changes": {
+        "answer": {
+          "before": "The HoD can condone a maximum of 20% absence for genuine reasons such as illness.",
+          "after": "The student will be assigned F/A grade in the course."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g002",
+      "question": "I am two courses behind my study plan. According to the June 2026 undergraduate rules handbook, who can still let me start my final year project, and what does my warning count need to be?",
+      "category": "answerable",
+      "before_trace_id": "46cb1f448fdf4f2fab06acd6873ffa71",
+      "after_trace_id": "457ca53e9ed146d18ef2a3683e548511",
+      "changes": {
+        "top5": {
+          "before": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              20,
+              "a2a586c6c18a3ba9"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              19,
+              "e49489dacc51f025"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              2,
+              "99e646c3fd245bb3"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "10c2886ae29a3c49"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              29,
+              "82847e7682e61e46"
+            ]
+          ],
+          "after": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              20,
+              "a2a586c6c18a3ba9"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              19,
+              "e49489dacc51f025"
+            ],
+            [
+              "plain-language-grades-guide",
+              "2026-09",
+              1,
+              "721d8dec101e5aae"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              2,
+              "99e646c3fd245bb3"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "10c2886ae29a3c49"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "A student can still be allowed to start their final year project if their warning count is zero.",
+          "after": "According to the handbook, a student under academic warning can still be allowed to start their final year project if the Head of Department approves the registration, provided they have not exceeded the maximum allowed courses (five courses) and their warning count is not three or more."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g003",
+      "question": "Under the June 2026 undergraduate rules handbook, what grade must a course have before it can be replaced, and can a core course be replaced?",
+      "category": "answerable",
+      "before_trace_id": "dd2604857abb49edb4cff94d351dcbbd",
+      "after_trace_id": "69d19eb57fd84797a9dd30bc36efc6d6",
+      "changes": {
+        "top5": {
+          "before": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "2cf6e60e86a10b21"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              25,
+              "cdf9e83b4eadfff2"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "38db96c012c2ed15"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              1,
+              "85bf12d81cc3633d"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              1,
+              "cad1a07e4854a9eb"
+            ]
+          ],
+          "after": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "2cf6e60e86a10b21"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              25,
+              "cdf9e83b4eadfff2"
+            ],
+            [
+              "plain-language-grades-guide",
+              "2026-09",
+              1,
+              "31f2e8472323df44"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "38db96c012c2ed15"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              1,
+              "85bf12d81cc3633d"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The grade in the course to be replaced must be 'F'.",
+          "after": "A course must have a grade of 'F' to be replaced, and core courses cannot be replaced by any other course."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g004",
+      "question": "By when must an application to recheck a final exam reach the Examination Office, and when is the rechecking fee refunded?",
+      "category": "answerable",
+      "before_trace_id": "b99e5816703f4565b22cd21875844344",
+      "after_trace_id": "ef8e959965944f738eee5fdb2a071ca0",
+      "changes": {
+        "top5": {
+          "before": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "ca00e43b2d9c3cde"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              26,
+              "a6209885099b06fb"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "630c044d644134e1"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "c65cb6f81c5bb9aa"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "b38c59b4d9e7cafa"
+            ]
+          ],
+          "after": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "ca00e43b2d9c3cde"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              26,
+              "a6209885099b06fb"
+            ],
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "d9d7b17a7278c3be"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "c65cb6f81c5bb9aa"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "b38c59b4d9e7cafa"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "An application to recheck a final exam must be submitted on the prescribed form together with the rechecking fee. The rechecking fee will be refunded if there is an increase in marks.",
+          "after": "Application to recheck a final exam must be submitted on prescribed form together with rechecking fee. Rechecking fee will be refunded if there is an increase in marks."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g006",
+      "question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "category": "answerable",
+      "before_trace_id": "19df5c633232415eb574de2dfacf17b1",
+      "after_trace_id": "d916f930bf8f4e6eb9459d0fc696340f",
+      "changes": {
+        "answer": {
+          "before": "The Agha Hasan Abedi Gold Medal is awarded for First position, and the minimum CGPA required for an undergraduate to qualify for a position medal at graduation is 3.00.",
+          "after": "Agha Hasan Abedi Gold Medal and a minimum CGPA of 3.00."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g007",
+      "question": "How much is the refundable security deposit that new students pay, and when is it refunded?",
+      "category": "answerable",
+      "before_trace_id": "bfd89865d4df440182cc20e32c2692c2",
+      "after_trace_id": "ed87e9c73ccd46beb469982af8862568",
+      "changes": {
+        "recall_at_3": {
+          "before": 1.0,
+          "after": 0.0
+        },
+        "recall_at_5": {
+          "before": 1.0,
+          "after": 0.0
+        },
+        "reciprocal_rank": {
+          "before": 1.0,
+          "after": 0.0
+        },
+        "ndcg_at_5": {
+          "before": 1.0,
+          "after": 0.0
+        },
+        "top5": {
+          "before": [
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "5232692e0d5784f3"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "630c044d644134e1"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              27,
+              "b38c59b4d9e7cafa"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "12892b77147f2bb8"
+            ]
+          ],
+          "after": [
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "237c7f7f90dbf236"
+            ],
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "d9d7b17a7278c3be"
+            ],
+            [
+              "student-locker-allocation",
+              "2026-07",
+              1,
+              "51fd837a7a0deea5"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ],
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "9ca270b2d034c6a0"
+            ]
+          ]
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g008",
+      "question": "If I pull out on the 18th day after classes began, what share of my tuition do I get back?",
+      "category": "answerable",
+      "before_trace_id": "bf648937e41e4654b86bf04a0fa4d3a8",
+      "after_trace_id": "d02c3550226c4b5aac565a9746b76336",
+      "changes": {
+        "answered_from_context": {
+          "before": false,
+          "after": true
+        },
+        "judge_verdict": {
+          "before": null,
+          "after": "supported"
+        },
+        "recall_at_3": {
+          "before": 1.0,
+          "after": 0.0
+        },
+        "recall_at_5": {
+          "before": 1.0,
+          "after": 0.0
+        },
+        "reciprocal_rank": {
+          "before": 0.5,
+          "after": 0.0
+        },
+        "ndcg_at_5": {
+          "before": 0.6309297535714575,
+          "after": 0.0
+        },
+        "top5": {
+          "before": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "f570fb4067328118"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "630c044d644134e1"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "108a156d5e6ae610"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              28,
+              "e1e038fba962ddb8"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              3,
+              "76e77c8ac5fe86a7"
+            ]
+          ],
+          "after": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "f570fb4067328118"
+            ],
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "d9d7b17a7278c3be"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "108a156d5e6ae610"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              28,
+              "e1e038fba962ddb8"
+            ],
+            [
+              "student-cloud-credits",
+              "2026-10",
+              1,
+              "da8c5e21324b8c3f"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The information provided does not specify the percentage of tuition refund for withdrawing on the 18th day after classes began. The tuition refund policy is covered in section 4.25 of the academic rules handbook, but it does not provide the specific information requested.",
+          "after": "The tuition fee is refunded at 60% if the student withdraws on or before the 20th day of commencement of classes. Since the 18th day falls within this period, the student would get a 60% refund of the tuition fee."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g009",
+      "question": "On the university's grading web page, how is a grade of B described for BS/BBA students compared with MS/MBA students?",
+      "category": "answerable",
+      "before_trace_id": "2a404f92a5c8414e9ee74d632b995813",
+      "after_trace_id": "5b1903f9654d4238b1ee9f0928beb2bf",
+      "changes": {
+        "judge_verdict": {
+          "before": "unsupported",
+          "after": "supported"
+        },
+        "reciprocal_rank": {
+          "before": 1.0,
+          "after": 0.5
+        },
+        "ndcg_at_5": {
+          "before": 1.0,
+          "after": 0.6309297535714575
+        },
+        "top5": {
+          "before": [
+            [
+              "grading",
+              "2026",
+              1,
+              "7f2d8ebad6240ff2"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              11,
+              "1e9b9e53bff4099a"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "2896cdfb0670a9c7"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              1,
+              "85bf12d81cc3633d"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "94f4941775e7ac89"
+            ]
+          ],
+          "after": [
+            [
+              "plain-language-grades-guide",
+              "2026-09",
+              1,
+              "ad6dcb0c66ff9217"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "7f2d8ebad6240ff2"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              11,
+              "1e9b9e53bff4099a"
+            ],
+            [
+              "grading",
+              "2026",
+              1,
+              "2896cdfb0670a9c7"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              1,
+              "85bf12d81cc3633d"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "For BS/BBA students, the grade B is described as 3.00, while for MS/MBA students, the grade B is also described as 3.00. However, the evidence does not specify the exact description for MS/MBA students for grade B.",
+          "after": "For BS/BBA students, B is described as 'good', while for MS/MBA students, B is described as 'average'."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g010",
+      "question": "How many library items can an undergraduate student borrow, for how long, and what is the daily fine?",
+      "category": "answerable",
+      "before_trace_id": "437c68c67ea5447e85539cdc68986d13",
+      "after_trace_id": "2ec45b7acffd49f288d7888118cfe093",
+      "changes": {
+        "top5": {
+          "before": [
+            [
+              "student-handbook",
+              "2026-06",
+              32,
+              "7d30c310f0485805"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              31,
+              "20bb9e12a4ebaa46"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              34,
+              "6b128d6730afdd2f"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              9,
+              "446bb49bfef168c4"
+            ]
+          ],
+          "after": [
+            [
+              "student-handbook",
+              "2026-06",
+              32,
+              "7d30c310f0485805"
+            ],
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "9ca270b2d034c6a0"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              31,
+              "20bb9e12a4ebaa46"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              34,
+              "6b128d6730afdd2f"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "An undergraduate student can borrow 4 library items for a duration of 2 weeks. The daily fine for overdue items is PKR 10/item/day.",
+          "after": "An undergraduate student can borrow 4 items for a maximum of 5,000 PKR per month. The daily fine for overdue items is 10 PKR per item."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g014",
+      "question": "How did the university-wide total in the first graduation summary table (BBA and BS degrees) change between the 2019-20 and 2023-24 annual reports?",
+      "category": "answerable",
+      "before_trace_id": "75d33a6c47724e66bbcf4c4f07f8406d",
+      "after_trace_id": "db23585c08ea435ea9419a3e02cf1b64",
+      "changes": {
+        "top5": {
+          "before": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              31,
+              "233cd64260c88fe4"
+            ],
+            [
+              "annual-report-2023-24",
+              "2023-24",
+              1,
+              "8607a3dc57f0412c"
+            ],
+            [
+              "annual-report-2019-20",
+              "2019-20",
+              1,
+              "abaede69bcc6d535"
+            ],
+            [
+              "annual-report-2023-24",
+              "2023-24",
+              70,
+              "e1308cc48a92c311"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              10,
+              "b74b1aa0efacb3a1"
+            ]
+          ],
+          "after": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              31,
+              "233cd64260c88fe4"
+            ],
+            [
+              "annual-report-2023-24",
+              "2023-24",
+              1,
+              "8607a3dc57f0412c"
+            ],
+            [
+              "annual-report-2019-20",
+              "2019-20",
+              1,
+              "abaede69bcc6d535"
+            ],
+            [
+              "annual-report-2023-24",
+              "2023-24",
+              70,
+              "e1308cc48a92c311"
+            ],
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "566cb78aa83aa57e"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The evidence provided does not contain the specific information needed to determine the change in the university-wide total in the first graduation summary table (BBA and BS degrees) between the 2019-20 and 2023-24 annual reports.",
+          "after": "The answer cannot be determined from the provided evidence."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g016",
+      "question": "I lost my student ID card for the first time. What will a replacement cost me?",
+      "category": "answerable",
+      "before_trace_id": "e8f2d24c629c43238b610bf11cea0182",
+      "after_trace_id": "ba7cd9ca43a24fd097682cbf50973d72",
+      "changes": {
+        "recall_at_3": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "recall_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "reciprocal_rank": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "ndcg_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "top5": {
+          "before": [
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "630c044d644134e1"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              23,
+              "108a156d5e6ae610"
+            ],
+            [
+              "prospectus-academic-rules",
+              "2026",
+              3,
+              "8f9fc150fa1ddc35"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              32,
+              "7d30c310f0485805"
+            ]
+          ],
+          "after": [
+            [
+              "student-id-card-replacement",
+              "2026-09",
+              1,
+              "5e7f03c8940728a9"
+            ],
+            [
+              "student-id-card-replacement",
+              "2026-09",
+              1,
+              "646f6bb293081989"
+            ],
+            [
+              "student-id-card-replacement",
+              "2026-09",
+              1,
+              "2601a6579b21512d"
+            ],
+            [
+              "student-id-card-replacement",
+              "2026-09",
+              1,
+              "34ba8ef2b6f7bbf0"
+            ],
+            [
+              "student-locker-allocation",
+              "2026-07",
+              1,
+              "6577ea21b4d5f57b"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The provided evidence does not contain information regarding the cost of a replacement student ID card.",
+          "after": "The procedure for reporting a lost or stolen card does not specify replacement costs."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g017",
+      "question": "What is the tuition fee per credit hour for BS students in the academic year 2027-28?",
+      "category": "answerable",
+      "before_trace_id": "d2083e1777fd405ba4ee13e7e32cc4b1",
+      "after_trace_id": "e02aa56aaa0048acbc5b670c1ce9f31a",
+      "changes": {
+        "answered_from_context": {
+          "before": false,
+          "after": true
+        },
+        "judge_verdict": {
+          "before": null,
+          "after": "supported"
+        },
+        "recall_at_3": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "recall_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "reciprocal_rank": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "ndcg_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "top5": {
+          "before": [
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "12892b77147f2bb8"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              10,
+              "c30b014f240f40eb"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "f945f0027141bf49"
+            ],
+            [
+              "fee-structure",
+              "2026-27",
+              1,
+              "630c044d644134e1"
+            ]
+          ],
+          "after": [
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "566cb78aa83aa57e"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              10,
+              "c30b014f240f40eb"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              18,
+              "0494b1ceb5b91c48"
+            ],
+            [
+              "student-cloud-credits",
+              "2026-10",
+              1,
+              "86ddb1e37e4a7bd4"
+            ],
+            [
+              "fee-structure",
+              "2027-28",
+              1,
+              "1fa11f06b6379dae"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The provided evidence does not contain the specific tuition fee per credit hour for BS students in the academic year 2027-28.",
+          "after": "Tuition Fee per credit hour for BS students in the academic year 2027-28 is Rs. 13,200."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g018",
+      "question": "I'm holding on to a portable oscilloscope from the makerspace. How long am I allowed to keep it, and what does each late day cost?",
+      "category": "answerable",
+      "before_trace_id": "2705705d9940439c91d56cb997980123",
+      "after_trace_id": "396cfac54f27477782464cea84ae47ca",
+      "changes": {
+        "answered_from_context": {
+          "before": false,
+          "after": true
+        },
+        "judge_verdict": {
+          "before": null,
+          "after": "supported"
+        },
+        "recall_at_3": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "recall_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "reciprocal_rank": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "ndcg_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "top5": {
+          "before": [
+            [
+              "student-handbook",
+              "2026-06",
+              32,
+              "7d30c310f0485805"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              26,
+              "803946ecf9c4c066"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              31,
+              "20bb9e12a4ebaa46"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              26,
+              "44d26a1ece93553c"
+            ],
+            [
+              "student-handbook",
+              "2026-06",
+              37,
+              "9950b38b68037b8d"
+            ]
+          ],
+          "after": [
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "82c64595026e57bb"
+            ],
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "9ca270b2d034c6a0"
+            ],
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "7fab81003c3c0bca"
+            ],
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "967a50201fde9f12"
+            ],
+            [
+              "makerspace-equipment-loan-rules",
+              "2026-09",
+              1,
+              "ab30997da1c995dd"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The policy does not provide specific information about the loan duration or late fees for portable oscilloscopes from the makerspace.",
+          "after": "A student is allowed to keep a portable oscilloscope for 3 calendar days. Each late day costs Rs 400."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g019",
+      "question": "How many weeks and working hours must an industrial internship last, and can two short placements be combined to get there?",
+      "category": "answerable",
+      "before_trace_id": "03302e8ed64b4a93af2b5c1f4d6c2747",
+      "after_trace_id": "746851618a704ec09acde62cd158a42d",
+      "changes": {
+        "answered_from_context": {
+          "before": false,
+          "after": true
+        },
+        "judge_verdict": {
+          "before": null,
+          "after": "supported"
+        },
+        "recall_at_3": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "recall_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "reciprocal_rank": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "ndcg_at_5": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "top5": {
+          "before": [
+            [
+              "ug-academic-rules",
+              "2026-06",
+              9,
+              "7e66abad8c1c420d"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              21,
+              "468185b364e458a0"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              28,
+              "98bbed875c3f42d3"
+            ],
+            [
+              "ug-academic-rules",
+              "2026-06",
+              7,
+              "67e2a51e5b2130cc"
+            ],
+            [
+              "annual-report-2023-24",
+              "2023-24",
+              47,
+              "cab393ec23290f42"
+            ]
+          ],
+          "after": [
+            [
+              "industrial-internship-guidelines",
+              "2026-08",
+              1,
+              "7a8236dab440d50d"
+            ],
+            [
+              "industrial-internship-guidelines",
+              "2026-08",
+              1,
+              "01e2af6cd4626bc8"
+            ],
+            [
+              "industrial-internship-guidelines",
+              "2026-08",
+              1,
+              "879bb1332230b88e"
+            ],
+            [
+              "industrial-internship-guidelines",
+              "2026-08",
+              1,
+              "47e7816839512788"
+            ],
+            [
+              "industrial-internship-guidelines",
+              "2026-08",
+              1,
+              "4e0533d9e563003e"
+            ]
+          ]
+        },
+        "answer": {
+          "before": "The evidence does not provide information about the duration and combination of industrial internships.",
+          "after": "An industrial internship must last at least six consecutive weeks and at least 180 working hours. Two shorter placements cannot be combined to meet these requirements."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g020",
+      "question": "My original degree got lost. What fee do I pay for a duplicate degree?",
+      "category": "unanswerable",
+      "before_trace_id": "1b3e060d08d247dfb347a088f5ffbc44",
+      "after_trace_id": "d3a1c75fd401478bbaba1950e4361c34",
+      "changes": {
+        "answer": {
+          "before": "FYP credits are not transferable and cannot be used for a duplicate degree.",
+          "after": "For a duplicate degree, the replacement charge is Rs 800 for the first loss or theft of the card. If it is a second or later loss during the same degree programme, the charge is Rs 1,200. If the card is damaged and handed in with the request, the charge is Rs 400. There is no charge for a printing error made by the university."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g022",
+      "question": "What fee do graduates have to pay to attend the convocation?",
+      "category": "unanswerable",
+      "before_trace_id": "7289239e23c340f8ab77c939c5d29502",
+      "after_trace_id": "5b6777a6f13748eb9c224c5c604204dc",
+      "changes": {
+        "answered_from_context": {
+          "before": true,
+          "after": false
+        },
+        "answer": {
+          "before": "The graduates do not have to pay the admission fee to attend the convocation.",
+          "after": "The answer is not provided in the evidence. The evidence does not contain information about the fee for convocation ceremonies."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    },
+    {
+      "id": "g024",
+      "question": "What is the semester fee for the university bus service in Karachi?",
+      "category": "unanswerable",
+      "before_trace_id": "9888e7af04c3405181289e6d1a382df9",
+      "after_trace_id": "cbf4115f5d3e42c1bd652eb5be4f8a3e",
+      "changes": {
+        "answer": {
+          "before": "The semester fee for the university bus service in Karachi is not provided in the given evidence.",
+          "after": "The information about the semester fee for the university bus service in Karachi is not available in the provided evidence."
+        }
+      },
+      "cause_type": null,
+      "cause": null
+    }
+  ],
+  "causes_missing": [
+    "g001",
+    "g002",
+    "g003",
+    "g004",
+    "g006",
+    "g007",
+    "g008",
+    "g009",
+    "g010",
+    "g014",
+    "g016",
+    "g017",
+    "g018",
+    "g019",
+    "g020",
+    "g022",
+    "g024"
+  ]
+}

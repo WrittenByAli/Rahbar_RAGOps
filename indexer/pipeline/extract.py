@@ -4,8 +4,15 @@ from __future__ import annotations
 
 from html.parser import HTMLParser
 from pathlib import Path
+from typing import Any
 
+from .metadata import front_matter
 from .models import Document, Page
+
+# Bump when a change here can alter the extracted text. It is part of the extraction
+# cache key and of the re-embedding fingerprint, and text that the data lake extracted
+# with an older version is extracted again. "1" also read text outside the visible page.
+EXTRACTOR_VERSION = "3"
 
 _SKIP_TAGS = {"script", "style", "noscript", "template", "svg", "head"}
 _BLOCK_TAGS = {
@@ -75,11 +82,12 @@ def extract(path: str, doc_version: str, superseded: bool) -> Document:
 
     if suffix == ".pdf":
         pages = _extract_pdf(p, source)
-    elif suffix == ".html":
-        raw = p.read_text(encoding="utf-8", errors="replace")
-        pages = [Page(source=source, page=1, text=_html_to_text(raw), ocr=False)]
     else:
-        text = p.read_text(encoding="utf-8", errors="replace")
+        text = p.read_text(encoding="utf-8-sig", errors="replace")
+        if suffix in (".html", ".htm"):
+            text = _html_to_text(text)
+        elif suffix == ".md":
+            text = front_matter(text)[1]      # metadata, not text of the document
         pages = [Page(source=source, page=1, text=text, ocr=False)]
 
     return Document(source=source, doc_version=doc_version, superseded=superseded, pages=pages)
@@ -91,20 +99,39 @@ def _extract_pdf(p: Path, source: str) -> list[Page]:
     pages: list[Page] = []
     with pdfplumber.open(str(p)) as pdf:
         for i, pdf_page in enumerate(pdf.pages, start=1):
-            text = pdf_page.extract_text() or ""
+            # Only what is on the visible page. The FAST-NUCES handbooks are spreads: each
+            # page shows one half, but pdfplumber also returns the other half, and merges
+            # the two line by line.
+            text = pdf_page.crop(_visible_box(pdf_page)).extract_text() or ""
             if text.strip():
                 pages.append(Page(source=source, page=i, text=text, ocr=False))
-            else:
-                ocr_text = _ocr_page(str(p), i)
-                pages.append(Page(source=source, page=i, text=ocr_text, ocr=True))
+                continue
+            try:
+                ocr_text, error = _ocr_page(str(p), i), ""
+            except Exception as exc:  # noqa: BLE001 - verification judges the missing text
+                ocr_text, error = "", f"{type(exc).__name__}: {exc}"
+            pages.append(Page(source=source, page=i, text=ocr_text, ocr=True,
+                              ocr_error=error))
     return pages
+
+
+def _visible_box(page: Any) -> tuple[float, float, float, float]:
+    """The part of a page a reader sees: the CropBox, as far as it lies on the page
+    (MediaBox). pdfplumber's page.bbox is the MediaBox alone."""
+    left, top, right, bottom = page.bbox
+    crop_left, crop_top, crop_right, crop_bottom = page.cropbox
+    box = (max(left, crop_left), max(top, crop_top),
+           min(right, crop_right), min(bottom, crop_bottom))
+    # A CropBox that misses the page altogether is a broken file; a viewer ignores it.
+    return box if box[0] < box[2] and box[1] < box[3] else page.bbox
 
 
 def _ocr_page(pdf_path: str, page_number: int) -> str:
     from pdf2image import convert_from_path
     from pytesseract import image_to_string
 
-    images = convert_from_path(pdf_path, first_page=page_number, last_page=page_number)
+    images = convert_from_path(pdf_path, first_page=page_number, last_page=page_number,
+                               use_cropbox=True)      # OCR the visible page, as above
     if not images:
         return ""
     return image_to_string(images[0]) or ""

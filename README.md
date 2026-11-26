@@ -1,6 +1,6 @@
 # RAHBAR — Grounded RAG on Kubernetes
 
-![CI](https://github.com/WrittenByAli/Rahbar/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/WrittenByAli/Rahbar_RAGOps/actions/workflows/ci.yml/badge.svg)
 
 RAHBAR is a Retrieval-Augmented Generation (RAG) system that answers questions about FAST-NUCES university policies. It ingests a curated document corpus (PDFs, HTML, Markdown), extracts and chunks the text with structure-aware splitting, embeds the chunks using a local embedding model (Ollama), stores them in a Chroma vector database, and serves a FastAPI endpoint that retrieves relevant passages and generates grounded answers via an LLM. The entire system runs on Kubernetes (minikube) with proper separation of concerns: an indexer Job writes the index, the API reads it, and a chat UI provides the user interface.
 
@@ -33,8 +33,8 @@ graph TB
 
 ```bash
 # 1. Clone and enter the repo
-git clone https://github.com/WrittenByAli/Rahbar.git
-cd Rahbar
+git clone https://github.com/WrittenByAli/Rahbar_RAGOps.git
+cd Rahbar_RAGOps
 
 # 2. Start minikube
 minikube start --driver=docker
@@ -168,3 +168,95 @@ rahbar-starter/
 ![RAHBAR Chat UI](docs/evidence/ui-screenshot.png)
 
 *The chat UI is served by nginx on port 8080 and communicates with the API via the Ingress at `/api/ask`.*
+
+---
+
+## Assignment 03 — RAGOps Parts
+
+## Part A — Data Management
+
+```bash
+# Ingest corpus into the data lake (Kubernetes job, namespace rahbar-a3)
+kubectl apply -f k8s/a3/jobs/ingest-manual.yaml
+kubectl wait --for=condition=complete job/ingest-manual -n rahbar-a3 --timeout=300s
+kubectl logs job/ingest-manual -n rahbar-a3
+```
+
+## Part B — Offline Testing
+
+```bash
+# Run the three-level eval suite (component + module + end-to-end)
+python eval/run_suite.py \
+  --target http://localhost:18990 \
+  --label s0-baseline-run1 \
+  --seed 42 \
+  --judge-model qwen2.5:3b \
+  --golden eval/golden.jsonl \
+  --pairs eval/module_pairs.jsonl \
+  --out eval/results
+
+# Stochasticity check (run twice, compare)
+python eval/stochasticity.py \
+  --runs eval/results/20261126T191531Z-s0-baseline-run1.json \
+        eval/results/20261126T191740Z-s0-baseline-run2.json
+```
+
+## Part C — Change and Release Gate
+
+```bash
+# Run the release gate: compare baseline vs candidate
+python eval/gate.py \
+  --baseline eval/results/20261126T191531Z-s0-baseline-run1.json \
+  --candidate eval/results/20261126T213346Z-s1-batchb-candidate.json
+# Exit 0 = pass, 1 = fail, 2 = invalid comparison
+```
+
+## Part D — Observability
+
+```bash
+# Collect traces from the running cluster
+kubectl logs -n rahbar-a3 -l app=api --tail=200 | grep '"trace_id"'
+
+# Check metrics endpoint
+curl http://localhost:18990/metrics
+```
+
+## Part E — Drift and Coverage
+
+```bash
+# Coverage check (before: S0 corpus, after: add new golden questions)
+python eval/coverage.py \
+  --label before \
+  --config eval/coverage_config.yaml \
+  --live eval/live_queries.jsonl \
+  --golden eval/golden.jsonl \
+  --out eval/results/coverage
+
+# Drift report between S0 baseline and S1 candidate
+python eval/drift.py \
+  --before eval/results/20261126T191531Z-s0-baseline-run1.json \
+  --after  eval/results/20261126T213346Z-s1-batchb-candidate.json \
+  --out eval/results/drift
+```
+
+## Part F — Kubernetes
+
+```bash
+# Deploy the full A3 cluster (namespace rahbar-a3)
+kubectl apply -f k8s/a3/00-namespace.yaml
+kubectl apply -f k8s/a3/01-storage.yaml
+kubectl apply -f k8s/a3/02-config.yaml
+kubectl apply -f k8s/a3/03-release.yaml
+kubectl apply -f k8s/a3/04-chroma.yaml
+kubectl apply -f k8s/a3/05-redis.yaml
+kubectl apply -f k8s/a3/06-api.yaml
+kubectl apply -f k8s/a3/08-networkpolicy.yaml
+
+# Wait for API to be ready
+kubectl rollout status deployment/api -n rahbar-a3
+
+# Run the in-cluster eval job
+kubectl apply -f k8s/eval-job.yaml
+kubectl wait --for=condition=complete job/rahbar-eval -n rahbar-a3 --timeout=600s
+kubectl logs job/rahbar-eval -n rahbar-a3
+```

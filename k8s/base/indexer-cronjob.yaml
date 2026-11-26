@@ -38,6 +38,13 @@ spec:
                   python /tmp/fetch.py
                   mkdir -p /corpus
                   cp -r /tmp/raw/. /corpus/
+              resources:
+                requests:
+                  cpu: "200m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "512Mi"
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
@@ -86,3 +93,6 @@ spec:
                 name: corpus-fetch-scripts
             - name: corpus-data
               emptyDir: {}
+            - name: datalake
+              persistentVolumeClaim:
+                claimName: rahbar-datalake

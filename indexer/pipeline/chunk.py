@@ -4,84 +4,105 @@ from __future__ import annotations
 
 import hashlib
 import re
+from collections import Counter
+from typing import NamedTuple
 
 from .models import Chunk, Document
 
+# Bump this whenever a change here can alter a chunk's text, section, pages or id. It belongs
+# in the re-embedding fingerprint (ARCHITECTURE 3.6). "1" was the Assignment 02 chunker.
+CHUNKER_VERSION = "3"
+
+
+class Word(NamedTuple):
+    """One word of the document. The page is kept per word because one paragraph can run
+    over a page break."""
+
+    text: str
+    page: int                   # the page it is printed on
+    end: str = " "              # what follows it in chunk text: "\n" closes a heading line
+
 
 def chunk(doc: Document, size: int, overlap: int) -> list[Chunk]:
-    """Split on sections, then paragraphs, then sentences, keeping each chunk under
-    `size` tokens, with `overlap` tokens shared between neighbours. Every chunk keeps
-    the section heading it sits under, its page, doc_version and superseded."""
-    sections = _split_into_sections(doc)
-    raw_chunks: list[dict] = []
+    """Split on headings, then pack whole paragraphs into chunks of at most `size` words.
+    A paragraph longer than `size` is cut by word count. Up to `overlap` words are then
+    repeated from the previous chunk (see _overlap_words).
 
-    for section_heading, section_text, page_num in sections:
-        paragraphs = re.split(r"\n{2,}", section_text)
-        buffer_words: list[str] = []
+    Heading lines are part of the text and count towards `size` like any other words.
+    page_start and page_end are the pages of the words in the chunk's text."""
+    chunks: list[Chunk] = []
+    chunks_under_heading: Counter[str] = Counter()
 
-        for para in paragraphs:
-            words = para.split()
-            if not words:
-                continue
-            if len(buffer_words) + len(words) <= size:
-                buffer_words.extend(words)
-            else:
-                if buffer_words:
-                    raw_chunks.append({
-                        "text": " ".join(buffer_words),
-                        "section": section_heading,
-                        "page": page_num,
-                    })
-                if len(words) <= size:
-                    buffer_words = list(words)
-                else:
-                    for sent_chunk in _split_sentences(words, size):
-                        raw_chunks.append({
-                            "text": " ".join(sent_chunk),
-                            "section": section_heading,
-                            "page": page_num,
-                        })
-                    buffer_words = []
-        if buffer_words:
-            raw_chunks.append({
-                "text": " ".join(buffer_words),
-                "section": section_heading,
-                "page": page_num,
-            })
+    for section, paragraphs in _split_into_sections(doc):
+        previous: list[Word] = []       # starts empty, so overlap never crosses a heading
+        for own_words in _pack_paragraphs(paragraphs, size):
+            first_page = own_words[0].page
+            last_page = own_words[-1].page
+            repeated = _overlap_words(previous, first_page, overlap)
+            text = _join(repeated + own_words)
+            ordinal = chunks_under_heading[section]
+            chunks_under_heading[section] += 1
+            chunks.append(Chunk(
+                id=_chunk_id(doc, section, ordinal, text),
+                text=text,
+                doc_id=doc.doc_id,
+                source=doc.source,
+                section=section,
+                page_start=first_page,
+                page_end=last_page,
+                doc_version=doc.doc_version,
+                superseded=doc.superseded,
+            ))
+            previous = own_words
 
-    chunks = _apply_overlap(raw_chunks, overlap, doc)
     return chunks
 
 
-def _split_into_sections(doc: Document) -> list[tuple[str, str, int]]:
-    """Return (heading, text, page_number) for each section."""
-    sections: list[tuple[str, str, int]] = []
-    current_heading = "Introduction"
-    current_text: list[str] = []
-    current_page = 1
+def _split_into_sections(doc: Document) -> list[tuple[str, list[list[Word]]]]:
+    """Return (label, paragraphs) for each section to be chunked.
+
+    A heading line opens the first paragraph of its section, so packing cannot leave it
+    apart from the start of its text. A heading with no text under it waits, and goes in
+    front of the next section that has text. If none follows, the waiting headings form a
+    section of their own, labelled with the last one. "Introduction" is only a label for
+    text before the first heading; it is not added to the text."""
+    sections: list[tuple[str, list[list[Word]]]] = []
+    label = "Introduction"
+    headings: list[Word] = []           # heading lines not yet placed in a section
+    body: list[list[Word]] = [[]]       # paragraphs under the current heading
 
     for page in doc.pages:
         for line in page.text.splitlines():
-            heading = _extract_heading(line)
-            if heading:
-                if current_text:
-                    sections.append((current_heading, "\n".join(current_text), current_page))
-                    current_text = []
-                current_heading = heading
-                current_page = page.page
+            next_label = _extract_heading(line)
+            if next_label:
+                if any(body):
+                    sections.append((label, _open_with(headings, body)))
+                    headings = []
+                label, body = next_label, [[]]
+                headings += _heading_line(next_label, page.page)
+            elif line:
+                body[-1].extend(Word(word, page.page) for word in line.split())
             else:
-                current_text.append(line)
-                if not sections:
-                    current_page = page.page
+                body.append([])         # an empty line ends a paragraph; a page break does not
 
-    if current_text:
-        sections.append((current_heading, "\n".join(current_text), current_page))
-
-    if not sections:
-        full_text = "\n".join(p.text for p in doc.pages)
-        sections = [(current_heading, full_text, 1)]
-
+    if any(body):
+        sections.append((label, _open_with(headings, body)))
+    elif headings:
+        sections.append((label, [headings]))
     return sections
+
+
+def _heading_line(heading: str, page: int) -> list[Word]:
+    """The heading's words (without Markdown "#" marks), ending in a line break."""
+    words = [Word(word, page) for word in heading.split()]
+    words[-1] = words[-1]._replace(end="\n")
+    return words
+
+
+def _open_with(headings: list[Word], body: list[list[Word]]) -> list[list[Word]]:
+    """Drop empty paragraphs and put the heading lines at the start of the first one."""
+    first, *rest = [paragraph for paragraph in body if paragraph]
+    return [headings + first, *rest]
 
 
 _NUMBERED_CLAUSE = re.compile(r"^(\d+(?:\.\d+)*)\s+([A-Z][A-Za-z].{2,78})$")
@@ -123,48 +144,46 @@ def _extract_heading(line: str) -> str | None:
     return None
 
 
-def _split_sentences(words: list[str], size: int) -> list[list[str]]:
-    chunks: list[list[str]] = []
-    current: list[str] = []
-    for w in words:
-        current.append(w)
-        if len(current) >= size:
-            chunks.append(current)
-            current = []
-    if current:
-        chunks.append(current)
-    return chunks
+def _pack_paragraphs(paragraphs: list[list[Word]], size: int) -> list[list[Word]]:
+    """Group one section's words into chunks, before any overlap is added."""
+    groups: list[list[Word]] = []
+    buffer: list[Word] = []
+    for words in paragraphs:
+        if len(buffer) + len(words) <= size:
+            buffer.extend(words)
+            continue
+        if buffer:
+            groups.append(buffer)
+        if len(words) <= size:
+            buffer = list(words)
+        else:
+            groups.extend(words[i:i + size] for i in range(0, len(words), size))
+            buffer = []
+    if buffer:
+        groups.append(buffer)
+    return groups
 
 
-def _apply_overlap(
-    raw_chunks: list[dict], overlap: int, doc: Document
-) -> list[Chunk]:
-    chunks: list[Chunk] = []
-    prev_words: list[str] = []
+def _overlap_words(previous: list[Word], first_page: int, overlap: int) -> list[Word]:
+    """The end of the previous chunk, to repeat in front of the next one.
 
-    for idx, rc in enumerate(raw_chunks):
-        text = rc["text"]
-        words = text.split()
+    Only words from the page where the next chunk starts are taken. So overlap never moves
+    page_start back: a citation shows the page where the chunk's own text begins, and every
+    word in the chunk is still inside [page_start, page_end]."""
+    if overlap <= 0:                    # previous[-0:] would be the whole list
+        return []
+    return [word for word in previous[-overlap:] if word.page == first_page]
 
-        if overlap > 0 and prev_words and idx > 0:
-            overlap_words = prev_words[-overlap:]
-            words = overlap_words + words
-            text = " ".join(words)
 
-        chunk_id = hashlib.sha256(
-            (doc.source + rc["section"] + str(idx)).encode()
-        ).hexdigest()[:16]
+def _join(words: list[Word]) -> str:
+    return "".join(word.text + word.end for word in words).rstrip()
 
-        chunks.append(Chunk(
-            id=chunk_id,
-            text=text,
-            source=doc.source,
-            section=rc["section"],
-            page=rc["page"],
-            doc_version=doc.doc_version,
-            superseded=doc.superseded,
-        ))
 
-        prev_words = rc["text"].split()
+def _chunk_id(doc: Document, section: str, ordinal: int, text: str) -> str:
+    """Hash of doc_id, version, section, ordinal and a hash of the text (ARCHITECTURE 3.6).
 
-    return chunks
+    `ordinal` counts the chunks under one heading name, so a section that gains a chunk does
+    not renumber other sections. Page numbers and `superseded` are not part of the id."""
+    text_hash = hashlib.sha256(text.encode()).hexdigest()
+    key = "\n".join([doc.doc_id, doc.doc_version, section, str(ordinal), text_hash])
+    return hashlib.sha256(key.encode()).hexdigest()[:16]
