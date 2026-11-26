@@ -106,3 +106,22 @@ raw citations valid went from 1 of 5 with the old evidence layout to 4 or 5 of 5
   marker. `AB.1` is **pending a member's review and signature**. Batch B has not been ingested
   (`AB.2` open). Members: confirm that the generator's short search phrases and own-words rewrite of
   the grading page are acceptable in a public repository.
+
+## 2026-11-27 - data management (`feature/ali-data-management`)
+Built by an agent; an independent agent reviewed it and reproduced four serious defects (crash
+blocking later runs, one bad file aborting a run, a failed update hiding a document, stale
+read-only files undoing corrections) plus others; the builder fixed them with failing tests first.
+228 indexer tests pass; `A1.1`, `A1.3`-`A1.8`, `A2.1`-`A2.4` pass the **build** stage.
+
+**Orchestrator integration (temporary lake, real Chroma 1.0.12 on a PVC, real embeddings, namespace
+`rahbar-a3-it`, since deleted; not official evidence, nothing committed under `eval/results/`):**
+corpus A: 7 accepted, 2 scans quarantined (no OCR on this laptop), 319 chunks. Unchanged re-run: 0
+embedded, 0 verification calls. Same after deleting the Chroma pod. **Batch B first contact** (the
+verifier was built without reading it; no tuning afterwards): 11 of 12 got the expected outcome.
+Missed: the deliberately hard paraphrase `how-your-grades-work.md` was accepted. The injection
+document passed all four checks, as designed. Re-run after Batch B: 0 embedded.
+
+**Before the official run:** OCR must work (use the indexer image) and both rules versions must be
+ingested together, otherwise the 2023 version is later rejected as stale. Set `CORPUS_DIR=""` for
+the permanent lake. Members: check `corpus/sidecars/` by hand; ADRs 0009 and 0010 are "Proposed".
+Still needed for A: cluster evidence and proofs.

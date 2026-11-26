@@ -13,6 +13,7 @@ class Page:
     page: int                # 1-based
     text: str
     ocr: bool = False        # True when this page had no text layer and was OCR'd
+    ocr_error: str = ""      # why OCR could not run; the page is then empty
 
 
 @dataclass
