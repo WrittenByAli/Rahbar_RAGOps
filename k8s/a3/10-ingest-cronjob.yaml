@@ -1,0 +1,63 @@
+# Scheduled re-run of the same ingestion. Forbid: a run never starts while another is active
+# (the lock in the lake is the second guard). With an empty inbox it embeds nothing.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ingest
+  namespace: rahbar-a3
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app: indexer
+        spec:
+          restartPolicy: Never
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            fsGroup: 10001
+          containers:
+            - name: indexer
+              image: rahbar-indexer:a3
+              imagePullPolicy: IfNotPresent
+              args: ["ingest"]
+              env:
+                - {name: LAKE_DIR, value: /data/lake}
+                - {name: CORPUS_DIR, value: ""}
+                - {name: HOME, value: /tmp}
+                - {name: PYTHONDONTWRITEBYTECODE, value: "1"}
+                - {name: CHROMA_HOST, value: chroma}
+                - {name: CHROMA_PORT, value: "8000"}
+                - {name: OLLAMA_URL, value: "http://host.minikube.internal:11434"}
+                - {name: VERIFY_EMBED_MODEL, value: nomic-embed-text}
+                - name: INDEX_TARGETS
+                  valueFrom:
+                    configMapKeyRef: {name: rahbar-index-targets, key: targets.yaml}
+              envFrom:
+                - configMapRef:
+                    name: rahbar-release-v1
+              # PROVISIONAL until measured.
+              resources:
+                requests: {cpu: "250m", memory: "256Mi"}
+                limits: {cpu: "2000m", memory: "2Gi"}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: {drop: [ALL]}
+              volumeMounts:
+                - {name: lake, mountPath: /data/lake}
+                - {name: tmp, mountPath: /tmp}
+          volumes:
+            - name: lake
+              persistentVolumeClaim: {claimName: rahbar-datalake}
+            - name: tmp
+              emptyDir: {}

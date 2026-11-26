@@ -1,0 +1,59 @@
+# One release = one immutable ConfigMap. Never edit or delete one that may be rolled back to.
+# v1 is live. v2 is prepared for the embedding-model change in docs/a3/DECISIONS.md D-02 and is
+# used only by api-candidate; its model is not pulled and its collection is not built yet.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-release-v1
+  namespace: rahbar-a3
+immutable: true
+data:
+  RELEASE_ID: "v1"
+  EMBED_MODEL: "nomic-embed-text"
+  CHROMA_COLLECTION: "rahbar_v1"
+  CHUNK_SIZE: "400"
+  CHUNK_OVERLAP: "50"
+  TOP_K: "5"
+  # 0.55 is the A2 value and is NOT yet checked for the current index (see api/app/config.py).
+  RELEVANCE_FLOOR: "0.55"
+  PROMPT_VERSION: "p1"
+  LLM_MODEL: "qwen2.5:3b"
+  TEMPERATURE: "0.0"
+  LLM_SEED: "42"
+  LLM_NUM_CTX: "8192"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-release-v2
+  namespace: rahbar-a3
+immutable: true
+data:
+  RELEASE_ID: "v2"
+  EMBED_MODEL: "mxbai-embed-large"
+  CHROMA_COLLECTION: "rahbar_v2"
+  CHUNK_SIZE: "400"
+  CHUNK_OVERLAP: "50"
+  TOP_K: "5"
+  # Unchanged on purpose: whether the floor must move with the model is open (plan T7.1).
+  RELEVANCE_FLOOR: "0.55"
+  PROMPT_VERSION: "p1"
+  LLM_MODEL: "qwen2.5:3b"
+  TEMPERATURE: "0.0"
+  LLM_SEED: "42"
+  LLM_NUM_CTX: "8192"
+---
+# The collections the ingestion Job maintains. The first entry is the live one and MUST equal
+# rahbar-release-v1 (collection, EMBED_MODEL, CHUNK_SIZE, CHUNK_OVERLAP). A rollback target left
+# out of this list goes stale. Consistency is checked by hand today (k8s/README.md, "Consistency").
+# Add this line when mxbai-embed-large has been pulled, before api-candidate is scaled up:
+#   - {collection: rahbar_v2, embed_model: mxbai-embed-large, chunk_size: 400, chunk_overlap: 50}
+# This map is editable (not immutable): adding a target is a deliberate operator action.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-index-targets
+  namespace: rahbar-a3
+data:
+  targets.yaml: |
+    - {collection: rahbar_v1, embed_model: nomic-embed-text, chunk_size: 400, chunk_overlap: 50}

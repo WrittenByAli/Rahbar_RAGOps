@@ -1,0 +1,68 @@
+# On-demand ingestion: verify the inbox, update the lake, sync every target collection.
+# A finished Job cannot be re-run by applying it again: delete it first.
+#   kubectl -n rahbar-a3 delete job ingest-manual --ignore-not-found
+#   kubectl apply -f k8s/a3/jobs/ingest-manual.yaml
+# Exit 3 means another ingestion run holds the lock (nothing was done).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ingest-manual
+  namespace: rahbar-a3
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: indexer
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: indexer
+          image: rahbar-indexer:a3
+          imagePullPolicy: IfNotPresent
+          # The shell only adds a peak-memory line (cgroup file) after the run, for F5.
+          command:
+            - sh
+            - -c
+            - |
+              python -m pipeline.run ingest
+              rc=$?
+              echo "{\"msg\": \"peak memory\", \"peak_memory_mib\": $(( $(cat /sys/fs/cgroup/memory.peak 2>/dev/null || echo 0) / 1048576 ))}"
+              exit $rc
+          env:
+            - {name: LAKE_DIR, value: /data/lake}
+            - {name: CORPUS_DIR, value: ""}
+            - {name: HOME, value: /tmp}
+            - {name: PYTHONDONTWRITEBYTECODE, value: "1"}
+            - {name: CHROMA_HOST, value: chroma}
+            - {name: CHROMA_PORT, value: "8000"}
+            - {name: OLLAMA_URL, value: "http://host.minikube.internal:11434"}
+            - {name: VERIFY_EMBED_MODEL, value: nomic-embed-text}
+            - name: INDEX_TARGETS
+              valueFrom:
+                configMapKeyRef: {name: rahbar-index-targets, key: targets.yaml}
+          envFrom:
+            - configMapRef:
+                name: rahbar-release-v1
+          # PROVISIONAL until measured (OCR can need memory).
+          resources:
+            requests: {cpu: "250m", memory: "256Mi"}
+            limits: {cpu: "2000m", memory: "2Gi"}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: lake, mountPath: /data/lake}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: lake
+          persistentVolumeClaim: {claimName: rahbar-datalake}
+        - name: tmp
+          emptyDir: {}

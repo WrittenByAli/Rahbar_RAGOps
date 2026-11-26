@@ -1,0 +1,32 @@
+# Shared settings. The pipeline settings that decide answers are NOT here: they live in the
+# immutable release maps (03-release.yaml).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-config
+  namespace: rahbar-a3
+data:
+  RETRIEVER: "chroma"
+  LLM_PROVIDER: "ollama-host"
+  OLLAMA_URL: "http://host.minikube.internal:11434"
+  CHROMA_HOST: "chroma"
+  CHROMA_PORT: "8000"
+  REDIS_URL: "redis://redis:6379"
+  LOG_LEVEL: "INFO"
+  CACHE_ENABLED: "true"
+  CACHE_THRESHOLD: "0.92"
+  RETRIEVAL_RAIL_ENABLED: "true"
+  TRACE_DIR: "/traces"
+  # The suite asks for each trace in the response. A trace holds the full prompt, so keep this
+  # cluster private and say so in the report.
+  EVAL_DEBUG_ENABLED: "true"
+---
+# No real key is needed for host Ollama. Real keys never go into git.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rahbar-secret
+  namespace: rahbar-a3
+type: Opaque
+stringData:
+  LLM_API_KEY: ""

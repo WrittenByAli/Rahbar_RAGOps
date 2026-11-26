@@ -1,0 +1,94 @@
+# The live API. Its Service selects app: api only; api-candidate pods never carry that label.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: rahbar-a3
+  annotations:
+    kubernetes.io/change-cause: "release v1: nomic-embed-text, collection rahbar_v1"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      terminationGracePeriodSeconds: 30
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: api
+          image: rahbar-api:a3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: rahbar-config
+            # Exactly one release map. Changing this name is what a release is.
+            - configMapRef:
+                name: rahbar-release-v1
+            - secretRef:
+                name: rahbar-secret
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef: {fieldPath: metadata.name}
+          # PROVISIONAL until measured (plan T8.6).
+          resources:
+            requests: {cpu: "100m", memory: "192Mi"}
+            limits: {cpu: "1000m", memory: "512Mi"}
+          livenessProbe:
+            httpGet: {path: /healthz, port: 8000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: {path: /readyz, port: 8000}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 6
+          startupProbe:
+            httpGet: {path: /healthz, port: 8000}
+            failureThreshold: 30
+            periodSeconds: 2
+          lifecycle:
+            preStop:
+              exec:
+                command: [sleep, "5"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: traces, mountPath: /traces}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: traces
+          persistentVolumeClaim:
+            claimName: rahbar-traces
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: rahbar-a3
+spec:
+  type: ClusterIP
+  selector:
+    app: api
+  ports:
+    - {port: 80, targetPort: 8000}

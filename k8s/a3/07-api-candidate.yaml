@@ -1,0 +1,96 @@
+# The candidate under test. Its pods carry app: api-candidate, so the live Service never selects
+# them. replicas: 0 for now, because release v2's collection (rahbar_v2) and embedding model do
+# not exist yet and /readyz would refuse to become ready. Scale to 1 after the v2 index is built
+# (k8s/README.md, "Candidate").
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-candidate
+  namespace: rahbar-a3
+  annotations:
+    kubernetes.io/change-cause: "candidate release v2: mxbai-embed-large, collection rahbar_v2"
+spec:
+  replicas: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: api-candidate
+  template:
+    metadata:
+      labels:
+        app: api-candidate
+    spec:
+      terminationGracePeriodSeconds: 30
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: api
+          image: rahbar-api:a3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: rahbar-config
+            - configMapRef:
+                name: rahbar-release-v2
+            - secretRef:
+                name: rahbar-secret
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef: {fieldPath: metadata.name}
+          # PROVISIONAL until measured (plan T8.6).
+          resources:
+            requests: {cpu: "100m", memory: "192Mi"}
+            limits: {cpu: "1000m", memory: "512Mi"}
+          livenessProbe:
+            httpGet: {path: /healthz, port: 8000}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: {path: /readyz, port: 8000}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 6
+          startupProbe:
+            httpGet: {path: /healthz, port: 8000}
+            failureThreshold: 30
+            periodSeconds: 2
+          lifecycle:
+            preStop:
+              exec:
+                command: [sleep, "5"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: traces, mountPath: /traces}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: traces
+          persistentVolumeClaim:
+            claimName: rahbar-traces
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-candidate
+  namespace: rahbar-a3
+spec:
+  type: ClusterIP
+  selector:
+    app: api-candidate
+  ports:
+    - {port: 80, targetPort: 8000}

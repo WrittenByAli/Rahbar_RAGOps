@@ -1,0 +1,40 @@
+# Release gate thresholds, mounted into the eval Job as /config/gate.yaml.
+#
+# EVERY VALUE BELOW IS PROVISIONAL. None was set from the baseline runs yet, because those runs
+# (plan step S0) have not happened. Before any candidate runs, the numbers are replaced by values
+# justified from the S0 spread and committed (requirement C2.1). After that they are not edited
+# to rescue a candidate.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-gate-thresholds
+  namespace: rahbar-a3
+data:
+  gate.yaml: |
+    rules:
+      recall_at_5:            # largest allowed drop from the baseline
+        limit: 0.02
+        justification: >-
+          PROVISIONAL until set from the baseline runs. 0.02 is the assignment's example value;
+          it has not been compared with the run-to-run spread yet.
+      faithfulness:           # minimum
+        limit: 0.80
+        justification: >-
+          PROVISIONAL until set from the baseline runs. A placeholder minimum; it must be
+          informed by the spread of the two seeded runs and by judge agreement with hand labels.
+      latency_ms_p95:         # maximum, milliseconds
+        limit: 60000
+        justification: >-
+          PROVISIONAL until set from the baseline runs. A loose placeholder for CPU or GPU on a
+          laptop; it must become the baseline p95 plus the observed run-to-run variation.
+      abstention_correctness: # largest allowed drop (0 means not below the baseline)
+        limit: 0
+        justification: >-
+          PROVISIONAL until set from the baseline runs. Zero drop is the starting policy: a
+          candidate must not abstain worse than the live release. The baseline noise has not
+          been measured yet.
+      answerable_answer_rate: # minimum
+        limit: 0.50
+        justification: >-
+          PROVISIONAL until set from the baseline runs. A placeholder that only catches a
+          pipeline that mostly abstains; it must be raised from the baseline answer rate.

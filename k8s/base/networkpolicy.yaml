@@ -126,10 +126,9 @@ spec:
         - podSelector:
             matchLabels:
               app: api
-      ports:
-        - port: 8000
-    - from:
-        - podSelector: {}
+        - podSelector:
+            matchLabels:
+              app: indexer
       ports:
         - port: 8000
 ---

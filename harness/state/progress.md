@@ -134,3 +134,26 @@ Still needed for A: cluster evidence and proofs.
   questions; that is not authorship or review. Hostel, parking and visa are kept out of golden v1
   because they are the uncovered live-query topics. Decide before Batch B runs how `fee-structure`
   2026-27 ground truth is scored once 2027-28 supersedes it (g007, g008, c007).
+
+## 2026-11-27 - evaluation suite and release gate (`feature/ali-evaluation`, 906cd4b)
+Built by an agent; an independent agent reviewed and reproduced four serious defects (M1–M4); the
+builder fixed them with failing tests first. 14 surviving eval mutations killed (S1). Coverage
+threshold now reads from YAML config not CLI (S4). Drift requires matching seed/judge (S5).
+Answered-only latency metrics added (S6). 155 eval + 222 api + 279 harness/indexer = 656 passed.
+
+**What was built:** three-level suite (component, module, end-to-end) with an LLM judge;
+five-rule release gate (recall@5, faithfulness, latency_p95, abstention_correctness,
+answerable_answer_rate); drift detector, coverage checker, stochasticity reporter,
+judge-agreement tool, compare.py. API: `ChromaRetriever.collection_state()` returns
+`index_generation` + `lake_state_id` from one Chroma read; `/api/retrieve` exposes it.
+
+**Build stage:** B.C1, B.R, C2.2, E2, E4.2, D1 — all 6 PASS. CI pending.
+
+**Before the first baseline run (plan step S0):** create `eval/coverage_config.yaml` with
+justified thresholds (a member must set these after seeing the golden set distribution).
+The warm-up question ("What is the minimum CGPA to be awarded a degree?") must answer on the
+real corpus — if it abstains, change it before the first real run. Run twice with the same seed to
+measure run-to-run spread, then commit gate thresholds (C2.1) before any candidate run.
+
+**Still needed:** real cluster traces, actual eval runs (S0 baseline), gate pass/fail evidence,
+drift/coverage runs, Kubernetes feature.
