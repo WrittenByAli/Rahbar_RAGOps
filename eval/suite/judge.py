@@ -42,7 +42,7 @@ def parse_verdict(raw: str) -> dict:
     never searched for inside free text: "not supported" contains "supported".
     """
     text = raw.strip()
-    fenced = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", text, re.S)
+    fenced = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL)
     if fenced:
         text = fenced.group(1)
     try:

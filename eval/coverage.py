@@ -31,7 +31,6 @@ from collections import Counter
 
 import httpx
 import yaml
-
 from suite.common import (
     EVAL_DIR,
     SuiteError,

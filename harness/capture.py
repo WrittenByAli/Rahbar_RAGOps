@@ -31,16 +31,16 @@ def main(argv: list[str]) -> int:
     name, command = argv[0], argv[2:]
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", name):
         return refuse("name must be lowercase letters, digits and hyphens")
-    if any(re.search(r"secret|LLM_API_KEY|token", part, re.I) for part in command):
+    if any(re.search(r"secret|LLM_API_KEY|token", part, re.IGNORECASE) for part in command):
         return refuse("commands that touch secrets are never recorded")
     try:
         run = subprocess.run(command, cwd=ROOT, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, text=True, encoding="utf-8",
-                             errors="replace", timeout=900)
+                             errors="replace", timeout=900, check=False)
     except (OSError, subprocess.TimeoutExpired) as exc:
         return refuse(f"command did not run: {exc}")
     sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
-                         capture_output=True, text=True).stdout.strip() or "unknown"
+                         capture_output=True, text=True, check=False).stdout.strip() or "unknown"
     header = [
         f"# captured: {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}",
         f"# command: {subprocess.list2cmdline(command)}",

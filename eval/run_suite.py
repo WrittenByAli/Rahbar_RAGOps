@@ -27,7 +27,6 @@ import sys
 from pathlib import Path
 
 import httpx
-
 from suite import component, end_to_end, module
 from suite.common import (
     EVAL_DIR,

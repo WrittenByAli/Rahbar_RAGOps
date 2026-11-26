@@ -1,0 +1,27 @@
+# F3 Rollout Undo Evidence
+# 
+# Scenario: live api deployment patched to use rahbar-release-v2 (rahbar_v2 collection,
+#           mxbai-embed-large) — a "bad" rollout because rahbar_v2 collection does not exist.
+#           Rollout stalled (maxUnavailable: 0 kept v1 pods serving).
+#           kubectl rollout undo restored v1.
+#           Trace below confirms: collection=rahbar_v1, embed=nomic-embed-text, release_id=v1.
+#
+# Commands run (2026-11-27):
+#   kubectl patch deployment api -n rahbar-a3 --patch '...envFrom rahbar-release-v2...'
+#   kubectl rollout status deployment/api -n rahbar-a3 --timeout=45s
+#     → "Waiting for deployment ... 1 out of 2 new replicas have been updated..."
+#     → "error: timed out waiting for the condition"   (exit 1 — rollout stalled)
+#   kubectl get pods -n rahbar-a3 -l app=api
+#     → api-6d8475bcdf-gvjp4   0/1  Running   (new v2 pod — never became ready)
+#     → api-76d8cf9cd6-268cd   1/1  Running   (old v1 pod — still serving)
+#     → api-76d8cf9cd6-lpwph   1/1  Running   (old v1 pod — still serving)
+#   kubectl rollout undo deployment/api -n rahbar-a3
+#     → "deployment.apps/api rolled back"
+#   kubectl rollout status deployment/api -n rahbar-a3
+#     → "deployment 'api' successfully rolled out"
+#   kubectl rollout history deployment/api -n rahbar-a3
+#     → REVISION 2: (bad v2 patch)
+#     → REVISION 3: release v1: nomic-embed-text, collection rahbar_v1
+
+# Post-undo trace (trace_id: 2bcef14fdc3a4b91831f7a1df7b290ce)
+{"kind":"trace","schema":1,"trace_id":"2bcef14fdc3a4b91831f7a1df7b290ce","ts":"2026-11-26T22:38:12.185Z","query":"After rollout undo confirm: what collection serves this answer?","embedding":{"model":"nomic-embed-text","version":"0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"},"collection":{"name":"rahbar_v1","version":"8a52048ca0214c27aa2a9385be2e7af1"},"release_id":"v1","pod":"api-76d8cf9cd6-268cd"}

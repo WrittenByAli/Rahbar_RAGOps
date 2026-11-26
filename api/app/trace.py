@@ -169,20 +169,20 @@ def finish_trace(record: TraceRecord, clock: StageClock, settings: Settings) -> 
     """
     try:
         record["embedding"]["version"] = embedding_version(settings)
-    except Exception:  # noqa: BLE001 - see the docstring
+    except Exception:
         log.exception("trace: embedding version not recorded")
     try:
         record["llm"]["version"] = llm_version(settings)
-    except Exception:  # noqa: BLE001
+    except Exception:
         log.exception("trace: model version not recorded")
     try:
         record["latency_ms"] = clock.latency_ms()
         write_trace(record, settings)
-    except Exception:  # noqa: BLE001
+    except Exception:
         log.exception("trace not written")
     try:
         metrics.observe_query(record, clock.ran)
-    except Exception:  # noqa: BLE001
+    except Exception:
         log.exception("trace: metrics not updated")
 
 

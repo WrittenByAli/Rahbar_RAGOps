@@ -24,13 +24,27 @@ from .embed import embed, model_digest
 from .extract import EXTRACTOR_VERSION, extract
 from .lake import ACTIVE, Lake
 from .lock import IngestLock
-from .metadata import (SIDECAR_SUFFIX, Metadata, derive_doc_id, front_matter, resolve,
-                       sidecar_path, valid_text)
+from .metadata import (
+    SIDECAR_SUFFIX,
+    Metadata,
+    derive_doc_id,
+    front_matter,
+    resolve,
+    sidecar_path,
+    valid_text,
+)
 from .models import Document, Page
 from .neardup import WindowVectors
 from .report import Reports, new_run_id, utc_now
-from .verify import (Candidate, Known, content_hash, magic_problem, normalised_text,
-                     truncation_signals, verify_batch)
+from .verify import (
+    Candidate,
+    Known,
+    content_hash,
+    magic_problem,
+    normalised_text,
+    truncation_signals,
+    verify_batch,
+)
 
 log = logging.getLogger("rahbar.indexer")
 
@@ -157,7 +171,7 @@ def load_candidate(lake: Lake, item: Input) -> Candidate:
     checks judge; one bad file never stops the run."""
     try:
         return _read_candidate(lake, item)
-    except Exception as exc:  # noqa: BLE001 - quarantine this file, go on with the others
+    except Exception as exc:
         log.warning("could not process %s", valid_text(item.path.name), exc_info=True)
         try:
             raw = hashlib.sha256(item.path.read_bytes()).hexdigest()
@@ -367,9 +381,9 @@ def run_ingest(settings: IndexerSettings, services: Services,
         for verdict in verdicts:
             if verdict.decision == "accepted":
                 lake.accept(verdict, run_id)
-            elif verdict.decision == "quarantined":
-                if not lake.quarantine(verdict, run_id, indexed_before[id(verdict)]):
-                    not_copied.add(verdict.candidate.path)
+            elif verdict.decision == "quarantined" and not lake.quarantine(
+                    verdict, run_id, indexed_before[id(verdict)]):
+                not_copied.add(verdict.candidate.path)
         lake.save()
         lake.sync_folders()
 

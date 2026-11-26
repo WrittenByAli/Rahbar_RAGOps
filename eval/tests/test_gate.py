@@ -3,10 +3,9 @@
 import copy
 import json
 
+import gate
 import pytest
 import yaml
-
-import gate
 
 LIMITS = {"recall_at_5": 0.02, "faithfulness": 0.8, "latency_ms_p95": 1000,
           "abstention_correctness": 0, "answerable_answer_rate": 0.7}

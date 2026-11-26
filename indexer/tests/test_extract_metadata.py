@@ -6,11 +6,11 @@ from pathlib import Path
 
 import pytest
 import yaml
-
 from fakes import make_pdf
+
 from pipeline import extract as extract_module
 from pipeline.extract import extract
-from pipeline.metadata import (derive_doc_id, normalise_title, resolve, version_key)
+from pipeline.metadata import derive_doc_id, normalise_title, resolve, version_key
 
 REPO = Path(__file__).resolve().parents[2]
 

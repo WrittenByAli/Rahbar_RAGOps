@@ -3,7 +3,6 @@
 import math
 
 import pytest
-
 from suite import metrics
 
 RELEVANT = [{"doc_id": "a", "page": 3}, {"doc_id": "b", "page": 1}]

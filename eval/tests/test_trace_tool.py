@@ -422,6 +422,7 @@ def test_script_prints_non_ascii_on_a_cp1252_console(tmp_path):
         env=env,
         cwd=tmp_path,
         timeout=60,
+        check=False,
     )
 
     assert run.returncode == 0, run.stderr.decode("utf-8", errors="replace")

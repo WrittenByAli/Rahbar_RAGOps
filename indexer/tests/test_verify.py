@@ -6,9 +6,17 @@ import json
 from pathlib import Path
 
 import pytest
+from fakes import (
+    FakeClient,
+    FakeEmbedder,
+    edit_words,
+    make_pdf,
+    prose,
+    put_markdown,
+    services,
+    settings,
+)
 
-from fakes import (FakeClient, FakeEmbedder, edit_words, make_pdf, prose, put_markdown,
-                   services, settings)
 from pipeline import ingest as ingest_module
 from pipeline import sync as sync_module
 from pipeline.ingest import run_ingest

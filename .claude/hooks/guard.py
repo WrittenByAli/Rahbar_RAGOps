@@ -33,18 +33,18 @@ SHELL_DENY = [
      "an agent must not change the git identity (G.4: both members commit)"),
     (r">>?\s*[\"']?[^\s\"'|;&>]*(eval[\\/]+results|(?<![\w-])traces)[\\/]",
      "evidence is written only by the pipeline scripts or harness/capture.py"),
-    (r"\b(Set-Content|Add-Content|Out-File|New-Item|tee|sed\s+-i)\b[^|;&\n]*"
-     r"(eval[\\/]+results[\\/]|(?<![\w-])traces[\\/])",
+    ((r"\b(Set-Content|Add-Content|Out-File|New-Item|tee|sed\s+-i)\b[^|;&\n]*"
+      r"(eval[\\/]+results[\\/]|(?<![\w-])traces[\\/])"),
      "evidence is written only by the pipeline scripts or harness/capture.py"),
-    (r"(>>?\s*[\"']?[^\s\"'|;&>]*|\b(Set-Content|Add-Content|Out-File|New-Item|tee|sed\s+-i|cp|mv|"
-     r"rm|del|Copy-Item|Move-Item|Remove-Item)\b[^|;&\n]*)(attestations\.toml|judge_labels\.jsonl|"
-     r"members\.toml)",
+    ((r"(>>?\s*[\"']?[^\s\"'|;&>]*|\b(Set-Content|Add-Content|Out-File|New-Item|tee|sed\s+-i|cp|mv|"
+      r"rm|del|Copy-Item|Move-Item|Remove-Item)\b[^|;&\n]*)(attestations\.toml|judge_labels\.jsonl|"
+      r"members\.toml)"),
      "that file is human-only"),
 ]
 SHELL_ASK = [
     (r"\bminikube\s+delete\b", "deletes the whole cluster and its volumes"),
-    (r"\bkubectl\b[^|;&\n]*\bdelete\b[^|;&\n]*\b(ns|namespace|namespaces|pvc|persistentvolumeclaim"
-     r"|statefulset|sts)\b", "can destroy the data lake or vector index"),
+    ((r"\bkubectl\b[^|;&\n]*\bdelete\b[^|;&\n]*\b(ns|namespace|namespaces|pvc|persistentvolumeclaim"
+      r"|statefulset|sts)\b"), "can destroy the data lake or vector index"),
     (r"\bkubectl\b[^|;&\n]*\bdelete\b[^|;&\n]*\s-[fk]\s", "bulk delete from manifests"),
     (r"\bgit\b[^|;&\n]*\b(reset\s+--hard|clean\s+-\w*f|filter-branch|rebase)\b",
      "discards or rewrites work"),
@@ -107,10 +107,10 @@ def decide(payload: dict, root: Path) -> tuple[str, str] | None:
     if tool in ("Bash", "PowerShell"):
         command = tool_input.get("command", "")
         for pattern, reason in SHELL_DENY:
-            if re.search(pattern, command, re.I):
+            if re.search(pattern, command, re.IGNORECASE):
                 return "deny", f"Blocked: {reason}."
         for pattern, reason in SHELL_ASK:
-            if re.search(pattern, command, re.I):
+            if re.search(pattern, command, re.IGNORECASE):
                 return "ask", f"Confirm: this {reason}."
     return None
 

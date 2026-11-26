@@ -49,9 +49,7 @@ EXIT_NO_PROMPT = 7
 
 # The record keys of docs/a3/CONTRACTS.md. Any other key is printed too, under "other fields".
 CONTRACT_KEYS = frozenset(
-    "kind schema trace_id ts query rewritten_query embedding collection retrieved "
-    "filters_applied reranker reranked_order context prompt llm response citations_raw "
-    "citations guardrail_actions latency_ms cache release_id git_sha pod".split()
+    ["kind", "schema", "trace_id", "ts", "query", "rewritten_query", "embedding", "collection", "retrieved", "filters_applied", "reranker", "reranked_order", "context", "prompt", "llm", "response", "citations_raw", "citations", "guardrail_actions", "latency_ms", "cache", "release_id", "git_sha", "pod"]
 )
 
 
@@ -211,15 +209,15 @@ def header(record: dict) -> list[str]:
         f"time:       {show(record.get('ts'))}",
         f"question:   {show(record.get('query'))}",
         f"rewritten:  {show(record.get('rewritten_query'))}",
-        f"release:    {show(record.get('release_id'))}  git {show(record.get('git_sha'))}  "
-        f"pod {show(record.get('pod'))}",
+        (f"release:    {show(record.get('release_id'))}  git {show(record.get('git_sha'))}  "
+         f"pod {show(record.get('pod'))}"),
         f"collection: {show(collection.get('name'))}  version {show(collection.get('version'))}",
         f"embedding:  {show(embedding.get('model'))}  version {show(embedding.get('version'))}",
         f"llm:        {show(record.get('llm'))}",  # whole object: model, params, attempt
         f"cache:      {show(cache.get('status'))}  source {show(cache.get('source_trace_id'))}",
         f"answer:     {show(response.get('text'))}",
-        f"            answered_from_context {show(response.get('answered_from_context'))}  "
-        f"confidence {show(response.get('confidence'))}",
+        (f"            answered_from_context {show(response.get('answered_from_context'))}  "
+         f"confidence {show(response.get('confidence'))}"),
         f"raw model output: {show(response.get('raw_output'))}",
         *listing("citations written by the model", as_list(record.get("citations_raw"))),
         *listing("citations returned to the user", as_list(record.get("citations"))),
@@ -267,16 +265,16 @@ def report(chain: list[dict], prompt: dict | None) -> str:
     )
     for number, chunk in enumerate(context, 1):
         lines += [
-            f"----- chunk {number}: {show(chunk.get('chunk_id'))} | "
-            f"{show(chunk.get('source'))} | {show(chunk.get('section'))} | "
-            f"page {show(chunk.get('page'))} -----",
+            (f"----- chunk {number}: {show(chunk.get('chunk_id'))} | "
+             f"{show(chunk.get('source'))} | {show(chunk.get('section'))} | "
+             f"page {show(chunk.get('page'))} -----"),
             chunk["text"],
             f"----- end of chunk {number} -----",
         ]
     lines += [
         "",
-        f"========== FULL PROMPT: template {show(prompt.get('template_version'))}, "
-        f"from trace {source['trace_id']} ==========",
+        (f"========== FULL PROMPT: template {show(prompt.get('template_version'))}, "
+         f"from trace {source['trace_id']} =========="),
         prompt["text"],
         "========== END OF PROMPT ==========",
         f"sha256 {prompt['sha256']}: verified against the text above",

@@ -177,7 +177,7 @@ def _embedded(path: Path) -> tuple[str, dict[str, Any]]:
     if suffix == ".pdf":
         return "pdf_info", _pdf_info(path)
     if suffix in (".html", ".htm"):
-        found = re.search(r"<title[^>]*>(.*?)</title>", _read_text(path), re.I | re.S)
+        found = re.search(r"<title[^>]*>(.*?)</title>", _read_text(path), re.IGNORECASE | re.DOTALL)
         title = " ".join(unescape(found[1]).split()) if found else ""
         return "html_title", {"title": _real_title(title)}
     return "none", {}

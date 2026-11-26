@@ -22,8 +22,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import verify  # noqa: E402
-from checks import PASS, PENDING  # noqa: E402
+import verify
+from checks import PASS, PENDING
 
 ROOT = verify.ROOT
 

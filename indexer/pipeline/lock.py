@@ -17,6 +17,7 @@ import threading
 import time
 import uuid
 from pathlib import Path
+from typing import Self
 
 
 class LockHeld(Exception):
@@ -35,7 +36,7 @@ class IngestLock:
         self._stop = threading.Event()
         self._heartbeat = threading.Thread(target=self._beat, daemon=True)
 
-    def __enter__(self) -> IngestLock:
+    def __enter__(self) -> Self:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         if not self._create():
             self._take_over_if_stale()

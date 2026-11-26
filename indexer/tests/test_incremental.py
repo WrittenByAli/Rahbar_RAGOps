@@ -8,12 +8,12 @@ from collections import defaultdict
 from pathlib import Path
 
 import pytest
-
 from fakes import FakeClient, FakeEmbedder, prose, put_markdown, services, settings
+
 from pipeline.admin import count_chunks, delete_document, restore_version, status
 from pipeline.ingest import EmptyLake, run_ingest
-from pipeline.sync import ForeignCollection
 from pipeline.store import ModelMismatch
+from pipeline.sync import ForeignCollection
 
 
 def sections(seed: int, count: int = 4) -> str:
@@ -178,7 +178,7 @@ def test_metadata_only_difference_is_updated_without_embedding(tmp_path: Path) -
     seed_corpus(config)
     run_ingest(config, services(client, embedder))
     collection = client.collections["rahbar"]
-    victim = sorted(collection.rows)[0]
+    victim = min(collection.rows)
     collection.rows[victim]["metadata"]["page_start"] = 99
     embedder.reset()
 
@@ -425,8 +425,8 @@ def test_every_target_collection_is_kept_up_to_date(tmp_path: Path) -> None:
 @pytest.mark.parametrize("bad", [
     "- {collection: a}",
     "[]",
-    "- {collection: a, embed_model: m, chunk_size: 40, chunk_overlap: 5}\n"
-    "- {collection: a, embed_model: m, chunk_size: 40, chunk_overlap: 5}",
+    ("- {collection: a, embed_model: m, chunk_size: 40, chunk_overlap: 5}\n"
+     "- {collection: a, embed_model: m, chunk_size: 40, chunk_overlap: 5}"),
 ])
 def test_incomplete_or_repeated_targets_are_refused(tmp_path: Path, bad: str) -> None:
     from pipeline.config import targets

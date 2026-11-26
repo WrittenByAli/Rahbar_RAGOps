@@ -8,8 +8,8 @@ import time
 from pathlib import Path
 
 import pytest
-
 from fakes import FakeClient, prose, put_markdown, services, settings
+
 from pipeline import run as cli
 from pipeline.admin import delete_document, restore_version
 from pipeline.ingest import run_ingest
@@ -28,9 +28,8 @@ def test_second_concurrent_ingest_is_refused(tmp_path: Path) -> None:
     put_markdown(config.lake_dir, "alpha.md", prose(1))
     lock_path = Path(config.lake_dir) / "state" / "ingest.lock"
 
-    with IngestLock(lock_path, stale_seconds=300):
-        with pytest.raises(LockHeld) as refused:
-            run_ingest(config, services(client))
+    with IngestLock(lock_path, stale_seconds=300), pytest.raises(LockHeld) as refused:
+        run_ingest(config, services(client))
 
     assert "held by" in str(refused.value)
     assert client.collections == {}                              # nothing was written
@@ -44,12 +43,12 @@ def test_second_concurrent_ingest_is_refused(tmp_path: Path) -> None:
 @pytest.mark.parametrize("command", ["delete", "restore"])
 def test_delete_and_restore_take_the_same_lock(tmp_path: Path, command: str) -> None:
     config = settings(tmp_path)
-    with IngestLock(Path(config.lake_dir) / "state" / "ingest.lock", stale_seconds=300):
-        with pytest.raises(LockHeld):
-            if command == "delete":
-                delete_document(config, services(), "x")
-            else:
-                restore_version(config, services(), "x", "2026")
+    with IngestLock(Path(config.lake_dir) / "state" / "ingest.lock", stale_seconds=300), \
+            pytest.raises(LockHeld):
+        if command == "delete":
+            delete_document(config, services(), "x")
+        else:
+            restore_version(config, services(), "x", "2026")
 
 
 def test_command_line_exits_non_zero_when_the_lock_is_held(tmp_path: Path, monkeypatch,

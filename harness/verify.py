@@ -22,8 +22,18 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from checks import (  # noqa: E402
-    CHECKS, FAIL, K8S_RULES, PASS, PENDING, SKIP, Context, Result, run_check, stage_of)
+from checks import (
+    CHECKS,
+    FAIL,
+    K8S_RULES,
+    PASS,
+    PENDING,
+    SKIP,
+    Context,
+    Result,
+    run_check,
+    stage_of,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 PARTS = ["G", "P", "A", "B", "C", "D", "E", "F", "R", "S"]
@@ -194,8 +204,8 @@ def render(reqs: list[dict]) -> str:
         "Generated from `harness/requirements.toml` by `python harness/verify.py --render`.",
         "Do not edit by hand. Status is deliberately not stored here: run the verifier.",
         "",
-        "Kind: **auto** = machine check; **mixed** = machine check and human signature; "
-        "**human** = only the members can do it.",
+        ("Kind: **auto** = machine check; **mixed** = machine check and human signature; "
+         "**human** = only the members can do it."),
     ]
     for part in PARTS:
         rows = [r for r in reqs if r["part"] == part]

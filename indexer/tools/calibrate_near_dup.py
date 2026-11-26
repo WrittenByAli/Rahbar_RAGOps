@@ -30,13 +30,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from pipeline import thresholds  # noqa: E402 - needs the line above
-from pipeline.clean import clean  # noqa: E402
-from pipeline.config import get_settings  # noqa: E402
-from pipeline.embed import embed, model_digest  # noqa: E402
-from pipeline.extract import extract  # noqa: E402
-from pipeline.neardup import best_similarities, share_at_least, split_windows, unit  # noqa: E402
-from pipeline.verify import normalised_text  # noqa: E402
+from pipeline import thresholds
+from pipeline.clean import clean
+from pipeline.config import get_settings
+from pipeline.embed import embed, model_digest
+from pipeline.extract import extract
+from pipeline.neardup import best_similarities, share_at_least, split_windows, unit
+from pipeline.verify import normalised_text
 
 SEED = 42
 WINDOWS = [(100, 50), (100, 100), (60, 30), (200, 100)]      # (words, stride)
@@ -154,11 +154,12 @@ def main() -> int:
     for size, stride in (tuple(map(int, w.split("/"))) for w in args.windows):
         cache: dict[str, list[list[float]]] = {}
 
-        def vectors(text: str) -> list[list[float]]:
-            if text not in cache:
-                cache[text] = [unit(v) for v in embed(split_windows(text, size, stride),
-                                                      settings)]
-            return cache[text]
+        def vectors(text: str, _cache: dict = cache, _size: int = size,
+                    _stride: int = stride) -> list[list[float]]:
+            if text not in _cache:
+                _cache[text] = [unit(v) for v in embed(split_windows(text, _size, _stride),
+                                                       settings)]
+            return _cache[text]
 
         # best cosine per window: positives are copy -> original, negatives a -> b
         first, second = list(corpus)[:2]

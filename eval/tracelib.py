@@ -15,7 +15,7 @@ import sys
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -117,15 +117,15 @@ def cache_status(record: dict) -> str | None:
 def parse_time(text: Any) -> datetime:
     """An ISO-8601 time that states its zone, converted to UTC. ValueError otherwise."""
     if not isinstance(text, str):
-        raise ValueError(f"not a time: {text!r}")
+        raise ValueError(f"not a time: {text!r}")  # noqa: TRY004  — caller catches ValueError
     value = datetime.fromisoformat(text)  # Python 3.11 and later accept a final Z
     if value.tzinfo is None:
         raise ValueError(f"time {text!r} has no zone: end it with Z (UTC) or add e.g. +05:00")
-    return value.astimezone(timezone.utc)
+    return value.astimezone(UTC)
 
 
 def format_time(value: datetime) -> str:
-    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+    return value.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
 
 def use_utf8_output() -> None:

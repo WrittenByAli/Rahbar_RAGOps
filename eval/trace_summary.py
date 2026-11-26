@@ -30,7 +30,7 @@ import math
 import re
 import sys
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -193,7 +193,7 @@ def summarise(loaded: LoadedTraces, since: datetime, until: datetime) -> dict:
     skipped = {reason: loaded.skipped[reason] for reason in SKIP_REASONS}
     skipped.update({reason: left_out[reason] for reason in ("bad_timestamp", "outside_window")})
     return {
-        "generated_at": format_time(datetime.now(timezone.utc)),
+        "generated_at": format_time(datetime.now(UTC)),
         "window": {
             "since": format_time(since),
             "until": format_time(until),
@@ -248,10 +248,10 @@ def table(summary: dict) -> str:
     statuses = ", ".join(f"{name} {count}" for name, count in cache["status_counts"].items())
     lines += [
         "",
-        f"abstention rate  {decimal(summary['abstention_rate'])}  "
-        f"({abstention['abstained']} of {abstention['n']} answers declined)",
-        f"cache hit rate   {decimal(summary['cache_hit_rate'])}  "
-        f"(hits / {cache['n']} lookups; only hit and miss count; seen: {statuses or 'none'})",
+        (f"abstention rate  {decimal(summary['abstention_rate'])}  "
+         f"({abstention['abstained']} of {abstention['n']} answers declined)"),
+        (f"cache hit rate   {decimal(summary['cache_hit_rate'])}  "
+         f"(hits / {cache['n']} lookups; only hit and miss count; seen: {statuses or 'none'})"),
         "",
         "latency p95 per stage, ms (nearest rank)",
         f"  {'stage':<10} {'n':>6} {'p95':>12}",
@@ -279,7 +279,7 @@ def table(summary: dict) -> str:
 
 def write_result(summary: dict, out_dir: Path, label: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     path = out_dir / f"{stamp}-{label}.json"
     with path.open("x", encoding="utf-8", newline="\n") as handle:  # "x": never overwrite
         handle.write(json.dumps(summary, indent=2) + "\n")

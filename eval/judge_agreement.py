@@ -49,8 +49,8 @@ def blind_view(suite: dict, seed: int = 0) -> str:
     """The answers and their context, in shuffled order, with nothing from the judge."""
     answers = judged_answers(suite)
     random.Random(seed).shuffle(answers)
-    blocks = [f"{len(answers)} answers from run {suite.get('run_id')}. Is every claim of "
-              "the answer supported by the context shown with it?"]
+    blocks = [(f"{len(answers)} answers from run {suite.get('run_id')}. Is every claim of "
+               "the answer supported by the context shown with it?")]
     # Only the fields named here are printed, so a verdict cannot slip through.
     for number, row in enumerate(answers, 1):
         context = "\n".join(

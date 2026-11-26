@@ -84,7 +84,7 @@ def test_superseded_flag_does_not_change_ids() -> None:
 def test_chunk_id_is_built_from_the_documented_fields() -> None:
     doc = make_doc("## Rules\nbody text", doc_id="ug-rules")
     text_hash = hashlib.sha256(b"Rules\nbody text").hexdigest()
-    key = "\n".join(["ug-rules", "2026-06", "Rules", "0", text_hash])
+    key = f"ug-rules\n2026-06\nRules\n0\n{text_hash}"
 
     assert ids(doc) == [hashlib.sha256(key.encode()).hexdigest()[:16]]
 

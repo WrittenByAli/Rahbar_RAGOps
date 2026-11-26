@@ -39,7 +39,6 @@ import sys
 from pathlib import Path
 
 import yaml
-
 from suite.common import (
     EVAL_DIR,
     JUDGE_SETTINGS,

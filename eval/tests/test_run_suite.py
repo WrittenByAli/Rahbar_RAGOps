@@ -7,7 +7,6 @@ from pathlib import Path
 
 import httpx
 import pytest
-
 import run_suite
 from suite import component, end_to_end, judge, module
 from suite.common import SUITE_METRICS, get, load_jsonl, sha256_file

@@ -152,7 +152,7 @@ def main() -> int:
             for pattern in patterns.get(q["id"], []):
                 checked_patterns += 1
                 hits = [f"{name} p{n}" for name, n, text in everything
-                        if re.search(pattern, text, re.I)]
+                        if re.search(pattern, text, re.IGNORECASE)]
                 if hits:
                     problems.append(f"{q['id']}: {pattern!r} matches {hits[:5]}")
             continue

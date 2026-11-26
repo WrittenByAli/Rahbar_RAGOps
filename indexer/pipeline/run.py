@@ -31,7 +31,7 @@ from .lock import LockHeld, LockLost
 from .store import ModelMismatch
 from .sync import ForeignCollection
 
-__all__ = ["main", "discover"]
+__all__ = ["discover", "main"]
 
 EXIT_FAILED = 1
 EXIT_NOT_IMPLEMENTED = 2

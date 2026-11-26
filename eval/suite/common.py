@@ -8,7 +8,7 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -107,7 +107,7 @@ def require_same(first: dict, second: dict, keys: tuple[str, ...]) -> None:
 
 
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def stamp(when: datetime) -> str:
@@ -138,7 +138,7 @@ def git_sha() -> str:
     if not sha:
         try:
             run = subprocess.run(["git", "-C", str(EVAL_DIR), "rev-parse", "HEAD"],
-                                 capture_output=True, text=True, timeout=30)
+                                 capture_output=True, text=True, timeout=30, check=False)
             sha = run.stdout.strip() if run.returncode == 0 else ""
         except (OSError, subprocess.TimeoutExpired):
             sha = ""
@@ -153,7 +153,7 @@ def post_json(client: httpx.Client, url: str, body: dict) -> dict:
     response.raise_for_status()
     data = response.json()
     if not isinstance(data, dict):
-        raise ValueError(f"{url} did not return a JSON object")
+        raise TypeError(f"{url} did not return a JSON object")
     return data
 
 

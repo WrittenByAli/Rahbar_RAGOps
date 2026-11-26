@@ -4,11 +4,10 @@ here exist only in memory or in a temporary folder."""
 import copy
 import json
 
-import pytest
-
 import compare
 import drift
 import judge_agreement
+import pytest
 import stochasticity
 from suite.common import SUITE_METRICS, SuiteError
 

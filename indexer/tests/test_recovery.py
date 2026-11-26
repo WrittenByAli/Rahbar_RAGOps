@@ -8,9 +8,8 @@ import shutil
 from pathlib import Path
 
 import pytest
+from fakes import FakeClient, FakeEmbedder, make_pdf, prose, put_markdown, services, settings
 
-from fakes import (FakeClient, FakeEmbedder, make_pdf, prose, put_markdown, services,
-                   settings)
 from pipeline import ingest as ingest_module
 from pipeline import lake as lake_module
 from pipeline import run as cli

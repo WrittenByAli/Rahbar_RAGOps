@@ -136,7 +136,7 @@ def _check_batch(*columns: list) -> None:
 def _check_metadata(metadata: dict) -> None:
     for key, value in metadata.items():
         if not isinstance(value, (str, int, float, bool)):
-            raise ValueError(f"metadata value for {key!r} must be str, int, float or bool")
+            raise TypeError(f"metadata value for {key!r} must be str, int, float or bool")
 
 
 class FakeEmbedder:
@@ -174,10 +174,12 @@ def services(client: FakeClient | None = None,
 
 
 def settings(tmp_path: Path, **changes: Any) -> IndexerSettings:
-    values: dict[str, Any] = dict(
-        embed_model="nomic-embed-text", chroma_host="", chroma_port=0, collection="rahbar",
-        corpus_dir=str(tmp_path / "no-corpus"), chunk_size=40, chunk_overlap=5,
-        ollama_url="", lake_dir=str(tmp_path / "lake"), report_dir=str(tmp_path / "reports"))
+    values: dict[str, Any] = {
+        "embed_model": "nomic-embed-text", "chroma_host": "", "chroma_port": 0,
+        "collection": "rahbar", "corpus_dir": str(tmp_path / "no-corpus"),
+        "chunk_size": 40, "chunk_overlap": 5, "ollama_url": "",
+        "lake_dir": str(tmp_path / "lake"), "report_dir": str(tmp_path / "reports"),
+    }
     values.update(changes)
     return IndexerSettings(**values)
 
@@ -228,9 +230,9 @@ def make_pdf(path: Path, pages: list[list[tuple[int, int, str]]], width: int = 4
              crop_box: tuple[int, int, int, int] | None = None) -> Path:
     """Write a small but well-formed PDF. Each page is a list of (x, y, text) lines.
     media_box and crop_box (x0, y0, x1, y1 in PDF units) apply to every page."""
-    boxes = "/MediaBox [%d %d %d %d]" % (media_box or (0, 0, width, height))
+    boxes = "/MediaBox [{} {} {} {}]".format(*(media_box or (0, 0, width, height)))
     if crop_box:
-        boxes += " /CropBox [%d %d %d %d]" % crop_box
+        boxes += " /CropBox [{} {} {} {}]".format(*crop_box)
     objects: list[bytes] = [b"<< /Type /Catalog /Pages 2 0 R >>", b"",
                             b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"]
     kids = []

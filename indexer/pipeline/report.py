@@ -13,7 +13,7 @@ import hashlib
 import json
 import re
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -23,12 +23,12 @@ from .verify import CHECKS
 
 def new_run_id() -> str:
     """Time stamp, milliseconds (for order within a second) and two random characters."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return f"{now:%Y%m%dT%H%M%S}Z-{now.microsecond // 1000:03d}{uuid.uuid4().hex[:2]}"
 
 
 def utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+    return datetime.now(UTC).isoformat(timespec="milliseconds").replace("+00:00", "Z")
 
 
 def _label(text: str) -> str:

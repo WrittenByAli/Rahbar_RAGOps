@@ -72,14 +72,14 @@ _RULES: list[tuple[str, re.Pattern[str]]] = [
          r"(?:unrestricted|unfiltered|jailbroken|different (?:ai|assistant|chatbot))\b"),
         # "note to the AI: ...", "if you are a language model ..."
         ("addressed_to_model",
-         r"\b(?:note|message|instructions?|attention|reminder|notice) (?:to|for) "
-         r"(?:(?:the|any|all|every) )?(?:ai(?: assistant| model| system)?|language model|llm"
-         r"|chatbot|virtual assistant) ?(?:[:,–—-]|reading\b)"
-         r"|\b(?:if|when) you are an? (?:ai|language model|llm|chatbot)\b"
-         r"|(?:^[^a-z]*|[:;\"'(\[>–—-] ?)(?:(?:dear|attention|hey) )?"
-         r"(?:ai(?: assistant| model)?|llm|chatbot|language model) ?[:,] "
-         r"(?:please |you (?:must|should|will) )?(?:ignore|disregard|forget|tell|say|reply"
-         r"|respond|answer|output|always|never|do not|don't)\b"),
+         (r"\b(?:note|message|instructions?|attention|reminder|notice) (?:to|for) "
+          r"(?:(?:the|any|all|every) )?(?:ai(?: assistant| model| system)?|language model|llm"
+          r"|chatbot|virtual assistant) ?(?:[:,–—-]|reading\b)"
+          r"|\b(?:if|when) you are an? (?:ai|language model|llm|chatbot)\b"
+          r"|(?:^[^a-z]*|[:;\"'(\[>–—-] ?)(?:(?:dear|attention|hey) )?"
+          r"(?:ai(?: assistant| model)?|llm|chatbot|language model) ?[:,] "
+          r"(?:please |you (?:must|should|will) )?(?:ignore|disregard|forget|tell|say|reply"
+          r"|respond|answer|output|always|never|do not|don't)\b")),
         # text that dictates the reply: "respond only with ...", "tell the user that ..."
         ("dictated_reply",
          _START + r"(?:respond|reply|answer)(?: to (?:all|every|any) (?:questions?|users?))? "
@@ -97,14 +97,14 @@ _RULES: list[tuple[str, re.Pattern[str]]] = [
          r"|(?:mention|reveal|disclose) (?:this|these) (?:instructions?|prompts?)\b)"),
         # control tokens of chat formats: no policy document needs them
         ("chat_markup",
-         r"<\|(?:im_start|im_end|system|user|assistant|endoftext|eot_id|start_header_id)\|>"
-         r"|\[/?inst\]|<</?sys>>"),
+         (r"<\|(?:im_start|im_end|system|user|assistant|endoftext|eot_id|start_header_id)\|>"
+          r"|\[/?inst\]|<</?sys>>")),
     )
 ]
 
 _SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
 # Soft hyphen and zero-width characters: invisible, but they split a word for a pattern.
-_INVISIBLE = re.compile("[­​-‏⁠-⁤﻿]")
+_INVISIBLE = re.compile("[" + chr(0xAD) + chr(0x200B) + "-" + chr(0x200F) + chr(0x2060) + "-" + chr(0x2064) + chr(0xFEFF) + "]")
 
 Match = tuple[str, str]      # (rule_id, the sentence that matched, as it was written)
 

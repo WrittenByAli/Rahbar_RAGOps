@@ -3,11 +3,10 @@
 import json
 import math
 
+import coverage
 import httpx
 import pytest
 import yaml
-
-import coverage
 from suite.common import sha256_file
 
 GOLDEN = [{"id": "g1", "question": "attendance rule"},
