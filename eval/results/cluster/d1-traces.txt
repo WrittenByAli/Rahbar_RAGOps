@@ -1,0 +1,30 @@
+# captured: 2026-11-26T21:50:35Z
+# command: kubectl exec -n rahbar-a3 datalake-shell -- sh -c "wc -l /data/traces/*.jsonl && head -1 /data/traces/api-76d8cf9cd6-268cd.jsonl | python3 -c 'import json,sys; t=json.load(sys.stdin); print(json.dumps({k:t.get(k) for k in [\"kind\",\"schema\",\"trace_id\",\"ts\",\"query\",\"release_id\",\"pod\",\"latency_ms\",\"cache\"]}, indent=2))'"
+# exit: 0
+# git: e9f6889
+Defaulted container "shell" out of: shell, make-inbox (init)
+     83 /data/traces/api-76d8cf9cd6-268cd.jsonl
+     12 /data/traces/api-76d8cf9cd6-pxbnc.jsonl
+     95 total
+{
+  "kind": "trace",
+  "schema": 1,
+  "trace_id": "390a74d392dc4021b4ff93b31ca0adf4",
+  "ts": "2026-11-26T19:15:37.738Z",
+  "query": "What is the minimum CGPA an undergraduate student needs to be awarded a degree?",
+  "release_id": "v1",
+  "pod": "api-76d8cf9cd6-268cd",
+  "latency_ms": {
+    "cache": null,
+    "embed": 50.593,
+    "retrieve": 13.632,
+    "guardrail": 3.042,
+    "prompt": 20.407,
+    "generate": 2147.31,
+    "total": 2286.565
+  },
+  "cache": {
+    "status": "bypass",
+    "source_trace_id": null
+  }
+}
