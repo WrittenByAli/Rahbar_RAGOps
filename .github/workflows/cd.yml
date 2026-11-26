@@ -1,8 +1,9 @@
 name: CD
 
+# Manual only since Assignment 03. The publish job needs Docker Hub secrets that this
+# repository does not have, and the assignment deploys locally built images to minikube.
+# To publish again: add DOCKERHUB_USERNAME and DOCKERHUB_TOKEN, then restore the push trigger.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:

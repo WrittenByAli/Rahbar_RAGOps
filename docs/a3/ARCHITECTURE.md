@@ -150,6 +150,12 @@ For each target collection and each lake version that should be retrievable or r
 7. Last, sweep ids whose `(doc_id, version)` is not in the manifest and report the orphan count.
 8. If anything changed, bump the collection's `index_generation` (used by the cache key).
 
+Tested against a real Chroma 1.0.12 server with the pinned client (Phase 0 spike): metadata
+`update` on a chunk **merges** (other keys stay). `collection.modify(metadata=...)` **replaces** the
+whole dictionary and **raises if it contains `hnsw:space`**, so send every other existing key plus
+the new generation. Cosine distance is unaffected. `get_or_create` does not update the metadata of
+an existing collection. `get` and `delete` accept `where`, including `$and`.
+
 The vector store describes itself, so there is no second index ledger to drift, and an interrupted
 run repairs itself. Chunk metadata: `doc_id, doc_version, content_sha256, fingerprint, source,
 section, page_start, page_end, page, superseded, status, chunk_count`.

@@ -39,3 +39,25 @@ errors in `eval/offline_eval.py`. No cluster run (Docker daemon stopped).
   A2 head tagged `a2-final`. This commit adds the harness and planning set; no assignment feature.
 - **Open:** tell the partner and add them as collaborator; plan T0.2 (`dev` branch, README links,
   `cd.yml` secrets). Public repo: keep roll numbers and the assignment PDFs out of git.
+
+## 2026-11-26 - Phase 0: baseline and cluster smoke test (branch `phase-0-baseline`)
+**Done:** 10 lint errors fixed; CI lints and tests the harness with pinned ruff and mypy;
+`cd.yml` is manual only; README badge and clone URL updated. `P.1` passes.
+
+**Cluster (one laptop only):** existing minikube profile (docker driver, 4 CPUs, 6144 MB, Calico,
+Kubernetes 1.37.0). It still runs the A2 deployment in namespace `rahbar`; after resume `/readyz`
+was ready with 475 chunks and one question was answered with a correct citation (HTTP 200, 14.1 s).
+Pods reached Ollama on the host without setting `OLLAMA_HOST`. Resuming the cluster also started
+A2's scheduled reindex job. Docker on this laptop also hosts unrelated projects: never prune.
+
+**Spikes (T0.9), run in a temporary namespace that was then deleted:**
+- non-root (uid 1000, `fsGroup`, read-only root) can write, atomically rename and `O_EXCL` lock on
+  a new PVC;
+- a 100,044-character JSON line comes back from `kubectl logs` as one parseable line;
+- Ollama `/api/tags` returns a `digest` per model (use it as the embedding and model version);
+- Chroma 1.0.12: see the note under ARCHITECTURE 3.6.
+
+**Corpus:** all 9 documents re-downloaded; every SHA-256 equals the A2 manifest.
+
+**Open (needs members):** the partner's laptop is not verified; `G.4` needs both members' commits.
+Python 3.12 is not installed here (tests ran on 3.11).

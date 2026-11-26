@@ -3,6 +3,10 @@
 "Recommended" is the planning default. It is not final until both members confirm it. Record the
 confirmation here, and turn the important ones into ADRs under `docs/adr/` while implementing.
 
+**Implementation started on 2026-11-26 using the recommended defaults (D-02 to D-14), which
+neither member has confirmed yet.** Each is a configuration value or a contained module, so it can
+still be changed. Confirm them before the first official baseline run (plan 1.1, step S0).
+
 | ID | Question | Recommended | Why | Alternatives and cost | Confirmed by |
 |---|---|---|---|---|---|
 | D-01 | Which repository? | **Decided:** new **public** repo `WrittenByAli/Rahbar_RAGOps`, full A2 history kept; A3 work is everything after `20b1e98` (tag `a2-final`) | keeps both members' history and shows the work builds on A2; `harness` base commit stays valid | private would keep other groups from reading it before submission; continuing in the A2 repo would mix the two assignments | chosen by one member, 2026-11-26; tell the partner |

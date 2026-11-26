@@ -1,6 +1,6 @@
 # RAHBAR — Grounded RAG on Kubernetes
 
-![CI](https://github.com/WrittenByAli/Rahbar/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/WrittenByAli/Rahbar_RAGOps/actions/workflows/ci.yml/badge.svg)
 
 RAHBAR is a Retrieval-Augmented Generation (RAG) system that answers questions about FAST-NUCES university policies. It ingests a curated document corpus (PDFs, HTML, Markdown), extracts and chunks the text with structure-aware splitting, embeds the chunks using a local embedding model (Ollama), stores them in a Chroma vector database, and serves a FastAPI endpoint that retrieves relevant passages and generates grounded answers via an LLM. The entire system runs on Kubernetes (minikube) with proper separation of concerns: an indexer Job writes the index, the API reads it, and a chat UI provides the user interface.
 
@@ -33,8 +33,8 @@ graph TB
 
 ```bash
 # 1. Clone and enter the repo
-git clone https://github.com/WrittenByAli/Rahbar.git
-cd Rahbar
+git clone https://github.com/WrittenByAli/Rahbar_RAGOps.git
+cd Rahbar_RAGOps
 
 # 2. Start minikube
 minikube start --driver=docker

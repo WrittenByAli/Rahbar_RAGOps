@@ -71,7 +71,7 @@ Rules:
 | Task | Detail |
 |---|---|
 | T0.1 | Confirm `DECISIONS.md` D-02, D-03 and D-13 (D-01 is decided). Send the instructor question in D-03 now |
-| T0.2 | In the new repo: add the partner as a collaborator; create `dev`; work on `a3/<topic>` branches into it. Point the README badge and clone URL at the new repo. `cd.yml` runs on every push to `main` and its publish job needs Docker Hub secrets that a new repo does not have: add them, or limit the workflow to manual runs (record which) |
+| T0.2 | In the new repo: add the partner as a collaborator. **One branch per phase** (`phase-<n>-<topic>`), each stacked on the previous one, so a branch's own commits are exactly that phase; merge into `main` in order by pull request after the other member reviews. README badge and clone URL point at the new repo. `cd.yml` is **manual only** (the repo has no Docker Hub secrets) |
 | T0.3 | [HUMAN] Each member sets their git identity and fills `harness/members.toml` (`G.4`) |
 | T0.4 | Fix the 10 E402 lint errors in `eval/offline_eval.py` so `P.1` passes. Add `harness/tests` to CI |
 | T0.5 | Python 3.12 venv; install both `requirements-dev.txt` and `pyyaml`; run the harness tests |
