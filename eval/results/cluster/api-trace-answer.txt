@@ -1,0 +1,59 @@
+# captured: 2026-11-26T21:46:22Z
+# command: python -c "
+import requests, json, sys
+r = requests.post('http://localhost:18990/api/ask', 
+    json={'question': 'What is the minimum CGPA required to graduate?', 'release': 'v1'},
+    timeout=60)
+print(json.dumps(r.json(), indent=2))
+print('status:', r.status_code)
+"
+# exit: 0
+# git: 7bcdf9b
+{
+  "request_id": "209749ac37b74029a1e54d5fdcc890a2",
+  "answer": "2.00",
+  "citations": [],
+  "answered_from_context": true,
+  "confidence": "high",
+  "retrieved": [
+    {
+      "chunk_id": "b74b1aa0efacb3a1",
+      "source": "academic-rules-handbook-jun-2026.pdf",
+      "section": "1.25 Minimum Cumulative Grade Point Average (CGPA) of 2.00 is",
+      "page": 10,
+      "score": 0.83326137
+    },
+    {
+      "chunk_id": "d5bfa695171a8da0",
+      "source": "academic-rules-handbook-jun-2026.pdf",
+      "section": "5.4 Minimum CGPA required to avoid academic warning is 2.00",
+      "page": 24,
+      "score": 0.79288095
+    },
+    {
+      "chunk_id": "10c2886ae29a3c49",
+      "source": "grading-page.html",
+      "section": "Warning/Probation",
+      "page": 1,
+      "score": 0.7154117799999999
+    },
+    {
+      "chunk_id": "9e0a3634d48baed1",
+      "source": "academic-rules-handbook-jun-2026.pdf",
+      "section": "7.2 Students earning high CGPA as below would have the following",
+      "page": 30,
+      "score": 0.70663285
+    },
+    {
+      "chunk_id": "99e646c3fd245bb3",
+      "source": "prospectus-2026-academic-rules-and-regulations.pdf",
+      "section": "Introduction",
+      "page": 2,
+      "score": 0.70344454
+    }
+  ],
+  "provider": "ollama",
+  "trace_id": "88a408667b274d3491fd6b2a8a3c06da",
+  "trace": null
+}
+status: 200

@@ -1,0 +1,19 @@
+# captured: 2026-11-26T21:46:28Z
+# command: python -c "
+import requests, json
+r = requests.post('http://localhost:18990/api/ask',
+    json={'question': 'What time does the hostel gate close at night?', 'release': 'v1'},
+    timeout=60)
+data = r.json()
+print(json.dumps({'answered_from_context': data.get('answered_from_context'),
+                  'answer': data.get('answer'), 'citations': data.get('citations', [])[:1]}, indent=2))
+print('status:', r.status_code)
+"
+# exit: 0
+# git: 7bcdf9b
+{
+  "answered_from_context": false,
+  "answer": "I don't have enough information in my knowledge base to answer this question.",
+  "citations": []
+}
+status: 200
