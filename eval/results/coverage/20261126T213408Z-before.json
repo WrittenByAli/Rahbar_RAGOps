@@ -1,0 +1,1060 @@
+{
+  "run_at": "2026-11-26T21:34:08+00:00",
+  "label": "before",
+  "git_sha": "b5a793a7fc51f73f23626e632689ef38b8e41d24",
+  "config_sha256": "3b820c4204dee5b294cb188ce7ce4978226729bf7326361d04afaa4ad782b855",
+  "threshold_similarity": 0.75,
+  "threshold_justification": "0.75 is below the lower end of the module-pair cosine similarity distribution (0.80-0.95 with nomic-embed-text). A live query scoring below this against every golden question is asking about a topic the golden set does not cover.",
+  "required_share": 0.7,
+  "share_covered": 0.023809523809523808,
+  "covered_count": 1,
+  "live_count": 42,
+  "near_identical_similarity": 0.98,
+  "near_identical_count": 0,
+  "share_covered_excluding_near_identical": 0.023809523809523808,
+  "cluster_similarity": 0.75,
+  "embed_model": "nomic-embed-text",
+  "golden_count": 26,
+  "golden_sha256": "13638c6dee8bf102501bf4aba7b6fafc38fad421b25b1c3e1e15289b6777f41b",
+  "live_queries_sha256": "07694a31ea6ea81a89cac2e4c021a0899c7344add217fe5a0f1bb12c63c6d6f5",
+  "matches": [
+    {
+      "id": "lq001",
+      "query": "my attendance is at 76 percent in one course, can i still sit the final??",
+      "expected": "in_domain",
+      "topic": "attendance",
+      "golden_id": "g001",
+      "golden_question": "Under the June 2026 Undergraduate Academic Rules handbook, how much absence can the HoD condone, and what grade does a student get for failing the attendance requirement?",
+      "similarity": 0.6290854620482933,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq002",
+      "query": "cgpa dropped to 1.9 this sem what happens now",
+      "expected": "in_domain",
+      "topic": "academic warning",
+      "golden_id": "g006",
+      "golden_question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "similarity": 0.5557911468692536,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq003",
+      "query": "how many warnings before they kick u out",
+      "expected": "in_domain",
+      "topic": "academic warning",
+      "golden_id": "g015",
+      "golden_question": "For how many semesters at most can a student freeze admission under the June 2026 undergraduate rules handbook, and can the first two semesters of a BS degree normally be frozen?",
+      "similarity": 0.5428100680268934,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq004",
+      "query": "how many points is a B+ worth",
+      "expected": "in_domain",
+      "topic": "grading",
+      "golden_id": "g009",
+      "golden_question": "On the university's grading web page, how is a grade of B described for BS/BBA students compared with MS/MBA students?",
+      "similarity": 0.5705819979492615,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq005",
+      "query": "whats the diff between sgpa and cgpa",
+      "expected": "in_domain",
+      "topic": "grading",
+      "golden_id": "g006",
+      "golden_question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "similarity": 0.5959277268852389,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq006",
+      "query": "if i repeat a course and get a worse grade which one counts",
+      "expected": "in_domain",
+      "topic": "grading",
+      "golden_id": "g003",
+      "golden_question": "Under the June 2026 undergraduate rules handbook, what grade must a course have before it can be replaced, and can a core course be replaced?",
+      "similarity": 0.6806971849051988,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq007",
+      "query": "i got an I grade, how long do i have to clear it",
+      "expected": "in_domain",
+      "topic": "grading",
+      "golden_id": "g003",
+      "golden_question": "Under the June 2026 undergraduate rules handbook, what grade must a course have before it can be replaced, and can a core course be replaced?",
+      "similarity": 0.6013676133707118,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq008",
+      "query": "per credit hour fee for bs cs?",
+      "expected": "in_domain",
+      "topic": "fees",
+      "golden_id": "g017",
+      "golden_question": "What is the tuition fee per credit hour for BS students in the academic year 2027-28?",
+      "similarity": 0.804754709438022,
+      "covered": true,
+      "near_identical": false
+    },
+    {
+      "id": "lq009",
+      "query": "if i leave in the first week do i get all my money back",
+      "expected": "in_domain",
+      "topic": "fees",
+      "golden_id": "g008",
+      "golden_question": "If I pull out on the 18th day after classes began, what share of my tuition do I get back?",
+      "similarity": 0.6708338007554303,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq010",
+      "query": "how can i pay fee online, can i use easypaisa",
+      "expected": "in_domain",
+      "topic": "fees",
+      "golden_id": "g005",
+      "golden_question": "What happens under the June 2026 undergraduate rules to someone who pays to get a look at a question paper before the exam?",
+      "similarity": 0.44340503070519205,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq011",
+      "query": "admission fee again for MS if i did BS from here??",
+      "expected": "in_domain",
+      "topic": "fees",
+      "golden_id": "g017",
+      "golden_question": "What is the tuition fee per credit hour for BS students in the academic year 2027-28?",
+      "similarity": 0.6540047891421868,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq012",
+      "query": "can i drop a course in 1st semester",
+      "expected": "in_domain",
+      "topic": "registration",
+      "golden_id": "g015",
+      "golden_question": "For how many semesters at most can a student freeze admission under the June 2026 undergraduate rules handbook, and can the first two semesters of a BS degree normally be frozen?",
+      "similarity": 0.6318486560311143,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq013",
+      "query": "max courses i can take in a normal semester",
+      "expected": "in_domain",
+      "topic": "registration",
+      "golden_id": "g015",
+      "golden_question": "For how many semesters at most can a student freeze admission under the June 2026 undergraduate rules handbook, and can the first two semesters of a BS degree normally be frozen?",
+      "similarity": 0.6469955065283206,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq014",
+      "query": "i want to take a semester break, what do i have to do",
+      "expected": "in_domain",
+      "topic": "registration",
+      "golden_id": "g015",
+      "golden_question": "For how many semesters at most can a student freeze admission under the June 2026 undergraduate rules handbook, and can the first two semesters of a BS degree normally be frozen?",
+      "similarity": 0.6024848233968404,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq015",
+      "query": "can i study a new course in summers or only repeat ones",
+      "expected": "in_domain",
+      "topic": "summer semester",
+      "golden_id": "g015",
+      "golden_question": "For how many semesters at most can a student freeze admission under the June 2026 undergraduate rules handbook, and can the first two semesters of a BS degree normally be frozen?",
+      "similarity": 0.5720281087758482,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq016",
+      "query": "requirements for registering fyp 1",
+      "expected": "in_domain",
+      "topic": "final year project",
+      "golden_id": "g006",
+      "golden_question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "similarity": 0.5679522837319505,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq017",
+      "query": "missed my mid because i was in hospital, can i get a retake",
+      "expected": "in_domain",
+      "topic": "exams",
+      "golden_id": "g011",
+      "golden_question": "If I move from NUCES to another institution and then want to come back, how soon must I ask for re-admission?",
+      "similarity": 0.5903261559417814,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq018",
+      "query": "is a cousins wedding a valid reason for retake exam",
+      "expected": "in_domain",
+      "topic": "exams",
+      "golden_id": "g004",
+      "golden_question": "By when must an application to recheck a final exam reach the Examination Office, and when is the rechecking fee refunded?",
+      "similarity": 0.5618607467187515,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq019",
+      "query": "paper checking seems wrong, how to apply for rechecking",
+      "expected": "in_domain",
+      "topic": "exams",
+      "golden_id": "g004",
+      "golden_question": "By when must an application to recheck a final exam reach the Examination Office, and when is the rechecking fee refunded?",
+      "similarity": 0.7053344282179811,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq020",
+      "query": "what happens if i get caught cheating in a quiz",
+      "expected": "in_domain",
+      "topic": "academic honesty",
+      "golden_id": "g012",
+      "golden_question": "What fine can a student receive for breaking the computer lab rules?",
+      "similarity": 0.6280464687141136,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq021",
+      "query": "am i allowed to use chatgpt for my assignments",
+      "expected": "in_domain",
+      "topic": "generative ai",
+      "golden_id": "g006",
+      "golden_question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "similarity": 0.4886284435682894,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq022",
+      "query": "do i have to cite ai tools if i only used them to search ideas",
+      "expected": "in_domain",
+      "topic": "generative ai",
+      "golden_id": "g023",
+      "golden_question": "What Turnitin similarity percentage counts as plagiarism for a student assignment?",
+      "similarity": 0.44473716710108874,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq023",
+      "query": "what gpa do i need for deans list",
+      "expected": "in_domain",
+      "topic": "awards",
+      "golden_id": "g006",
+      "golden_question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "similarity": 0.6086218363541822,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq024",
+      "query": "can i shift from karachi campus to lahore campus",
+      "expected": "in_domain",
+      "topic": "campus transfer",
+      "golden_id": "g024",
+      "golden_question": "What is the semester fee for the university bus service in Karachi?",
+      "similarity": 0.6176549300160191,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq025",
+      "query": "any scholarship for students who cant afford fee",
+      "expected": "in_domain",
+      "topic": "scholarships",
+      "golden_id": "g022",
+      "golden_question": "What fee do graduates have to pay to attend the convocation?",
+      "similarity": 0.599957985951012,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq026",
+      "query": "how many books can an ms student issue at once",
+      "expected": "in_domain",
+      "topic": "library",
+      "golden_id": "g010",
+      "golden_question": "How many library items can an undergraduate student borrow, for how long, and what is the daily fine?",
+      "similarity": 0.652048476391637,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq027",
+      "query": "does islamabad campus have a bus for students",
+      "expected": "in_domain",
+      "topic": "transport",
+      "golden_id": "g024",
+      "golden_question": "What is the semester fee for the university bus service in Karachi?",
+      "similarity": 0.7422252081816327,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq028",
+      "query": "how many students graduated from lahore campus in 2023-24",
+      "expected": "in_domain",
+      "topic": "annual report",
+      "golden_id": "g013",
+      "golden_question": "According to the summary table in the 2023-24 annual report, how many faculty members did the university have in total, and how many of them were in the Professor column?",
+      "similarity": 0.5927901950159389,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq029",
+      "query": "max years allowed to complete bs degree",
+      "expected": "in_domain",
+      "topic": "degree duration",
+      "golden_id": "g015",
+      "golden_question": "For how many semesters at most can a student freeze admission under the June 2026 undergraduate rules handbook, and can the first two semesters of a BS degree normally be frozen?",
+      "similarity": 0.6804584464545512,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq030",
+      "query": "how to apply for hostel room as a new student",
+      "expected": "out_of_coverage",
+      "topic": "hostel",
+      "golden_id": "g006",
+      "golden_question": "What is the gold medal for first position called, and what minimum CGPA must an undergraduate have to qualify for a position medal at graduation?",
+      "similarity": 0.5573724292238988,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq031",
+      "query": "hostel monthly charges for boys??",
+      "expected": "out_of_coverage",
+      "topic": "hostel",
+      "golden_id": "g026",
+      "golden_question": "What is the monthly stipend amount under the HEC scholarship for PhD students?",
+      "similarity": 0.564472309005517,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq032",
+      "query": "what time does the hostel gate close at night",
+      "expected": "out_of_coverage",
+      "topic": "hostel",
+      "golden_id": "g007",
+      "golden_question": "How much is the refundable security deposit that new students pay, and when is it refunded?",
+      "similarity": 0.4354805999941794,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq033",
+      "query": "can i change my roommate in the hostel",
+      "expected": "out_of_coverage",
+      "topic": "hostel",
+      "golden_id": "g011",
+      "golden_question": "If I move from NUCES to another institution and then want to come back, how soon must I ask for re-admission?",
+      "similarity": 0.48397440415380355,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq034",
+      "query": "is mess food included in hostel dues",
+      "expected": "out_of_coverage",
+      "topic": "hostel",
+      "golden_id": "g021",
+      "golden_question": "How much does a meal cost at the campus cafeteria?",
+      "similarity": 0.5696406341363629,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq035",
+      "query": "where can i park my bike inside campus",
+      "expected": "out_of_coverage",
+      "topic": "parking",
+      "golden_id": "g021",
+      "golden_question": "How much does a meal cost at the campus cafeteria?",
+      "similarity": 0.48978950380621383,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq036",
+      "query": "do i need a sticker for my car to enter",
+      "expected": "out_of_coverage",
+      "topic": "parking",
+      "golden_id": "g005",
+      "golden_question": "What happens under the June 2026 undergraduate rules to someone who pays to get a look at a question paper before the exam?",
+      "similarity": 0.4332151834683229,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq037",
+      "query": "parking fee per semester for students?",
+      "expected": "out_of_coverage",
+      "topic": "parking",
+      "golden_id": "g024",
+      "golden_question": "What is the semester fee for the university bus service in Karachi?",
+      "similarity": 0.7344856955384144,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq038",
+      "query": "my car got a fine for wrong parking how do i appeal",
+      "expected": "out_of_coverage",
+      "topic": "parking",
+      "golden_id": "g012",
+      "golden_question": "What fine can a student receive for breaking the computer lab rules?",
+      "similarity": 0.511463607241871,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq039",
+      "query": "im from abroad, how do i get a study visa for pakistan",
+      "expected": "out_of_coverage",
+      "topic": "student visa",
+      "golden_id": "g024",
+      "golden_question": "What is the semester fee for the university bus service in Karachi?",
+      "similarity": 0.5576616525733133,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq040",
+      "query": "visa extension process for international students, mine expires next month",
+      "expected": "out_of_coverage",
+      "topic": "student visa",
+      "golden_id": "g016",
+      "golden_question": "I lost my student ID card for the first time. What will a replacement cost me?",
+      "similarity": 0.5307645698862448,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq041",
+      "query": "will the university send me a letter for the visa embassy",
+      "expected": "out_of_coverage",
+      "topic": "student visa",
+      "golden_id": "g011",
+      "golden_question": "If I move from NUCES to another institution and then want to come back, how soon must I ask for re-admission?",
+      "similarity": 0.5167529428882588,
+      "covered": false,
+      "near_identical": false
+    },
+    {
+      "id": "lq042",
+      "query": "can i work part time on a student visa",
+      "expected": "out_of_coverage",
+      "topic": "student visa",
+      "golden_id": "g019",
+      "golden_question": "How many weeks and working hours must an industrial internship last, and can two short placements be combined to get there?",
+      "similarity": 0.5562314608705418,
+      "covered": false,
+      "near_identical": false
+    }
+  ],
+  "uncovered_topics": [
+    {
+      "cluster_id": "c1",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq001"
+      ],
+      "queries": [
+        "my attendance is at 76 percent in one course, can i still sit the final??"
+      ],
+      "topics_in_live_file": {
+        "attendance": 1
+      }
+    },
+    {
+      "cluster_id": "c2",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq002"
+      ],
+      "queries": [
+        "cgpa dropped to 1.9 this sem what happens now"
+      ],
+      "topics_in_live_file": {
+        "academic warning": 1
+      }
+    },
+    {
+      "cluster_id": "c3",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq003"
+      ],
+      "queries": [
+        "how many warnings before they kick u out"
+      ],
+      "topics_in_live_file": {
+        "academic warning": 1
+      }
+    },
+    {
+      "cluster_id": "c4",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq004"
+      ],
+      "queries": [
+        "how many points is a B+ worth"
+      ],
+      "topics_in_live_file": {
+        "grading": 1
+      }
+    },
+    {
+      "cluster_id": "c5",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq005"
+      ],
+      "queries": [
+        "whats the diff between sgpa and cgpa"
+      ],
+      "topics_in_live_file": {
+        "grading": 1
+      }
+    },
+    {
+      "cluster_id": "c6",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq006"
+      ],
+      "queries": [
+        "if i repeat a course and get a worse grade which one counts"
+      ],
+      "topics_in_live_file": {
+        "grading": 1
+      }
+    },
+    {
+      "cluster_id": "c7",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq007"
+      ],
+      "queries": [
+        "i got an I grade, how long do i have to clear it"
+      ],
+      "topics_in_live_file": {
+        "grading": 1
+      }
+    },
+    {
+      "cluster_id": "c8",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq009"
+      ],
+      "queries": [
+        "if i leave in the first week do i get all my money back"
+      ],
+      "topics_in_live_file": {
+        "fees": 1
+      }
+    },
+    {
+      "cluster_id": "c9",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq010"
+      ],
+      "queries": [
+        "how can i pay fee online, can i use easypaisa"
+      ],
+      "topics_in_live_file": {
+        "fees": 1
+      }
+    },
+    {
+      "cluster_id": "c10",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq011"
+      ],
+      "queries": [
+        "admission fee again for MS if i did BS from here??"
+      ],
+      "topics_in_live_file": {
+        "fees": 1
+      }
+    },
+    {
+      "cluster_id": "c11",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq012"
+      ],
+      "queries": [
+        "can i drop a course in 1st semester"
+      ],
+      "topics_in_live_file": {
+        "registration": 1
+      }
+    },
+    {
+      "cluster_id": "c12",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq013"
+      ],
+      "queries": [
+        "max courses i can take in a normal semester"
+      ],
+      "topics_in_live_file": {
+        "registration": 1
+      }
+    },
+    {
+      "cluster_id": "c13",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq014"
+      ],
+      "queries": [
+        "i want to take a semester break, what do i have to do"
+      ],
+      "topics_in_live_file": {
+        "registration": 1
+      }
+    },
+    {
+      "cluster_id": "c14",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq015"
+      ],
+      "queries": [
+        "can i study a new course in summers or only repeat ones"
+      ],
+      "topics_in_live_file": {
+        "summer semester": 1
+      }
+    },
+    {
+      "cluster_id": "c15",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq016"
+      ],
+      "queries": [
+        "requirements for registering fyp 1"
+      ],
+      "topics_in_live_file": {
+        "final year project": 1
+      }
+    },
+    {
+      "cluster_id": "c16",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq017"
+      ],
+      "queries": [
+        "missed my mid because i was in hospital, can i get a retake"
+      ],
+      "topics_in_live_file": {
+        "exams": 1
+      }
+    },
+    {
+      "cluster_id": "c17",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq018"
+      ],
+      "queries": [
+        "is a cousins wedding a valid reason for retake exam"
+      ],
+      "topics_in_live_file": {
+        "exams": 1
+      }
+    },
+    {
+      "cluster_id": "c18",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq019"
+      ],
+      "queries": [
+        "paper checking seems wrong, how to apply for rechecking"
+      ],
+      "topics_in_live_file": {
+        "exams": 1
+      }
+    },
+    {
+      "cluster_id": "c19",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq020"
+      ],
+      "queries": [
+        "what happens if i get caught cheating in a quiz"
+      ],
+      "topics_in_live_file": {
+        "academic honesty": 1
+      }
+    },
+    {
+      "cluster_id": "c20",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq021"
+      ],
+      "queries": [
+        "am i allowed to use chatgpt for my assignments"
+      ],
+      "topics_in_live_file": {
+        "generative ai": 1
+      }
+    },
+    {
+      "cluster_id": "c21",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq022"
+      ],
+      "queries": [
+        "do i have to cite ai tools if i only used them to search ideas"
+      ],
+      "topics_in_live_file": {
+        "generative ai": 1
+      }
+    },
+    {
+      "cluster_id": "c22",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq023"
+      ],
+      "queries": [
+        "what gpa do i need for deans list"
+      ],
+      "topics_in_live_file": {
+        "awards": 1
+      }
+    },
+    {
+      "cluster_id": "c23",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq024"
+      ],
+      "queries": [
+        "can i shift from karachi campus to lahore campus"
+      ],
+      "topics_in_live_file": {
+        "campus transfer": 1
+      }
+    },
+    {
+      "cluster_id": "c24",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq025"
+      ],
+      "queries": [
+        "any scholarship for students who cant afford fee"
+      ],
+      "topics_in_live_file": {
+        "scholarships": 1
+      }
+    },
+    {
+      "cluster_id": "c25",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq026"
+      ],
+      "queries": [
+        "how many books can an ms student issue at once"
+      ],
+      "topics_in_live_file": {
+        "library": 1
+      }
+    },
+    {
+      "cluster_id": "c26",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq027"
+      ],
+      "queries": [
+        "does islamabad campus have a bus for students"
+      ],
+      "topics_in_live_file": {
+        "transport": 1
+      }
+    },
+    {
+      "cluster_id": "c27",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq028"
+      ],
+      "queries": [
+        "how many students graduated from lahore campus in 2023-24"
+      ],
+      "topics_in_live_file": {
+        "annual report": 1
+      }
+    },
+    {
+      "cluster_id": "c28",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq029"
+      ],
+      "queries": [
+        "max years allowed to complete bs degree"
+      ],
+      "topics_in_live_file": {
+        "degree duration": 1
+      }
+    },
+    {
+      "cluster_id": "c29",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq030"
+      ],
+      "queries": [
+        "how to apply for hostel room as a new student"
+      ],
+      "topics_in_live_file": {
+        "hostel": 1
+      }
+    },
+    {
+      "cluster_id": "c30",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq031"
+      ],
+      "queries": [
+        "hostel monthly charges for boys??"
+      ],
+      "topics_in_live_file": {
+        "hostel": 1
+      }
+    },
+    {
+      "cluster_id": "c31",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq032"
+      ],
+      "queries": [
+        "what time does the hostel gate close at night"
+      ],
+      "topics_in_live_file": {
+        "hostel": 1
+      }
+    },
+    {
+      "cluster_id": "c32",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq033"
+      ],
+      "queries": [
+        "can i change my roommate in the hostel"
+      ],
+      "topics_in_live_file": {
+        "hostel": 1
+      }
+    },
+    {
+      "cluster_id": "c33",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq034"
+      ],
+      "queries": [
+        "is mess food included in hostel dues"
+      ],
+      "topics_in_live_file": {
+        "hostel": 1
+      }
+    },
+    {
+      "cluster_id": "c34",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq035"
+      ],
+      "queries": [
+        "where can i park my bike inside campus"
+      ],
+      "topics_in_live_file": {
+        "parking": 1
+      }
+    },
+    {
+      "cluster_id": "c35",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq036"
+      ],
+      "queries": [
+        "do i need a sticker for my car to enter"
+      ],
+      "topics_in_live_file": {
+        "parking": 1
+      }
+    },
+    {
+      "cluster_id": "c36",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq037"
+      ],
+      "queries": [
+        "parking fee per semester for students?"
+      ],
+      "topics_in_live_file": {
+        "parking": 1
+      }
+    },
+    {
+      "cluster_id": "c37",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq038"
+      ],
+      "queries": [
+        "my car got a fine for wrong parking how do i appeal"
+      ],
+      "topics_in_live_file": {
+        "parking": 1
+      }
+    },
+    {
+      "cluster_id": "c38",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq039"
+      ],
+      "queries": [
+        "im from abroad, how do i get a study visa for pakistan"
+      ],
+      "topics_in_live_file": {
+        "student visa": 1
+      }
+    },
+    {
+      "cluster_id": "c39",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq040"
+      ],
+      "queries": [
+        "visa extension process for international students, mine expires next month"
+      ],
+      "topics_in_live_file": {
+        "student visa": 1
+      }
+    },
+    {
+      "cluster_id": "c40",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq041"
+      ],
+      "queries": [
+        "will the university send me a letter for the visa embassy"
+      ],
+      "topics_in_live_file": {
+        "student visa": 1
+      }
+    },
+    {
+      "cluster_id": "c41",
+      "name": null,
+      "size": 1,
+      "query_ids": [
+        "lq042"
+      ],
+      "queries": [
+        "can i work part time on a student visa"
+      ],
+      "topics_in_live_file": {
+        "student visa": 1
+      }
+    }
+  ]
+}

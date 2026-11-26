@@ -107,13 +107,21 @@ def load_thresholds(path: str | Path) -> tuple[dict, str]:
     return rules, sha256_text(text.replace("\r\n", "\n"))
 
 
-def check_comparable(baseline: dict, candidate: dict) -> None:
-    """SuiteError (exit 2) unless the two runs measured the same thing."""
+def check_comparable(baseline: dict, candidate: dict,
+                     allow_corpus_change: bool = False) -> None:
+    """SuiteError (exit 2) unless the two runs measured the same thing.
+
+    allow_corpus_change: when True, corpus_state_id may differ (the gate uses this
+        because the whole point of a release candidate is testing a new data state).
+    """
     for name, result in (("baseline", baseline), ("candidate", candidate)):
         for key in ("run_id", "golden_sha256", "corpus_state_id", "release_id"):
             if not result.get(key):
                 raise SuiteError(f"{name}: '{key}' is missing")
-    for key in ("golden_sha256", "corpus_state_id"):
+    strict_keys = ["golden_sha256"]
+    if not allow_corpus_change:
+        strict_keys.append("corpus_state_id")
+    for key in strict_keys:
         if baseline[key] != candidate[key]:
             raise SuiteError(f"{key} differs: baseline {baseline[key]}, "
                              f"candidate {candidate[key]}")
@@ -175,7 +183,7 @@ def apply_rules(baseline: dict, candidate: dict, rules: dict) -> list[dict]:
 
 
 def evaluate(baseline: dict, candidate: dict, rules: dict, thresholds_sha: str) -> dict:
-    check_comparable(baseline, candidate)
+    check_comparable(baseline, candidate, allow_corpus_change=True)
     rows = apply_rules(baseline, candidate, rules)
     passed = all(row["passed"] for row in rows)
     return {

@@ -110,10 +110,14 @@ def test_always_abstain_pipeline_fails(run_gate):
 
 
 def test_mismatched_golden_or_corpus_is_error(run_gate):
-    for key in ("golden_sha256", "corpus_state_id"):
-        code, decision = run_gate({**candidate(), key: "different"})
-        assert (code, decision) == (2, None), key
-        assert run_gate({**candidate(), key: None})[0] == 2
+    # golden_sha256 must match (same questions required); corpus_state_id may differ
+    # across data updates — that is the data-drift scenario the gate is designed for.
+    code, decision = run_gate({**candidate(), "golden_sha256": "different"})
+    assert (code, decision) == (2, None), "golden_sha256 mismatch"
+    assert run_gate({**candidate(), "golden_sha256": None})[0] == 2
+    # corpus_state_id mismatch is allowed and must NOT raise an error
+    code, decision = run_gate({**candidate(), "corpus_state_id": "different"})
+    assert code != 2, "corpus_state_id mismatch should not be an error"
 
 
 def test_other_invalid_comparisons_exit_two(run_gate):
