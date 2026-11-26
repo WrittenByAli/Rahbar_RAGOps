@@ -1,0 +1,14 @@
+# Filled in by the two members, not by an agent.
+# git_emails lists every address that member commits with; it is how G.4 is checked.
+# Tip: each member runs `git config user.name` / `user.email` once in their own clone
+# and keeps them stable. Assignment 02 history shows several identities for two people.
+
+[members.M1]
+name = ""
+roll_no = ""
+git_emails = []
+
+[members.M2]
+name = ""
+roll_no = ""
+git_emails = []

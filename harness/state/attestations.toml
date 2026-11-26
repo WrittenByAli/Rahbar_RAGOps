@@ -1,0 +1,13 @@
+# HUMAN-ONLY FILE. An AI agent must never add, edit or delete an entry here.
+# (.claude/hooks/guard.py and the permission rules block it.)
+#
+# Sign a requirement only after you have personally done or checked the thing.
+# `by` uses the keys from harness/members.toml. Requirements marked `both = true`
+# need both signatures.
+#
+# Example (remove the leading '#'):
+#
+# [attest."B.G2"]
+# by = ["M1", "M2"]
+# date = "YYYY-MM-DD"
+# note = "What you did and where the evidence is."

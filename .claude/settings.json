@@ -1,0 +1,95 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(kubectl get pods *)",
+      "Bash(kubectl get jobs *)",
+      "Bash(kubectl rollout status *)",
+      "Bash(kubectl rollout history *)",
+      "PowerShell(git status *)",
+      "PowerShell(git diff *)",
+      "PowerShell(git log *)"
+    ],
+    "ask": [
+      "Edit(/harness/*.py)",
+      "Edit(/harness/*.toml)",
+      "Edit(/.claude/**)",
+      "Edit(/k8s/gate-thresholds.yaml)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(kubectl apply *)",
+      "Bash(kubectl delete *)",
+      "Bash(kubectl rollout undo *)",
+      "Bash(minikube delete *)",
+      "PowerShell(git commit *)",
+      "PowerShell(git push *)",
+      "PowerShell(kubectl apply *)",
+      "PowerShell(kubectl delete *)",
+      "PowerShell(kubectl rollout undo *)",
+      "PowerShell(minikube delete *)"
+    ],
+    "deny": [
+      "Edit(/eval/results/**)",
+      "Edit(/traces/**)",
+      "Edit(/eval/judge_labels.jsonl)",
+      "Edit(/harness/state/attestations.toml)",
+      "Edit(/harness/members.toml)",
+      "Read(.env)",
+      "Read(.env.*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/session_start.py"],
+            "timeout": 90
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.py"],
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/post_edit.py"],
+            "timeout": 90
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/stop_loop.py"],
+            "timeout": 600
+          }
+        ]
+      }
+    ]
+  }
+}
