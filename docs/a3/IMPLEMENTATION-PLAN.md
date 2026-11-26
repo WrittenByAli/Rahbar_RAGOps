@@ -150,6 +150,7 @@ re-fetched by the CronJob).
 | Task | Detail | Requirement |
 |---|---|---|
 | T3.1 | `trace.py`: schema 1, written in `finally`; keeps dropped candidates, full prompt and hash, per-stage timings, model digests, collection generation; stdout and per-pod file | `D1` |
+| T3.0 | Providers report the raw output, the attempt and the seed used. Set `LLM_NUM_CTX` explicitly and record the model's prompt token count: Ollama loaded `qwen2.5:3b` with a 4096-token context and nothing set it, so long real-corpus prompts could be cut silently, and `context[]` would then list text the model never saw | `D1`, `B.E1` |
 | T3.2 | Cache entries store `source_trace_id` | `D1`, `D2` |
 | T3.3 | `eval/trace_tool.py <trace_id>`: print context and prompt, recompute and check the hash, follow cache hits, exit non-zero if not found | `D2` |
 | T3.4 | Five metric families in `routes/metrics.py` (names fixed by the check) | `D3` |

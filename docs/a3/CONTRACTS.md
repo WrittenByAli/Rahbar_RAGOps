@@ -72,11 +72,11 @@ Counts and ids must be read back from the vector store, not from the manifest.
 {"kind":"trace","schema":1,"trace_id":"...","ts":"...","query":"...","rewritten_query":null,
  "embedding":{"model":"...","version":"<digest>"},
  "collection":{"name":"...","version":"<index_generation>"},
- "retrieved":[{"chunk_id":"...","doc_id":"...","doc_version":"...","page":1,"score":0.71,"rank":1,
-               "kept":true,"dropped_by":null}],
+ "retrieved":[{"chunk_id":"...","doc_id":"...","doc_version":"...","source":"...","section":"...",
+               "page":1,"page_start":1,"page_end":1,"score":0.71,"rank":1,"kept":true,"dropped_by":null}],
  "filters_applied":[{"name":"superseded","value":false},{"name":"relevance_floor","value":0.55,"dropped":[]}],
  "reranker":null,"reranked_order":["chunk ids in the order sent"],
- "context":[{"chunk_id":"...","text":"exact text sent"}],
+ "context":[{"chunk_id":"...","source":"...","section":"...","page":1,"text":"exact text sent"}],
  "prompt":{"template_version":"p1","sha256":"...","text":"full prompt"},
  "llm":{"model":"...","version":"<digest>","params":{"temperature":0,"seed":42}},
  "response":{"text":"...","raw_output":"...","answered_from_context":true,"confidence":"high"},
@@ -86,6 +86,10 @@ Counts and ids must be read back from the vector store, not from the manifest.
  "cache":{"status":"miss","source_trace_id":null},
  "release_id":"v1","git_sha":"...","pod":"..."}
 ```
+`source` and `section` are in `retrieved[]` and `context[]` because citations name
+(source, section): with them, citation validity can be recomputed from the trace alone.
+`llm.params.seed` is the seed of the attempt that produced the answer (a retry uses seed+1), and
+`llm.attempt` records which attempt it was.
 `cache.status`: `hit` | `miss` | `bypass` | `disabled`. If the model is not called, `prompt` and
 `context` are present and `null` / `[]`, and `llm.model` still names the configured model.
 

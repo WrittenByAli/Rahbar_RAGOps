@@ -23,11 +23,14 @@ DUMMY_DIM = 768
 
 DUMMY_CHUNKS = [
     Chunk(id="dummy-001", text="Dummy chunk one. The real indexer replaces this.",
-          source="dummy.md", section="1 Dummy", page=1, doc_version="dummy", superseded=False),
+          doc_id="dummy", source="dummy.md", section="1 Dummy", page_start=1, page_end=1,
+          doc_version="dummy", superseded=False),
     Chunk(id="dummy-002", text="Dummy chunk two. It exists so readiness has something to count.",
-          source="dummy.md", section="2 Dummy", page=1, doc_version="dummy", superseded=False),
+          doc_id="dummy", source="dummy.md", section="2 Dummy", page_start=1, page_end=1,
+          doc_version="dummy", superseded=False),
     Chunk(id="dummy-003", text="Dummy chunk three. Its vector is a hash, not an embedding.",
-          source="dummy.md", section="3 Dummy", page=1, doc_version="dummy", superseded=False),
+          doc_id="dummy", source="dummy.md", section="3 Dummy", page_start=1, page_end=1,
+          doc_version="dummy", superseded=False),
 ]
 
 

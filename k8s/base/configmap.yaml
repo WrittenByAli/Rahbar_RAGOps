@@ -11,7 +11,12 @@ data:
   CHROMA_PORT: "8000"
   CHROMA_COLLECTION: "rahbar"
   TOP_K: "5"
-  TEMPERATURE: "0.2"
+  # Temperature 0 and a fixed seed, so two evaluation runs are comparable (B.S).
+  TEMPERATURE: "0.0"
+  LLM_SEED: "42"
+  # Part of the cache key and of every trace. Change them with the pipeline configuration.
+  RELEASE_ID: "v1"
+  PROMPT_VERSION: "p1"
   LLM_MODEL: "llama3.2:3b"
   OLLAMA_URL: "http://host.minikube.internal:11434"
   CORPUS_DIR: "/corpus"

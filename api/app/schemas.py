@@ -15,6 +15,14 @@ from pydantic import BaseModel, Field
 
 class AskRequest(BaseModel):
     question: str = Field(min_length=3, max_length=500)
+    # The two flags below were added later: docs/adr/0007-api-additive-fields.md
+    bypass_cache: bool = Field(
+        default=False, description="Neither read nor write the answer cache for this request."
+    )
+    include_trace: bool = Field(
+        default=False,
+        description="Reserved. Accepted, but has no effect: returning the trace is not built yet.",
+    )
 
 
 class Passage(BaseModel):
@@ -62,3 +70,5 @@ class AskResponse(BaseModel):
     confidence: Literal["high", "medium", "low"]
     retrieved: list[RetrievedRef]
     provider: str
+    # Id of this request's record in trace.py. The record is not saved anywhere yet.
+    trace_id: str | None = None

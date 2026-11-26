@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from dataclasses import replace
 
 from .models import Document, Page
 
@@ -22,12 +23,7 @@ def clean(doc: Document) -> Document:
         text = _normalize_whitespace(text)
         cleaned.append(Page(source=page.source, page=page.page, text=text, ocr=page.ocr))
 
-    return Document(
-        source=doc.source,
-        doc_version=doc.doc_version,
-        superseded=doc.superseded,
-        pages=cleaned,
-    )
+    return replace(doc, pages=cleaned)  # keeps every other field, doc_id included
 
 
 def _find_repeated_lines(pages: list[Page]) -> set[str]:
@@ -35,20 +31,18 @@ def _find_repeated_lines(pages: list[Page]) -> set[str]:
     if len(pages) < 2:
         return set()
 
-    threshold = len(pages) / 2
+    # At least 2: on a two-page document "half the pages" is one page, which would treat
+    # every line near the top or bottom of either page as a header and delete it.
+    threshold = max(2, len(pages) / 2)
     head_counter: Counter[str] = Counter()
     tail_counter: Counter[str] = Counter()
 
     for page in pages:
         lines = page.text.splitlines()
-        for line in lines[:3]:
-            stripped = line.strip()
-            if stripped:
-                head_counter[stripped] += 1
-        for line in lines[-3:]:
-            stripped = line.strip()
-            if stripped:
-                tail_counter[stripped] += 1
+        # Sets, so each page counts a line once: "repeated" means on many pages, not
+        # many times on one page.
+        head_counter.update({line.strip() for line in lines[:3] if line.strip()})
+        tail_counter.update({line.strip() for line in lines[-3:] if line.strip()})
 
     # A line repeating on >=50% of pages is a running header/footer, full stop -
     # a genuine section heading marks the start of ONE section and would never

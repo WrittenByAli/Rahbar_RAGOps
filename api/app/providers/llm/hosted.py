@@ -2,21 +2,16 @@
 
 from __future__ import annotations
 
-import json
 import logging
 
 import httpx
 from pydantic import ValidationError
 
 from ...config import Settings
+from ...prompting import build_prompt
 from ...schemas import Answer, Passage
 
 log = logging.getLogger("rahbar.hosted")
-
-SYSTEM_PROMPT = (
-    "You are a university policy assistant. Answer ONLY from the evidence below.\n"
-    "If the answer is not in the evidence, set answered_from_context to false.\n"
-)
 
 
 class HostedProvider:
@@ -25,44 +20,22 @@ class HostedProvider:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
-    def _build_prompt(self, question: str, passages: list[Passage]) -> str:
-        evidence_lines = []
-        for i, p in enumerate(passages, 1):
-            evidence_lines.append(f"[{i}] {p.source} § {p.section}: {p.text}")
-        evidence = "\n".join(evidence_lines)
-        # json.dumps, not str(): see ollama.py's _build_prompt for why.
-        schema = json.dumps(Answer.model_json_schema(), indent=2)
-        example = json.dumps({
-            "reasoning": "one sentence citing which evidence item answers this",
-            "answer": "the answer in plain text",
-            "citations": [{"source": "example.pdf", "section": "1.1 Example", "page": 1}],
-            "answered_from_context": True,
-            "confidence": "high",
-        }, indent=2)
-        return (
-            f"Evidence:\n{evidence}\n\n"
-            f"Question: {question}\n\n"
-            f"Respond with valid JSON matching this schema:\n{schema}\n\n"
-            f"Example of the expected shape (citations is a list of objects, not strings):\n{example}"
-        )
-
     def generate(self, question: str, passages: list[Passage]) -> Answer:
-        prompt = self._build_prompt(question, passages)
+        prompt = build_prompt(question, passages, self.settings.prompt_version)
         headers = {
             "Authorization": f"Bearer {self.settings.llm_api_key}",
             "Content-Type": "application/json",
         }
         payload = {
             "model": self.settings.llm_model,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
+            "messages": prompt.messages(),
             "response_format": {"type": "json_object"},
             "temperature": self.settings.temperature,
         }
 
         for attempt in range(2):
+            # Same rule as ollama.py: configured seed first, the next seed for the retry.
+            payload["seed"] = self.settings.llm_seed + attempt
             try:
                 resp = httpx.post(
                     f"{self.settings.hosted_base_url}/chat/completions",

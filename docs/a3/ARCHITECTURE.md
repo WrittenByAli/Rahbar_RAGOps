@@ -145,10 +145,17 @@ For each target collection and each lake version that should be retrievable or r
 2. `chunk_id = sha256(doc_id | version | section | ordinal | text hash)[:16]`
 3. Read existing ids and metadata with `get(where={"doc_id": ...})`.
 4. Same expected id set, same `content_sha256` and fingerprint: **skip, embed nothing**.
-5. Otherwise embed the missing ids, upsert them, then delete this document's stale ids.
+5. Otherwise, **if any stored fingerprint differs, re-embed every chunk of the document**: ids do not
+   include the fingerprint, so "only the missing ids" would keep old vectors after a model, size or
+   chunker change. If the fingerprint matches, embed just the missing ids. Upsert, then delete this
+   document's stale ids. If only metadata differs (for example page numbers), `update` it without
+   embedding. The fingerprint also needs a cleaner version.
 6. Status change only (superseded or restored): `update(metadatas)`, no embedding.
 7. Last, sweep ids whose `(doc_id, version)` is not in the manifest and report the orphan count.
-8. If anything changed, bump the collection's `index_generation` (used by the cache key).
+8. Bump the collection's `index_generation` (part of the cache key) **before the first write and
+   again after the last**, for every answer-affecting change including delete, supersede and
+   restore. Bumping only at the end would leave old cache entries readable if the run crashed half
+   way, and a rerun with nothing left to change would never bump.
 
 Tested against a real Chroma 1.0.12 server with the pinned client (Phase 0 spike): metadata
 `update` on a chunk **merges** (other keys stay). `collection.modify(metadata=...)` **replaces** the
@@ -204,7 +211,7 @@ A release is everything that changes answers, in one **immutable** ConfigMap:
 
 ```
 rahbar-release-v1: RELEASE_ID EMBED_MODEL CHROMA_COLLECTION CHUNK_SIZE CHUNK_OVERLAP TOP_K
-                   RELEVANCE_FLOOR PROMPT_VERSION LLM_MODEL TEMPERATURE LLM_SEED
+                   RELEVANCE_FLOOR PROMPT_VERSION LLM_MODEL TEMPERATURE LLM_SEED LLM_NUM_CTX
 ```
 
 Remove these keys from `rahbar-config`. The `api` pod template lists `rahbar-config` and exactly one

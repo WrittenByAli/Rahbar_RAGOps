@@ -61,3 +61,29 @@ A2's scheduled reindex job. Docker on this laptop also hosts unrelated projects:
 
 **Open (needs members):** the partner's laptop is not verified; `G.4` needs both members' commits.
 Python 3.12 is not installed here (tests ran on 3.11).
+
+## 2026-11-26 - Phase 1: measurement fixes and foundations (branch `phase-1-foundations`)
+Built by two agents, reviewed by a third read-only agent. **No member has reviewed it yet.**
+
+**Done (`P.2`, `P.3`, `P.4` build stage):** raw citations kept and validity computed from them
+(never 1.0 by default); cache keyed by release, collection, index generation, prompt version and
+question, with bypass; one versioned prompt template; seed and temperature 0 sent by both
+providers (the k8s ConfigMap still forced 0.2: fixed); chunks report the pages of their own text;
+heading words are now embedded (some A2 facts existed only in "headings"); chunk ids include
+document and version; two A2 bugs in `clean()` that deleted real text fixed.
+
+**Review findings fixed:** cited page now comes from the retrieved chunk, not the model; trace
+context carries source, section and page; ADR text corrected.
+
+**Sanity checks, not report numbers:** A2 offline eval on the 6 fixture questions with real
+embeddings: recall, citation validity and abstention 1.0. With real `qwen2.5:3b` on the fixtures,
+raw citations valid went from 1 of 5 with the old evidence layout to 4 or 5 of 5 with the new one.
+
+**Must be handled before the first baseline:**
+- running footers with page numbers are read as headings and shift `page_start` (Phase 2);
+- nothing bumps `index_generation` yet (Phase 2);
+- set the model context length explicitly (Phase 3, T3.0);
+- seeded Ollama calls did **not** always repeat (one run matched 9 of 12): `B.S` must explain it;
+- relevance floor 0.55 predates this chunker: recalibrate on non-golden data;
+- `eval/run_eval.py` still scores filtered citations (Phase 4);
+- ADRs 0006 to 0008 are "Proposed": both members review them.

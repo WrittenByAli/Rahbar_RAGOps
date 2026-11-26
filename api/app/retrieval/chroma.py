@@ -17,6 +17,15 @@ class ChromaRetriever:
         self.client = chromadb.HttpClient(host=settings.chroma_host, port=settings.chroma_port,
                                           settings=ChromaSettings(anonymized_telemetry=False))
 
+    def index_generation(self) -> str:
+        """The collection metadata value the ingestion Job bumps when it changes the index.
+
+        "0" when the collection does not have it. It is fetched from the server on every
+        call, so cached answers stop matching as soon as it changes.
+        """
+        collection = self.client.get_collection(name=self.settings.collection)
+        return str((collection.metadata or {}).get("index_generation", "0"))
+
     def retrieve(self, question: str, k: int) -> list[Passage]:
         import httpx
         resp = httpx.post(
