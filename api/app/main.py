@@ -20,7 +20,7 @@ from .config import get_settings
 from .logjson import configure_logging, request_id_var
 from .providers.llm import get_provider
 from .retrieval import get_retriever
-from .routes import ask, health, metrics
+from .routes import ask, health, metrics, retrieve
 
 log = logging.getLogger("rahbar.api")
 
@@ -55,8 +55,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     log.info(
         "api started",
         extra={"retriever": settings.retriever, "llm_provider": settings.llm_provider,
-               "embed_model": settings.embed_model, "top_k": settings.top_k},
+               "embed_model": settings.embed_model, "top_k": settings.top_k,
+               "retrieval_rail": settings.retrieval_rail_enabled,
+               "trace_dir": settings.trace_dir},
     )
+    if settings.eval_debug_enabled:
+        log.warning("EVAL_DEBUG_ENABLED is true: any caller can ask for the full prompt")
     yield
 
 
@@ -89,6 +93,7 @@ async def request_context(request: Request, call_next):  # type: ignore[no-untyp
 app.include_router(health.router)
 app.include_router(metrics.router)
 app.include_router(ask.router)
+app.include_router(retrieve.router)
 
 # Development only: `make dev` serves the chat UI from this process, so you can try it
 # without a cluster. On Kubernetes the ui Deployment serves it and this stays unset.

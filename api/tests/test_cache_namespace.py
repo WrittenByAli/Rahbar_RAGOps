@@ -152,8 +152,12 @@ def _settings(**overrides: Any) -> Settings:
     {"prompt_version": "p2"},
 ])
 def test_candidate_never_reads_live_entry(
-    fake_redis: RecordingRedis, candidate_change: dict[str, str]
+    fake_redis: RecordingRedis, candidate_change: dict[str, str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    # This build renders only "p1", and the pipeline renders the prompt itself so that the
+    # trace holds what was sent. Let the pretend candidate template "p2" render.
+    monkeypatch.setattr("app.prompting.check_prompt_version", lambda version: None)
     live, candidate = _settings(), _settings(**candidate_change)
     live_model = SayingProvider("live answer")
     candidate_model = SayingProvider("candidate answer")

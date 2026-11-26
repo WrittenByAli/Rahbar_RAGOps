@@ -6,11 +6,20 @@ real model. It is deterministic: the same input always gives the same output.
 
 from __future__ import annotations
 
+from ...prompting import Prompt
 from ...schemas import Answer, Citation, Passage
+from .base import Generation
 
 
 class StubProvider:
     name = "stub"
+
+    def generate_detailed(
+        self, question: str, passages: list[Passage], prompt: Prompt
+    ) -> Generation:
+        """No model reads the prompt. The answer's JSON stands in for the raw output."""
+        answer = self.generate(question, passages)
+        return Generation(answer, raw_output=answer.model_dump_json(), attempt=1)
 
     def generate(self, question: str, passages: list[Passage]) -> Answer:
         if not passages:

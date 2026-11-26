@@ -58,8 +58,23 @@ class Settings:
     ollama_url: str = "http://host.minikube.internal:11434"
     hosted_base_url: str = ""        # e.g. an OpenAI-compatible endpoint
     llm_api_key: str = field(default="", repr=False)   # from the Secret; never log it
+    # LLM_NUM_CTX: the context window Ollama is asked for, in tokens. Without it Ollama used
+    # 4096 for qwen2.5:3b, and a longer prompt can be cut without any error.
+    llm_num_ctx: int = 8192
 
     log_level: str = "INFO"
+
+    # Tracing (app/trace.py)
+    trace_dir: str = ""              # TRACE_DIR: also append traces here; "" means stdout only
+    git_sha: str = ""                # GIT_SHA: the commit the image was built from
+    pod_name: str = ""               # POD_NAME: if empty, the host name (in a pod, its name)
+    # EVAL_DEBUG_ENABLED: lets a request ask for its trace in the response. The trace holds
+    # the full prompt, so this is off unless an operator turns it on.
+    eval_debug_enabled: bool = False
+
+    # RETRIEVAL_RAIL_ENABLED: false switches the retrieval rail off, to measure what it does.
+    # The input rail only flags, so it has no switch (docs/adr/0011-retrieval-rail.md).
+    retrieval_rail_enabled: bool = True
 
     # Cache and retrieval tuning (section 3.3)
     redis_url: str = "redis://redis:6379"
@@ -94,7 +109,13 @@ def get_settings() -> Settings:
         ollama_url=os.environ.get("OLLAMA_URL", "http://host.minikube.internal:11434"),
         hosted_base_url=os.environ.get("HOSTED_BASE_URL", ""),
         llm_api_key=os.environ.get("LLM_API_KEY", ""),
+        llm_num_ctx=_int("LLM_NUM_CTX", default.llm_num_ctx),
         log_level=os.environ.get("LOG_LEVEL", "INFO"),
+        trace_dir=os.environ.get("TRACE_DIR", default.trace_dir),
+        git_sha=os.environ.get("GIT_SHA", default.git_sha),
+        pod_name=os.environ.get("POD_NAME", default.pod_name),
+        eval_debug_enabled=_bool("EVAL_DEBUG_ENABLED", default.eval_debug_enabled),
+        retrieval_rail_enabled=_bool("RETRIEVAL_RAIL_ENABLED", default.retrieval_rail_enabled),
         redis_url=os.environ.get("REDIS_URL", "redis://redis:6379"),
         cache_enabled=_bool("CACHE_ENABLED", default.cache_enabled),
         relevance_floor=_float("RELEVANCE_FLOOR", default.relevance_floor),

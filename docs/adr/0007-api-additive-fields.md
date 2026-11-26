@@ -61,3 +61,7 @@ spans several chunks, this page may not be that of the sentence the model used.
   that is off by default (`docs/a3/ARCHITECTURE.md`, section 4).
 - Citation validity needs the model's raw citations. The response still returns only the filtered
   ones, so a caller over HTTP **cannot measure raw validity until the trace is returned**.
+
+## Added with tracing
+`include_trace` returns the trace record only when the server sets `EVAL_DEBUG_ENABLED` (off by
+default), because the record contains the full prompt.

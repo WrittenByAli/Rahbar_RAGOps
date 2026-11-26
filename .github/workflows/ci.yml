@@ -36,6 +36,7 @@ jobs:
       - run: cd api && pytest -v
       - run: cd indexer && pytest -v
       - run: pytest -v harness/tests
+      - run: pytest -v eval/tests
 
   build:
     runs-on: ubuntu-latest

@@ -5,8 +5,8 @@ It is not a semantic cache: answer_question() never passes a question vector. Th
 lookup below came with Assignment 02 and only unit tests reach it (decision D-09,
 docs/adr/0008-cache-namespace.md).
 
-Every key carries a namespace: release id, collection, index generation and prompt version.
-So a candidate cannot read the live release's answers, and once the index generation changes,
+Every key carries a namespace: release id, collection, index generation and prompt version,
+plus "rail-off" when the retrieval rail is switched off. So a candidate cannot read the live release's answers, and once the index generation changes,
 older entries are no longer read (Redis drops them when their time to live ends).
 """
 
@@ -41,8 +41,11 @@ class AnswerCache:
             socket_timeout=REDIS_TIMEOUT_SECONDS,
         )
         self.threshold = settings.cache_threshold
-        parts = (settings.release_id, settings.collection, index_generation,
-                 settings.prompt_version)
+        parts = [settings.release_id, settings.collection, index_generation,
+                 settings.prompt_version]
+        if not settings.retrieval_rail_enabled:
+            # An answer made without the rail must never be served where the rail is on.
+            parts.append("rail-off")
         # Percent-encoding keeps the key readable, and stops a ":" inside one part from moving
         # the boundary between parts, or a "*" from acting as a wildcard in scan_iter.
         self.namespace = ":".join(quote(part, safe="") for part in parts)
