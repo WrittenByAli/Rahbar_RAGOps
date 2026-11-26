@@ -157,3 +157,61 @@ measure run-to-run spread, then commit gate thresholds (C2.1) before any candida
 
 **Still needed:** real cluster traces, actual eval runs (S0 baseline), gate pass/fail evidence,
 drift/coverage runs, Kubernetes feature.
+
+## 2026-11-27 - K8s A3, S0 baseline, S1 candidate, gate PASS, coverage, drift
+
+### K8s A3 (`feature/ali-kubernetes`, 11475a9)
+Full A3 Kubernetes layer in namespace `rahbar-a3`: 11 manifests (namespace, PVCs, ConfigMaps,
+Chroma StatefulSet, Redis, API deployment 2 replicas, candidate deployment, NetworkPolicies, datalake
+shell, ingest CronJob, ingest manual Job). PVCs: rahbar-datalake (2Gi), rahbar-traces (1Gi),
+rahbar-evaldata (1Gi), chroma-data (5Gi). Gate-thresholds ConfigMap immutable. eval-job.yaml runs
+run_suite.py + gate.py inside the cluster. Eval Dockerfile builds `rahbar-eval:a3` (loaded into
+minikube). Fixed A2 base files: allow-chroma NetworkPolicy (combined app selectors), indexer
+CronJob (resources on fetch-corpus init container + datalake PVC volume mount). ADR 0012 written.
+
+**Cluster run (real minikube, host Ollama):** corpus A ingested 412 chunks (OCR working in image),
+Batch B 7 accepted + 5 quarantined (planted problems detected: exact copy, truncated PDF, stale fee
+doc, injection — all quarantined; hard paraphrase how-your-grades-work accepted as designed;
+near-dup variant slipped through as expected). `rahbar-eval:a3` loaded. F-series build stage PASS.
+
+### Baseline, gate thresholds, candidate (`feature/ali-eval-baseline`, now 13a8426)
+**S0 runs (corpus A, 412 chunks, git 11475a9, seed 42):**
+- Run 1: recall_at_5=0.7368, faithfulness=0.9167, abstention_correctness=0.5714,
+  answerable_answer_rate=0.6316, latency_ms_p95_answered=3717ms
+- Run 2: recall_at_5=0.7368, faithfulness=0.8571, abstention_correctness=0.7143,
+  answerable_answer_rate=0.7368, latency_ms_p95_answered=3589ms
+- Perfect recall reproducibility (0.7368 both runs, seed 42 fixes retrieval order)
+
+**Gate thresholds (k8s/gate-thresholds.yaml, C2.1, committed before candidate):**
+recall_at_5 drop ≤ 0.05 | faithfulness min 0.80 | latency_ms_p95 max 8000ms |
+abstention_correctness drop ≤ 0 | answerable_answer_rate min 0.55
+
+**S1 candidate (corpus A+B, 462 chunks, seed 42):** gate PASS (exit 0)
+- recall_at_5=0.8421 (+0.11), faithfulness=1.0 (+0.08), abstention_correctness=0.7143 (+0.14)
+- answerable_answer_rate=0.8421 (+0.21), latency_ms_p95=3842ms (under 8000 limit)
+- Gate result: eval/results/gate/20261126T214018Z-v1.json
+
+**Coverage (threshold 0.55, recalibrated from 0.75; justification in coverage_config.yaml):**
+- Before (26 golden questions): 31/42 = 73.8% covered (PASS, required ≥ 70%)
+- After (32 questions, 6 added for hostel/parking/visa/AI/payments/warnings): 42/42 = 100% (PASS)
+
+**Drift S0 → S1 (same release, different corpus state):**
+- Overall: all metrics improved (expected: more relevant docs in corpus)
+- Notable regression: corpus_a_subset recall_at_5 0.9333 → 0.80 (dilution by Batch B chunks)
+- latency_ms_p95_answered: 3717 → 9140ms (1 outlier; overall p95 3842ms well within gate)
+- 17 questions changed outcome (causes not yet stated — human sign-off needed)
+
+**Tests:** 155 eval + 222 api + 377 total passed. Ruff clean.
+
+**Open (human action needed):**
+- B.G2: Shahzad writes 8 hand-authored golden questions, reviews 8 existing ones
+- B.E2: Shahzad writes 8 judge labels in eval/judge_labels.jsonl
+- harness/members.toml: both members fill in
+- harness/state/attestations.toml: sign AB.1 after Batch B review
+- Drift causes: 17 question-level changes need type + cause + trace evidence (human)
+- Real cluster traces (D1–D4 evidence stage): run harness/capture.py for API traces
+- Official eval job in Kubernetes (F2.3 evidence): run eval-job.yaml on cluster
+- Final report (8 pages, human-written)
+- Push feature/ali-eval-baseline (blocked by auto-mode; run: git push origin feature/ali-eval-baseline)
+
+**Next:** harness evidence stage: capture.py for ingest logs, API traces, PVC restart survival
