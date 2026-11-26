@@ -897,7 +897,8 @@ def test_retrieve_returns_ranked_candidates_before_the_floor(
     first = body["retrieved"][0]
     assert (first["doc_id"], first["doc_version"], first["page_start"], first["page_end"]) \
         == ("rules", "2026-06", 3, 4)
-    assert body["collection"] == {"name": "rahbar-v1", "version": "7"}
+    assert body["collection"] == {"name": "rahbar-v1", "version": "7",
+                                  "lake_state_id": None}
     assert body["embedding"] == {"model": "nomic-embed-text", "version": EMBED_DIGEST}
     assert body["release_id"] == "v1" and body["top_k"] == 5
     assert {"name": "superseded", "value": False} in body["filters_applied"]
@@ -1011,3 +1012,51 @@ def test_metrics_follow_the_queries(backend: Backend) -> None:
     assert change["stage_embed"] == change["stage_retrieve"] == 4
     assert change["stage_generate"] == change["stage_prompt"] == 3
     assert change["stage_cache"] == 3                        # miss, hit, miss
+
+
+@pytest.mark.parametrize("extra, expected", [
+    ({"lake_state_id": "lake-abc"}, "lake-abc"),
+    ({"lake_state_id": "lake-abc", "write_in_progress": False}, "lake-abc"),
+    ({"lake_state_id": "lake-abc", "write_in_progress": True}, None),
+    ({}, None),
+    ({"lake_state_id": ""}, None),
+])
+def test_retrieve_reports_the_lake_state_of_the_collection(
+    backend: Backend, retrieve_client: TestClient, extra: dict, expected: str | None
+) -> None:
+    backend.metadata.update(extra)
+
+    body = retrieve_client.post("/api/retrieve", json={"question": QUESTION}).json()
+
+    assert body["collection"] == {"name": "rahbar-v1", "version": "7",
+                                  "lake_state_id": expected}
+
+
+def test_collection_state_comes_from_one_read(
+    backend: Backend, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # two reads could pair the generation of one index state with the lake state of another
+    from app.retrieval.chroma import ChromaRetriever
+
+    backend.metadata["lake_state_id"] = "lake-abc"
+    retriever = ChromaRetriever(Settings(collection="rahbar-v1"))
+    reads: list[str] = []
+    original = retriever.client.get_collection
+
+    def counting(name: str) -> Any:
+        reads.append(name)
+        return original(name=name)
+
+    monkeypatch.setattr(retriever.client, "get_collection", counting)
+
+    assert retriever.collection_state() == {"version": "7", "lake_state_id": "lake-abc"}
+    assert reads == ["rahbar-v1"]
+
+
+def test_stub_retrieve_has_no_lake_state() -> None:
+    from app.retrieval.stub import StubRetriever
+    from app.services.answer import retrieve_candidates
+
+    body = retrieve_candidates(QUESTION, StubRetriever(), Settings(), 3)
+
+    assert body.collection == {"name": "rahbar", "version": "0", "lake_state_id": None}

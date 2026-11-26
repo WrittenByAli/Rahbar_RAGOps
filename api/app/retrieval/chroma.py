@@ -38,8 +38,21 @@ class ChromaRetriever:
         "0" when the collection does not have it. It is fetched from the server on every
         call, so cached answers stop matching as soon as it changes.
         """
+        return str(self.collection_state()["version"])
+
+    def collection_state(self) -> dict[str, str | None]:
+        """The index generation ("version") and "lake_state_id", from one read, so the two
+        describe the same moment.
+
+        lake_state_id is written by the ingestion Job and names the set of documents the
+        collection was built from. It is None when the collection does not record it, and
+        while a write is in progress, because the collection is then only partly written.
+        """
         collection = self.client.get_collection(name=self.settings.collection)
-        return str((collection.metadata or {}).get("index_generation", "0"))
+        metadata = collection.metadata or {}
+        lake_state = None if metadata.get("write_in_progress") else metadata.get("lake_state_id")
+        return {"version": str(metadata.get("index_generation", "0")),
+                "lake_state_id": _text(lake_state)}
 
     def retrieve(self, question: str, k: int) -> list[Passage]:
         return self.search(self.embed_query(question), k)

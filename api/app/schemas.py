@@ -93,7 +93,8 @@ class RetrieveRequest(BaseModel):
 class RetrieveResponse(BaseModel):
     request_id: str
     release_id: str
-    collection: dict[str, str | None]       # name, version (index generation)
+    # name, version (index generation), lake_state_id (None: not recorded or being written)
+    collection: dict[str, str | None]
     embedding: dict[str, str | None]        # model, version (digest)
     top_k: int
     filters_applied: list[dict[str, Any]]

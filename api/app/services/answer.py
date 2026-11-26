@@ -45,6 +45,19 @@ def _index_generation(retriever: Retriever, settings: Settings) -> str | None:
         return None
 
 
+def _collection_state(retriever: Retriever, settings: Settings) -> dict[str, str | None]:
+    """"version" and "lake_state_id" of the collection. A retriever without a store (the
+    stub) has no lake state, and None for both means the state could not be read."""
+    read = getattr(retriever, "collection_state", None)
+    if settings.retriever == "stub" or read is None:
+        return {"version": _index_generation(retriever, settings), "lake_state_id": None}
+    try:
+        return read()
+    except Exception as exc:  # noqa: BLE001 - retrieval itself reports a broken store
+        log.warning("collection state unavailable", extra={"error": str(exc)})
+        return {"version": None, "lake_state_id": None}
+
+
 def _cache_lookup(
     question: str, settings: Settings, generation: str | None
 ) -> tuple[AnswerCache | None, AskResponse | None]:
@@ -272,7 +285,7 @@ def retrieve_candidates(
 
     No model, cache, rail, trace line or query metric.
     """
-    generation = _index_generation(retriever, settings)
+    state = _collection_state(retriever, settings)
     passages = retriever.retrieve(question, k=k)
     candidates = candidate_entries(passages)
     below = [p.chunk_id for p in passages if not p.score >= settings.relevance_floor]
@@ -280,7 +293,7 @@ def retrieve_candidates(
     return RetrieveResponse(
         request_id=request_id_var.get(),
         release_id=settings.release_id,
-        collection={"name": settings.collection, "version": generation},
+        collection={"name": settings.collection, **state},
         embedding={"model": settings.embed_model, "version": embedding_version(settings)},
         top_k=k,
         filters_applied=[
