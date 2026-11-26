@@ -87,3 +87,16 @@ raw citations valid went from 1 of 5 with the old evidence layout to 4 or 5 of 5
 - relevance floor 0.55 predates this chunker: recalibrate on non-golden data;
 - `eval/run_eval.py` still scores filtered citations (Phase 4);
 - ADRs 0006 to 0008 are "Proposed": both members review them.
+
+## 2026-11-26 - resumed: branches are now `feature/ali-<name>`, pushed after each feature
+- Pushed `feature/ali-baseline` (248f18c), `feature/ali-foundations` (fd2466d), `feature/ali-ci`.
+  `cd.yml` is back to its A2 form (the manual-only change is undone); CI also runs on `feature/**`.
+  CI on `feature/ali-ci`: all six jobs passed, including the kind end-to-end job.
+- `feature/ali-tracing`: `D1` to `D4` **build stage only**. Clean checkout: 215 API, 59 indexer, 57 eval
+  and 51 harness tests passed. Smoke run with real `qwen2.5:3b` and `nomic-embed-text` on the A2
+  fixtures, brute-force search and a fake Redis (not a report result, nothing committed): 5 traces
+  (answer, cache hit, abstention, injection chunk, model error) passed the D1 field check and
+  `trace_tool.py` exited 0 for each. Its builder stopped at a usage limit; there was **no
+  independent agent review**.
+- Still needed for D: real cluster traces, a trace summary result, the Batch B rail test, D5.
+- Data management is unfinished in the working tree (tests exist, `pipeline/ingest.py` does not).
