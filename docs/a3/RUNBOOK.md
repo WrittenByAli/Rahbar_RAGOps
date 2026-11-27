@@ -1,38 +1,33 @@
 # Runbook: cluster, screenshots, demo, report
 
-**Every command that refers to a file or flag this assignment adds is PLANNED and has never been
-run.** Correct this document during implementation. `k8s/README.md` (to be written) becomes the
-authoritative fresh-cluster procedure.
+## 1. Fresh cluster
 
-## 1. Fresh cluster (target procedure)
-```bash
-minikube start --driver=docker --cni=calico --cpus=4 --memory=6144   # size from F5 measurements
-minikube addons enable metrics-server
-ollama list                                  # generator, embedding, candidate and judge models
-docker build -t rahbar-api:a3 api
-docker build -t rahbar-indexer:a3 indexer
-docker build -t rahbar-eval:a3 -f eval/Dockerfile .
-minikube image load rahbar-api:a3            # repeat for each image; add ui if used
-kubectl apply -k k8s/overlays/a3
-kubectl create secret generic rahbar-secret -n rahbar --from-literal=LLM_API_KEY=unused
-kubectl apply -f k8s/tools/datalake-shell.yaml
-python corpus/fetch.py                       # needs network once; the snapshot is then reused
-kubectl cp <relative-folder> rahbar/datalake-shell:/data/lake/inbox/A   # RELATIVE path on Windows
-kubectl apply -f k8s/jobs/ingest-job.yaml
-kubectl wait --for=condition=complete job/ingest-manual -n rahbar --timeout=1800s
-kubectl rollout status deployment/api -n rahbar
-```
-The API stays unready until the collection exists: expected. Never put a real key in a command you
-will screenshot.
+**`k8s/README.md` is the authoritative procedure.** Follow it, not a copy here: namespace
+`rahbar-a3`, manifests in `k8s/a3/`. Do not apply `k8s/base` or `k8s/overlays` — that is the
+Assignment 02 tree in namespace `rahbar` and it is not part of A3.
 
-Re-running a Job:
+| Step | Section of `k8s/README.md` |
+|---|---|
+| Start minikube, build and load images, apply `k8s/a3/` | 1 |
+| Seed the lake with corpus A, then Batch B separately | 2 |
+| Re-run the ingestion and eval Jobs | 3 |
+| Admin commands: the A1.7, A2.2, A2.3, A2.4 proofs | 8 |
+| Copy evidence out and validate it | 9 |
+
+Ingest corpus A and Batch B in **separate** runs. The batch name comes from the inbox folder
+(`inbox/A`, `inbox/B`), and `AB.2` looks for one verification report per batch; a single run over
+both folders reports `batch: "A,B"` and satisfies neither.
+
+The API stays unready until the first ingestion has built the collection: expected. Never put a
+real key in a command you will screenshot.
+
+**F6, the fresh-cluster capture.** Once the pipeline answers, with
+`kubectl -n rahbar-a3 port-forward svc/api 8080:80` running:
 ```bash
-kubectl delete job rahbar-eval -n rahbar --ignore-not-found
-kubectl apply -f k8s/eval-job.yaml
-kubectl logs -n rahbar job/rahbar-eval -f
+python harness/capture.py fresh-cluster-ready -- curl -s http://localhost:8080/readyz
 ```
-Copying results out: from `datalake-shell` (or a similar tool pod mounting the volume), never from
-the finished Job pod.
+`/readyz` must return `"status": "ready"`; that string is what the checker looks for. This is the
+last of the ten captures named in `CONTRACTS.md`.
 
 ## 2. Screenshot checklist
 Each shows the **command and its output, uncropped**, labelled with part and item, from your own
@@ -41,16 +36,16 @@ cluster and runs. Take each when the state first exists; several states are hard
 | Label | Show | When | Planned command |
 |---|---|---|---|
 | A1 | Batch B verification report: pass or fail per check, with reasons | T6.1 | print the report table (all rows, reasons readable) |
-| A2 | Second run on unchanged corpus: `chunks_embedded: 0` | T5.8 and T6.1 | `kubectl logs job/ingest-manual -n rahbar` |
+| A2 | Second run on unchanged corpus: `chunks_embedded: 0` | T5.8 and T6.1 | `kubectl logs job/ingest-manual -n rahbar-a3` |
 | (A extra) | delete count by doc id; restore demo | T6.2 | `... run.py count --doc-id <id>` before and after |
-| B1 | Evaluation summary with all three levels | T5.8 | `kubectl logs job/rahbar-eval -n rahbar` |
+| B1 | Evaluation summary with all three levels | T5.8 | `kubectl logs job/rahbar-eval -n rahbar-a3` |
 | C1 | Gate failing, with the failed rules | T7.5 | gate command, then `echo $?` |
 | C2 | Gate passing | T7.5 | same |
 | D1 | One full trace record | any | one line, pretty-printed in full |
 | D2 | Trace tool rebuilding the prompt for a trace id | any | `python eval/trace_tool.py <id>` |
 | E1 | Coverage before (include exit code) | T9.3 | coverage command |
 | E2 | Coverage after | T9.6 | same |
-| F1 | `kubectl get all,pvc,configmap,cronjob,job -n rahbar` | T8 end | exactly that |
+| F1 | `kubectl get all,pvc,configmap,cronjob,job -n rahbar-a3` | T8 end | exactly that |
 | F2 | Logs of a completed ingestion Job | T5.8 | `kubectl logs` |
 | F3 | Logs of a completed evaluation Job | T5.8 | `kubectl logs` |
 | F4 | Gate result changing after a ConfigMap edit (before, edit, after) | T8.5 | `kubectl get configmap ... -o yaml`, Job logs, image id |
@@ -70,9 +65,9 @@ disk space checked; results committed and pushed; know how long the eval Job tak
 **Preflight on the day:**
 ```bash
 minikube status
-kubectl get pods -n rahbar            # all Ready
+kubectl get pods -n rahbar-a3          # all Ready
 ollama list
-curl.exe -s http://localhost:8000/readyz     # through port-forward
+curl.exe -s http://localhost:8080/readyz     # through port-forward
 ```
 
 **The three required actions:**
