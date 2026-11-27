@@ -112,6 +112,43 @@ in `k8s/a3/03-release.yaml` to `rahbar-index-targets`, re-run the ingestion Job,
 `kubectl -n rahbar-a3 scale deploy/api-candidate --replicas=1`. Its pods carry `app: api-candidate`
 and never match the live Service `api`.
 
+## 7. Demo rehearsal (G.7)
+
+Before the demo, run the checklist script — it verifies cluster state and prints the exact commands:
+
+```bash
+python eval/demo_checklist.py --namespace rahbar-a3
+```
+
+The three required demo actions (G.7) are:
+
+| Action | Command |
+|--------|---------|
+| Run the eval Job | `kubectl apply -f k8s/eval-job.yaml` |
+| Open a trace | `python eval/trace_tool.py --traces traces/ <TRACE_ID>` |
+| Ingest an unseen batch | `kubectl apply -f k8s/a3/jobs/ingest-manual.yaml` (after copying new docs) |
+
+Screenshots must show the command and its full output, uncropped (S.0).
+
+## 8. Assembling proof files after cluster runs
+
+After running cluster jobs, copy evidence to the local `eval/results/` tree:
+
+```bash
+# Copy ingest reports from PVC (then register with prove_ingest.py):
+kubectl cp -n rahbar-a3 -c shell \
+    datalake-shell:/data/lake/reports/ ./tmp-reports/
+python eval/prove_ingest.py --src ./tmp-reports
+
+# Assemble the rollout-undo proof (after capturing three traces: before, released, after):
+python eval/prove_release.py \
+    --before   <TRACE_ID_BEFORE_ROLLOUT> \
+    --released <TRACE_ID_WHILE_V2_LIVE> \
+    --after    <TRACE_ID_AFTER_UNDO>
+```
+
+Both scripts validate the proof shape against the harness contract before writing.
+
 ## Notes
 
 - Resource requests and limits are PROVISIONAL until measured under load (plan T8.6).
