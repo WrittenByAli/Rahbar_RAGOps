@@ -130,7 +130,41 @@ The three required demo actions (G.7) are:
 
 Screenshots must show the command and its full output, uncropped (S.0).
 
-## 8. Assembling proof files after cluster runs
+## 8. Admin commands: the A1.7, A2.3 and A2.4 proofs
+
+The ingestion Job only runs `ingest`, and `datalake-shell` cannot do this work: it mounts the
+lake read-only and default-deny leaves it no network. Use `k8s/a3/jobs/admin.yaml`. Its pod
+template carries `app: indexer`, which is what `allow-chroma` and `allow-indexer` select on;
+`delete` and `restore` write, so they take the same ingestion lock.
+
+```bash
+run_admin () {                      # $1 = the arguments for python -m pipeline.run
+  kubectl -n rahbar-a3 delete job admin --ignore-not-found
+  sed "s|__ADMIN_ARGS__|$1|" k8s/a3/jobs/admin.yaml | kubectl apply -f -
+  kubectl -n rahbar-a3 wait --for=condition=complete job/admin --timeout=600s
+  kubectl -n rahbar-a3 logs job/admin
+}
+
+run_admin "status"                                     # lake and target collections
+run_admin "count --doc-id <doc_id>"                    # chunks of one document
+run_admin "quarantine-proof"                           # A1.7
+run_admin "delete --doc-id <doc_id>"                   # A2.3
+run_admin "restore --doc-id <doc_id> --version <ver>"  # A2.4
+```
+
+Each proof has to show a specific thing, or `harness/verify.py` rejects it:
+
+| Proof | What it must show |
+|---|---|
+| `quarantine.json` (A1.7) | at least one document listed, each with `in_quarantine: true` and `indexed_chunks: 0` |
+| `changed.json` (A2.2) | from `ingest --prove-changed <doc_id>`: that document's chunks differ, at least one other document is present, and no other document's chunks moved |
+| `deleted.json` (A2.3) | `count_before` > 0, `count_after` 0 and `orphan_chunks_after` 0 — run `count --doc-id` first so the delete has something to remove |
+| `restored.json` (A2.4) | exactly the replaced version retrieves before, exactly the restored one after, and `chunks_embedded` is 0 |
+
+The proofs land on the lake PVC at `/data/lake/reports/proofs/`. Copy them out with the
+`kubectl cp` in section 9, then validate them with `eval/prove_ingest.py`.
+
+## 9. Assembling proof files after cluster runs
 
 After running cluster jobs, copy evidence to the local `eval/results/` tree:
 

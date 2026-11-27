@@ -1,0 +1,78 @@
+# One-off admin commands on the lake and the index: the proofs that parts A1.7, A2.3
+# and A2.4 ask for. The ingestion Job only runs "ingest", and datalake-shell cannot do
+# this work: it mounts the lake read-only and the default-deny NetworkPolicy gives it no
+# network. delete and restore write, so they take the same ingestion lock (pipeline/admin.py).
+#
+# Set ADMIN_ARGS to one of:
+#   quarantine-proof                      -> reports/proofs/quarantine.json   (A1.7)
+#   delete  --doc-id <doc_id>             -> reports/proofs/deleted.json      (A2.3)
+#   restore --doc-id <doc_id> --version <v> -> reports/proofs/restored.json   (A2.4)
+#   status | count --doc-id <doc_id>      -> read-only, prints JSON
+#
+# Run it without editing the file:
+#   sed 's|__ADMIN_ARGS__|status|' k8s/a3/jobs/admin.yaml | kubectl apply -f -
+#   kubectl -n rahbar-a3 wait --for=condition=complete job/admin --timeout=600s
+#   kubectl -n rahbar-a3 logs job/admin
+#
+# A finished Job cannot be re-run by applying it again, so delete it between commands:
+#   kubectl -n rahbar-a3 delete job admin --ignore-not-found
+# Exit 3 means an ingestion run holds the lock (nothing was done).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: admin
+  namespace: rahbar-a3
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        # app: indexer is required: allow-chroma and allow-indexer select on it.
+        app: indexer
+        role: admin
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: indexer
+          image: rahbar-indexer:a3
+          imagePullPolicy: IfNotPresent
+          # Unquoted on purpose: ADMIN_ARGS carries several words.
+          command: ["sh", "-c", "exec python -m pipeline.run $ADMIN_ARGS"]
+          env:
+            - {name: ADMIN_ARGS, value: "__ADMIN_ARGS__"}
+            - {name: LAKE_DIR, value: /data/lake}
+            - {name: CORPUS_DIR, value: ""}
+            - {name: HOME, value: /tmp}
+            - {name: PYTHONDONTWRITEBYTECODE, value: "1"}
+            - {name: CHROMA_HOST, value: chroma}
+            - {name: CHROMA_PORT, value: "8000"}
+            - {name: OLLAMA_URL, value: "http://host.minikube.internal:11434"}
+            - {name: VERIFY_EMBED_MODEL, value: nomic-embed-text}
+            - name: INDEX_TARGETS
+              valueFrom:
+                configMapKeyRef: {name: rahbar-index-targets, key: targets.yaml}
+          envFrom:
+            - configMapRef:
+                name: rahbar-release-v1
+          # PROVISIONAL, as for the ingestion Job.
+          resources:
+            requests: {cpu: "250m", memory: "256Mi"}
+            limits: {cpu: "2000m", memory: "2Gi"}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: lake, mountPath: /data/lake}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: lake
+          persistentVolumeClaim: {claimName: rahbar-datalake}
+        - name: tmp
+          emptyDir: {}
