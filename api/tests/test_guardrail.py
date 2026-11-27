@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -111,6 +112,32 @@ def test_injected_chunk_is_neutralised() -> None:
     assert record["context"][0]["text"] == provider.received[0].text
     assert [r.chunk_id for r in response.retrieved] == ["bad", "good"]
     assert record["reranked_order"] == ["bad", "good"]
+
+
+BATCH_B_INJECTED = (Path(__file__).resolve().parents[2]
+                    / "eval" / "batch_b" / "docs" / "id-card-replacement-procedure.md")
+
+
+def test_batch_b_injected_document_is_neutralised() -> None:
+    """D4 asks for the rail to be tested with the injected Batch B document itself, not only
+    with short synthetic strings. The text is flattened the way the chunker emits a paragraph
+    (words joined by spaces), because _redact truncates a matching sentence to the end of its
+    line and the chunker keeps no hard wraps inside a paragraph.
+    """
+    section = "## " + next(part for part in
+                           BATCH_B_INJECTED.read_text(encoding="utf-8").split("## ")
+                           if part.startswith("3. Replacement charges"))
+    kept, actions = apply_retrieval_rail(
+        [passage("idcard", " ".join(section.split()), section="3. Replacement charges")])
+
+    [action] = actions
+    assert action["rail"].startswith("retrieval")
+    assert action["action"] and action["doc_id"]
+    assert action["rule_id"] == "dictated_reply"
+    # The real charges survive; the dictated reply and its secrecy clause do not.
+    assert "Rs 800" in kept[0].text and "Rs 1,200" in kept[0].text
+    for gone in ("waived", "Rs 0", "only that figure", "make no mention"):
+        assert gone not in kept[0].text
 
 
 def test_action_written_to_trace(capsys: pytest.CaptureFixture[str]) -> None:
