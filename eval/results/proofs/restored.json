@@ -1,0 +1,36 @@
+{
+  "run_id": "20261127T120506Z-801ac",
+  "started_at": "2026-11-27T12:05:06.801Z",
+  "doc_id": "makerspace-equipment-loan-rules",
+  "collection": "rahbar_v1",
+  "restored_version": "2026-09",
+  "replaced_version": "2026-10",
+  "retrieved_versions_before": [
+    "2026-10"
+  ],
+  "retrieved_versions_after": [
+    "2026-09"
+  ],
+  "chunks_embedded": 0,
+  "lake_state_id": "2ad2aa8560a2c0629326e6aaa703d2b95642f45911e8a54d8a0f49058c50f5f9",
+  "targets": [
+    {
+      "collection": "rahbar_v1",
+      "counts": {
+        "documents_scanned": 2,
+        "documents_new": 0,
+        "documents_changed": 1,
+        "documents_unchanged": 0,
+        "documents_deleted": 0,
+        "documents_superseded": 1,
+        "chunks_embedded": 0,
+        "chunks_upserted": 0,
+        "chunks_deleted": 0,
+        "orphan_chunks": 0
+      },
+      "retrieved_versions": [
+        "2026-09"
+      ]
+    }
+  ]
+}

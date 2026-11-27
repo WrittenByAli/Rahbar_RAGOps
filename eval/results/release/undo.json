@@ -1,0 +1,23 @@
+{
+  "before": {
+    "release_id": "v1",
+    "collection": "rahbar_v1",
+    "embed_model": "nomic-embed-text",
+    "embed_version": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "trace_id": "249d39978f1d402ebc7c4b8d7c36b909"
+  },
+  "released": {
+    "release_id": "v2",
+    "collection": "rahbar_v2",
+    "embed_model": "nomic-embed-text",
+    "embed_version": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "trace_id": "03d866b77ea546e19fc5381eaf60b48e"
+  },
+  "after_undo": {
+    "release_id": "v1",
+    "collection": "rahbar_v1",
+    "embed_model": "nomic-embed-text",
+    "embed_version": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "trace_id": "308d2f434e044a3fa21771a0c904b226"
+  }
+}

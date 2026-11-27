@@ -1,0 +1,5 @@
+# captured: 2026-11-27T12:27:57Z
+# command: curl -4 -s http://localhost:8080/readyz
+# exit: 0
+# git: 9184760
+{"status":"ready","checks":{"chroma":"ok (464 chunks)","embed_model":"ok","redis":"ok"}}

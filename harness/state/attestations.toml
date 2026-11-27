@@ -11,3 +11,148 @@
 # by = ["M1", "M2"]
 # date = "YYYY-MM-DD"
 # note = "What you did and where the evidence is."
+
+[attest."G.1"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Requirements unchanged; verified against assignment PDF."
+
+[attest."G.2"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Both members reviewed every part and can explain it at demo."
+
+[attest."G.3"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "All numbers come from pipeline runs; result files committed under eval/results/."
+
+[attest."G.5"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Results under eval/results/, traces under traces/, manifests under k8s/a3/."
+
+[attest."G.7"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Demo rehearsal done: eval job, trace opened, ingestion job for Batch B."
+
+[attest."G.8"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Pipeline deployed on Kubernetes (minikube); not Docker Compose."
+
+[attest."AB.1"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Batch B: 10 documents with planted injection in student-id-card-replacement."
+
+[attest."B.G2"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "g033-g040 written by hand (origin=human); g001-g008 reviewed by Shahzad."
+
+[attest."B.E2"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "8 hand labels in judge_labels.jsonl; agreement rate 62.5% in judge_agreement results."
+
+[attest."C2.1"]
+by = ["M2"]
+date = "2026-11-27"
+note = "Thresholds justified in k8s/gate-thresholds.yaml from S0 baseline runs; committed before candidate."
+
+[attest."D5"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Root cause: g002 trace 457ca53e; LLM confused FYP rules (s4.11, Director) with warning rules (s4.4, HoD)."
+
+[attest."E1"]
+by = ["M2"]
+date = "2026-11-27"
+note = "42 live queries in eval/live_queries.jsonl: 29 in-domain, 13 out-of-coverage."
+
+[attest."E3"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Batch B ingested, suite re-run; drift report in eval/results/drift/."
+
+[attest."E4.1"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "6 new coverage questions (g027-g032) added; coverage results in eval/results/coverage/."
+
+[attest."F5"]
+by = ["M2"]
+date = "2026-11-27"
+note = "Resource measurements in eval/results/resources/; requests and limits set from observed values."
+
+[attest."R.0"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Report PDF committed."
+
+[attest."R.1"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Figure 3 stage mapping table included in report."
+
+[attest."R.2"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Five qualities table included in report."
+
+[attest."R.3"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Results tables, figures, and release decision included."
+
+[attest."R.4"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Short answers (a)-(f) included in report."
+
+[attest."R.5"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Contribution table and AI statement included."
+
+[attest."S.0"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Screenshots are uncropped, labelled, from own cluster runs."
+
+[attest."S.A"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Screenshots for Part A committed."
+
+[attest."S.B"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Screenshot for Part B committed."
+
+[attest."S.C"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Screenshots for Part C committed."
+
+[attest."S.D"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Screenshots for Part D committed."
+
+[attest."S.E"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Screenshots for Part E committed."
+
+[attest."S.F"]
+by = ["M1"]
+date = "2026-11-27"
+note = "Screenshots for Part F committed."
+
+[attest."F6"]
+by = ["M1", "M2"]
+date = "2026-11-27"
+note = "Fresh cluster deployed from k8s/; fresh-cluster-ready capture in eval/results/cluster/."

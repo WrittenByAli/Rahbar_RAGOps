@@ -57,3 +57,4 @@ metadata:
 data:
   targets.yaml: |
     - {collection: rahbar_v1, embed_model: nomic-embed-text, chunk_size: 400, chunk_overlap: 50}
+    - {collection: rahbar_v2, embed_model: nomic-embed-text, chunk_size: 400, chunk_overlap: 50}
