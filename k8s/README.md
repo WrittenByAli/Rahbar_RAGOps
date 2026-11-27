@@ -148,9 +148,14 @@ run_admin () {                      # $1 = the arguments for python -m pipeline.
 run_admin "status"                                     # lake and target collections
 run_admin "count --doc-id <doc_id>"                    # chunks of one document
 run_admin "quarantine-proof"                           # A1.7
+run_admin "ingest --prove-changed <doc_id>"            # A2.2
 run_admin "delete --doc-id <doc_id>"                   # A2.3
 run_admin "restore --doc-id <doc_id> --version <ver>"  # A2.4
 ```
+
+`ingest --prove-changed` is the only way to write `changed.json`, and the ingestion Job cannot
+pass flags, so run that one here too. It is an ordinary ingestion otherwise: same image, same
+lake, same targets. Re-deliver the changed file to `inbox/A/` first, or it has nothing to pick up.
 
 Each proof has to show a specific thing, or `harness/verify.py` rejects it:
 

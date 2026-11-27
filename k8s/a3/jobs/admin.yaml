@@ -4,10 +4,12 @@
 # network. delete and restore write, so they take the same ingestion lock (pipeline/admin.py).
 #
 # Set ADMIN_ARGS to one of:
-#   quarantine-proof                      -> reports/proofs/quarantine.json   (A1.7)
-#   delete  --doc-id <doc_id>             -> reports/proofs/deleted.json      (A2.3)
+#   quarantine-proof                        -> reports/proofs/quarantine.json (A1.7)
+#   ingest --prove-changed <doc_id>         -> reports/proofs/changed.json    (A2.2)
+#   delete  --doc-id <doc_id>               -> reports/proofs/deleted.json    (A2.3)
 #   restore --doc-id <doc_id> --version <v> -> reports/proofs/restored.json   (A2.4)
-#   status | count --doc-id <doc_id>      -> read-only, prints JSON
+#   status | count --doc-id <doc_id>        -> read-only, prints JSON
+# ingest --prove-changed runs here because the ingestion Job cannot pass flags.
 #
 # Run it without editing the file:
 #   sed 's|__ADMIN_ARGS__|status|' k8s/a3/jobs/admin.yaml | kubectl apply -f -
