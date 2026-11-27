@@ -54,6 +54,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - name: Set lowercase registry
+        run: echo "REGISTRY=ghcr.io/$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -61,8 +63,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push images
-        env:
-          REGISTRY: ghcr.io/${{ github.repository_owner }}
         run: |
           docker build -t $REGISTRY/rahbar-api:${{ github.sha }} -f api/Dockerfile api/
           docker build -t $REGISTRY/rahbar-indexer:${{ github.sha }} -f indexer/Dockerfile indexer/
@@ -84,10 +84,12 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Set lowercase registry
+        run: echo "REGISTRY=ghcr.io/$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
       # This student project has no persistent, internet-reachable production
       # cluster for a cloud runner to reach - `kubectl apply` with no cluster
       # context just fails dialing localhost:8080. An ephemeral kind cluster,
-      # deploying the images just pushed to Docker Hub by their real tag, is the
+      # deploying the images just pushed to GHCR by their real tag, is the
       # honest stand-in: it proves the images that were just published actually
       # roll out and come up healthy, not a fabricated "it's running somewhere".
       - name: Create kind cluster
@@ -95,8 +97,6 @@ jobs:
         with:
           cluster_name: kind
       - name: Deploy the published images to kind
-        env:
-          REGISTRY: ghcr.io/${{ github.repository_owner }}
         run: |
           kubectl kustomize k8s/overlays/prod/ | sed \
             "s|rahbar-api:dev|$REGISTRY/rahbar-api:${{ github.sha }}|g; \
@@ -128,7 +128,7 @@ jobs:
           # and the HPA removed above.
           kubectl kustomize k8s/overlays/prod/ \
             | yq 'select(.kind == "Job")' \
-            | sed "s|rahbar-indexer:dev|ghcr.io/${{ github.repository_owner }}/rahbar-indexer:${{ github.sha }}|g" \
+            | sed "s|rahbar-indexer:dev|$REGISTRY/rahbar-indexer:${{ github.sha }}|g" \
             | kubectl apply -f -
           if ! kubectl wait --for=condition=complete job/indexer-initial -n rahbar --timeout=120s; then
             echo "::group::Diagnostics: indexer-initial did not complete"
