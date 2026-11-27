@@ -1,0 +1,48 @@
+# captured: 2026-11-27T01:56:46Z
+# command: kubectl logs -n rahbar-a3 -l job-name=rahbar-eval-gate-fail --tail=100
+# exit: 0
+# git: 354d53b
+component level: retrieval
+end to end: asking the golden questions
+end to end: judging the answers
+module level: embedding model
+run 20261127T015513Z-v1-candidate-gate-fail  release v1-cand  seed 42
+metric                                      value  note
+module.paraphrase_mean                     0.7514
+module.unrelated_mean                      0.5449
+module.gap                                 0.2065
+module.embed_ms_per_chunk                   40.08
+module.determinism_max_abs_diff                 0
+component.recall_at_3                      0.8421
+component.recall_at_5                      0.8421  n=19, list depth 10
+component.mrr                               0.761
+component.ndcg_at_5                        0.7769
+end_to_end.faithfulness                         1  n=18 answers, judge errors 0
+end_to_end.abstention_correctness          0.7143  n=7
+end_to_end.citation_validity                  0.6  n=35 raw citations
+end_to_end.latency_ms_p50                    1994
+end_to_end.latency_ms_p95                    3429  n=26, nearest rank
+end_to_end.answerable_answer_rate          0.9474  n=19
+noise delta recall_at_3                   -0.1053  noisy minus clean
+noise delta recall_at_5                         0  noisy minus clean
+noise delta mrr                          -0.01924  noisy minus clean
+noise delta ndcg_at_5                    -0.01649  noisy minus clean
+corpus A subset recall_at_5                   0.8  n=15
+latency of answered requests only: p50 2043 ms, p95 3429 ms, n=20
+request errors: end to end 0, retrieval 0
+corpus_state_id: 228ff460df307cd3e44088fd0af8a572d8ac15d94149e29b619a8af68bad3ecb (lake_state_id from /api/retrieve (collection metadata))
+peak_memory_mib: 35.0
+result: /results/suite/20261127T015513Z-v1-candidate-gate-fail.json
+rule                       baseline  candidate      limit  result
+no_null_metric                    -         []          0  ok
+no_request_errors        {'end_to_end': 0, 'retrieval': 0} {'end_to_end': 0, 'retrieval': 0}          0  ok
+recall_at_5                  0.8421     0.8421       0.05  ok
+faithfulness                      1          1        0.8  ok
+latency_ms_p95                 3842       3429       3000  FAILED
+abstention_correctness       0.7143     0.7143          0  ok
+answerable_answer_rate       0.8421     0.9474       0.55  ok
+thresholds_sha256: 5564f76772590769dd3540ba402d79f33d5d0eda7118536bc1706a8c8b6dacca
+decision: fail (candidate release v1-cand)
+result: /results/gate/20261127T015637Z-v1-cand.json
+eval: gate exit 1 (0 pass, 1 gate failed, 2 invalid or error)
+{"msg": "peak memory", "peak_memory_mib": 29}

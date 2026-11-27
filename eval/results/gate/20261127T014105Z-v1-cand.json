@@ -1,0 +1,74 @@
+{
+  "decided_at": "2026-11-27T01:41:05+00:00",
+  "decision": "fail",
+  "exit_code": 1,
+  "rules": [
+    {
+      "name": "no_null_metric",
+      "baseline": null,
+      "candidate": [],
+      "limit": 0,
+      "passed": true
+    },
+    {
+      "name": "no_request_errors",
+      "baseline": {
+        "end_to_end": 0,
+        "retrieval": 0
+      },
+      "candidate": {
+        "end_to_end": 0,
+        "retrieval": 0
+      },
+      "limit": 0,
+      "passed": true
+    },
+    {
+      "name": "recall_at_5",
+      "kind": "max_drop",
+      "baseline": 0.8571428571428571,
+      "candidate": 0.8571428571428571,
+      "limit": 0.05,
+      "passed": true
+    },
+    {
+      "name": "faithfulness",
+      "kind": "minimum",
+      "baseline": 0.9629629629629629,
+      "candidate": 1.0,
+      "limit": 0.8,
+      "passed": true
+    },
+    {
+      "name": "latency_ms_p95",
+      "kind": "maximum",
+      "baseline": 3372.313,
+      "candidate": 3737.235,
+      "limit": 3000,
+      "passed": false
+    },
+    {
+      "name": "abstention_correctness",
+      "kind": "max_drop",
+      "baseline": 0.5833333333333334,
+      "candidate": 0.5833333333333334,
+      "limit": 0,
+      "passed": true
+    },
+    {
+      "name": "answerable_answer_rate",
+      "kind": "minimum",
+      "baseline": 0.9642857142857143,
+      "candidate": 0.8928571428571429,
+      "limit": 0.55,
+      "passed": true
+    }
+  ],
+  "thresholds_sha256": "5564f76772590769dd3540ba402d79f33d5d0eda7118536bc1706a8c8b6dacca",
+  "candidate_release": "v1-cand",
+  "baseline_release": "v1",
+  "baseline_run_id": "20261127T013852Z-s0-baseline-run3",
+  "candidate_run_id": "20261127T013551Z-v1-cand-candidate",
+  "golden_sha256": "6f012d1f30736847df7c60c24430320fbc9eedc534cd7df23fea68e109c9df6e",
+  "corpus_state_id": "228ff460df307cd3e44088fd0af8a572d8ac15d94149e29b619a8af68bad3ecb"
+}

@@ -1,0 +1,20 @@
+{
+  "kind": "rejected_not_released",
+  "captured": "2026-11-27T01:41:30Z",
+  "gate_decision": "fail",
+  "candidate_release": "v1-cand",
+  "live_release_before": "v1",
+  "live_release_after": "v1",
+  "explanation": "Candidate v1-cand (api-candidate deployment using rahbar-release-v1-cand ConfigMap) was evaluated against the strict threshold (latency_ms_p95 limit=3000ms). Candidate latency_ms_p95 was 3737ms, failing the gate. The live deployment remained at v1 — no rollout was performed.",
+  "gate_result_file": "eval/results/gate/20261127T014105Z-v1-cand.json",
+  "gate_result": {
+    "decided_at": "2026-11-27T01:41:05+00:00",
+    "decision": "fail",
+    "exit_code": 1,
+    "thresholds_sha256": "5564f76772590769dd3540ba402d79f33d5d0eda7118536bc1706a8c8b6dacca",
+    "candidate_release": "v1-cand",
+    "baseline_release": "v1",
+    "baseline_run_id": "20261127T013852Z-s0-baseline-run3",
+    "candidate_run_id": "20261127T013551Z-v1-cand-candidate"
+  }
+}

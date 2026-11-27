@@ -1,0 +1,50 @@
+{
+  "kind": "threshold_flip",
+  "captured": "2026-11-27T01:30:00Z",
+  "image_id": "sha256:aac7ab1225b790d8d23e7a6a18b1aabb5bbfed17a00581b19e20920872e2eeb3",
+  "explanation": "Same api image (rahbar-api:a3), same candidate run (20261126T213346Z-s1-batchb-candidate). Only the gate-thresholds ConfigMap differs. Normal thresholds (latency_ms_p95 limit=8000ms): gate passes. Strict thresholds (latency_ms_p95 limit=3000ms): gate fails. Candidate latency_ms_p95 is 3842ms, below 8000 but above 3000.",
+  "run_a": {
+    "image_id": "sha256:aac7ab1225b790d8d23e7a6a18b1aabb5bbfed17a00581b19e20920872e2eeb3",
+    "decided_at": "2026-11-27T01:27:00+00:00",
+    "decision": "pass",
+    "exit_code": 0,
+    "rules": [
+      {"name": "no_null_metric", "baseline": null, "candidate": [], "limit": 0, "passed": true},
+      {"name": "no_request_errors", "baseline": {"end_to_end": 0, "retrieval": 0}, "candidate": {"end_to_end": 0, "retrieval": 0}, "limit": 0, "passed": true},
+      {"name": "recall_at_5", "kind": "max_drop", "baseline": 0.7368421052631579, "candidate": 0.8421052631578947, "limit": 0.05, "passed": true},
+      {"name": "faithfulness", "kind": "minimum", "baseline": 0.9166666666666666, "candidate": 1.0, "limit": 0.8, "passed": true},
+      {"name": "latency_ms_p95", "kind": "maximum", "baseline": 3068.018, "candidate": 3841.877, "limit": 8000, "passed": true},
+      {"name": "abstention_correctness", "kind": "max_drop", "baseline": 0.5714285714285714, "candidate": 0.7142857142857143, "limit": 0, "passed": true},
+      {"name": "answerable_answer_rate", "kind": "minimum", "baseline": 0.631578947368421, "candidate": 0.8421052631578947, "limit": 0.55, "passed": true}
+    ],
+    "thresholds_sha256": "4afa746b634441415583625ea66f62acb12cafed30a90e0173cbeb0560a69ff2",
+    "candidate_release": "v1",
+    "baseline_release": "v1",
+    "baseline_run_id": "20261126T191531Z-s0-baseline-run1",
+    "candidate_run_id": "20261126T213346Z-s1-batchb-candidate",
+    "golden_sha256": "13638c6dee8bf102501bf4aba7b6fafc38fad421b25b1c3e1e15289b6777f41b",
+    "corpus_state_id": "228ff460df307cd3e44088fd0af8a572d8ac15d94149e29b619a8af68bad3ecb"
+  },
+  "run_b": {
+    "image_id": "sha256:aac7ab1225b790d8d23e7a6a18b1aabb5bbfed17a00581b19e20920872e2eeb3",
+    "decided_at": "2026-11-26T22:34:39+00:00",
+    "decision": "fail",
+    "exit_code": 1,
+    "rules": [
+      {"name": "no_null_metric", "baseline": null, "candidate": [], "limit": 0, "passed": true},
+      {"name": "no_request_errors", "baseline": {"end_to_end": 0, "retrieval": 0}, "candidate": {"end_to_end": 0, "retrieval": 0}, "limit": 0, "passed": true},
+      {"name": "recall_at_5", "kind": "max_drop", "baseline": 0.7368421052631579, "candidate": 0.8421052631578947, "limit": 0.05, "passed": true},
+      {"name": "faithfulness", "kind": "minimum", "baseline": 0.9166666666666666, "candidate": 1.0, "limit": 0.8, "passed": true},
+      {"name": "latency_ms_p95", "kind": "maximum", "baseline": 3068.018, "candidate": 3841.877, "limit": 3000, "passed": false},
+      {"name": "abstention_correctness", "kind": "max_drop", "baseline": 0.5714285714285714, "candidate": 0.7142857142857143, "limit": 0, "passed": true},
+      {"name": "answerable_answer_rate", "kind": "minimum", "baseline": 0.631578947368421, "candidate": 0.8421052631578947, "limit": 0.55, "passed": true}
+    ],
+    "thresholds_sha256": "5564f76772590769dd3540ba402d79f33d5d0eda7118536bc1706a8c8b6dacca",
+    "candidate_release": "v1",
+    "baseline_release": "v1",
+    "baseline_run_id": "20261126T191531Z-s0-baseline-run1",
+    "candidate_run_id": "20261126T213346Z-s1-batchb-candidate",
+    "golden_sha256": "13638c6dee8bf102501bf4aba7b6fafc38fad421b25b1c3e1e15289b6777f41b",
+    "corpus_state_id": "228ff460df307cd3e44088fd0af8a572d8ac15d94149e29b619a8af68bad3ecb"
+  }
+}

@@ -1,0 +1,6 @@
+# captured: 2026-11-27T01:56:51Z
+# command: kubectl get job rahbar-eval-gate-fail -n rahbar-a3
+# exit: 0
+# git: 354d53b
+NAME                    STATUS   COMPLETIONS   DURATION   AGE
+rahbar-eval-gate-fail   Failed   0/1           100s       100s

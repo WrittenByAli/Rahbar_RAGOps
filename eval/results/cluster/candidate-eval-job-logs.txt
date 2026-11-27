@@ -1,0 +1,37 @@
+# captured: 2026-11-27T01:46:36Z
+# command: kubectl logs -n rahbar-a3 -l job-name=rahbar-eval-candidate2 --tail=200
+# exit: 0
+# git: 354d53b
+component level: retrieval
+end to end: asking the golden questions
+end to end: judging the answers
+module level: embedding model
+run 20261127T014502Z-v1-candidate-job  release v1-cand  seed 42
+metric                                      value  note
+module.paraphrase_mean                     0.7514
+module.unrelated_mean                      0.5449
+module.gap                                 0.2065
+module.embed_ms_per_chunk                    35.5
+module.determinism_max_abs_diff                 0
+component.recall_at_3                      0.8421
+component.recall_at_5                      0.8421  n=19, list depth 10
+component.mrr                               0.761
+component.ndcg_at_5                        0.7769
+end_to_end.faithfulness                         1  n=18 answers, judge errors 0
+end_to_end.abstention_correctness          0.7143  n=7
+end_to_end.citation_validity                  0.6  n=35 raw citations
+end_to_end.latency_ms_p50                    1886
+end_to_end.latency_ms_p95                    3352  n=26, nearest rank
+end_to_end.answerable_answer_rate          0.9474  n=19
+noise delta recall_at_3                   -0.1053  noisy minus clean
+noise delta recall_at_5                         0  noisy minus clean
+noise delta mrr                          -0.01924  noisy minus clean
+noise delta ndcg_at_5                    -0.01649  noisy minus clean
+corpus A subset recall_at_5                   0.8  n=15
+latency of answered requests only: p50 2020 ms, p95 3352 ms, n=20
+request errors: end to end 0, retrieval 0
+corpus_state_id: 228ff460df307cd3e44088fd0af8a572d8ac15d94149e29b619a8af68bad3ecb (lake_state_id from /api/retrieve (collection metadata))
+peak_memory_mib: 33.5
+result: /results/suite/20261127T014502Z-v1-candidate-job.json
+eval: no baseline at /results/baseline/baseline.json, gate not run
+{"msg": "peak memory", "peak_memory_mib": 32}
