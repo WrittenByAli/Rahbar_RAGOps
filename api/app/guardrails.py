@@ -80,13 +80,15 @@ _RULES: list[tuple[str, re.Pattern[str]]] = [
           r"(?:ai(?: assistant| model)?|llm|chatbot|language model) ?[:,] "
           r"(?:please |you (?:must|should|will) )?(?:ignore|disregard|forget|tell|say|reply"
           r"|respond|answer|output|always|never|do not|don't)\b")),
-        # text that dictates the reply: "respond only with ...", "tell the user that ..."
+        # text that dictates the reply: "respond only with ...", "tell the user that ...",
+        # "is to state that ..." (indirect command form used in planted documents)
         ("dictated_reply",
          _START + r"(?:respond|reply|answer)(?: to (?:all|every|any) (?:questions?|users?))? "
          r"(?:only with|with only|with the (?:exact )?(?:words?|phrase|sentence|text))\b"
          r"|" + _START + r"(?:always )?tell the users? that\b"
          r"|\b(?:when(?:ever)?|if) (?:asked|answering)\b[^.]{0,80}?, "
-         r"(?:you (?:must|should|will) )?(?:always|only) (?:say|reply|respond|answer|state)\b"),
+         r"(?:you (?:must|should|will) )?(?:always|only) (?:say|reply|respond|answer|state)\b"
+         r"|\bis to (?:state|say|tell|reply|answer) that\b"),
         # asking for the hidden prompt, or for silence towards the user
         ("prompt_secrecy",
          _START + r"(?:reveal|print|show|repeat|output|display|leak|recite)(?: me)?(?: all)? "
