@@ -78,10 +78,12 @@ def build_proof(before_id: str, released_id: str, after_id: str,
             if not stage.get(key):
                 errors.append(f"{stage_name}.{key} is empty")
 
-    if after["collection"] != before["collection"]:
-        errors.append(
-            f"after_undo.collection '{after['collection']}' != before.collection '{before['collection']}'"
-        )
+    for key in ("collection", "embed_model", "embed_version"):
+        if after[key] != before[key]:
+            errors.append(
+                f"after_undo.{key} '{after[key]}' != before.{key} '{before[key]}' "
+                "— the undo did not restore the previous release"
+            )
     if released["collection"] == before["collection"]:
         errors.append(
             f"released.collection == before.collection ('{before['collection']}') — rollout did not change collection"

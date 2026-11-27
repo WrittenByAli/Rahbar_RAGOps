@@ -12,14 +12,14 @@ import prove_release
 
 
 def _trace(trace_id: str, collection: str, embed_model: str = "nomic-embed-text",
-           release_id: str = "v1") -> str:
+           release_id: str = "v1", embed_version: str = "abc123") -> str:
     return json.dumps({
         "kind": "trace",
         "schema": 1,
         "trace_id": trace_id,
         "ts": "2026-11-27T10:00:00.000Z",
         "query": "test query",
-        "embedding": {"model": embed_model, "version": "abc123"},
+        "embedding": {"model": embed_model, "version": embed_version},
         "collection": {"name": collection, "version": "col-ver"},
         "release_id": release_id,
     })
@@ -80,6 +80,26 @@ class TestProveRelease:
             _trace("tid-before",   "rahbar_v1"),
             _trace("tid-released", "rahbar_v2"),
             _trace("tid-after",    "rahbar_v2"),  # undo didn't restore v1
+        ])
+        rc = prove_release.build_proof(
+            "tid-before", "tid-released", "tid-after", [str(traces_dir)])
+        assert rc != 0
+
+    def test_embed_model_change_after_undo_fails(self, tmp_path: Path) -> None:
+        traces_dir = _write_traces(tmp_path / "traces", [
+            _trace("tid-before",   "rahbar_v1", embed_model="nomic-embed-text"),
+            _trace("tid-released", "rahbar_v2", embed_model="mxbai-embed-large"),
+            _trace("tid-after",    "rahbar_v1", embed_model="mxbai-embed-large"),
+        ])
+        rc = prove_release.build_proof(
+            "tid-before", "tid-released", "tid-after", [str(traces_dir)])
+        assert rc != 0
+
+    def test_embed_version_change_after_undo_fails(self, tmp_path: Path) -> None:
+        traces_dir = _write_traces(tmp_path / "traces", [
+            _trace("tid-before",   "rahbar_v1", embed_version="v-old"),
+            _trace("tid-released", "rahbar_v2", embed_version="v-new"),
+            _trace("tid-after",    "rahbar_v1", embed_version="v-new"),
         ])
         rc = prove_release.build_proof(
             "tid-before", "tid-released", "tid-after", [str(traces_dir)])
@@ -198,3 +218,123 @@ class TestProveIngest:
         self._write_src(src, ingest=[_ingest_result()])
         rc = prove_ingest.run(src)
         assert rc == 0
+
+
+# ------------------------------------- validators mirroring harness/checks.py
+
+
+def _changed_proof() -> dict:
+    return {
+        "run_id": "r1",
+        "changed_doc_id": "beta",
+        "collection": "rahbar_v1",
+        "before": {"beta": ["b1", "b2"], "alpha": ["a1"]},
+        "after":  {"beta": ["b3"],       "alpha": ["a1"]},
+    }
+
+
+def _restored_proof() -> dict:
+    return {
+        "run_id": "r1",
+        "doc_id": "ug-rules",
+        "restored_version": "2023-08",
+        "replaced_version": "2026-06",
+        "retrieved_versions_before": ["2026-06"],
+        "retrieved_versions_after": ["2023-08"],
+        "chunks_embedded": 0,
+    }
+
+
+class TestVerificationDecision:
+    def test_accepted_with_all_passing_is_valid(self) -> None:
+        assert prove_ingest.validate_verification(
+            _verif_report(), Path("v.json")) == []
+
+    def test_unknown_decision_rejected(self) -> None:
+        errs = prove_ingest.validate_verification(
+            _verif_report(decision="maybe"), Path("v.json"))
+        assert any("not accepted/quarantined/unchanged" in e for e in errs)
+
+    def test_quarantined_but_all_checks_pass_rejected(self) -> None:
+        errs = prove_ingest.validate_verification(
+            _verif_report(decision="quarantined"), Path("v.json"))
+        assert any("contradicts" in e for e in errs)
+
+    def test_accepted_with_a_failing_check_rejected(self) -> None:
+        report = _verif_report()
+        report["documents"][0]["checks"]["quality"] = {
+            "status": "fail", "reason": "scanned, no text layer"}
+        errs = prove_ingest.validate_verification(report, Path("v.json"))
+        assert any("contradicts" in e for e in errs)
+
+
+class TestChangedProof:
+    def test_valid_changed_proof(self) -> None:
+        assert prove_ingest.validate_proof(
+            _changed_proof(), Path("changed.json")) == []
+
+    def test_target_chunks_unchanged_rejected(self) -> None:
+        proof = _changed_proof()
+        proof["after"]["beta"] = ["b1", "b2"]
+        errs = prove_ingest.validate_proof(proof, Path("changed.json"))
+        assert any("unchanged" in e for e in errs)
+
+    def test_no_other_document_rejected(self) -> None:
+        proof = _changed_proof()
+        del proof["before"]["alpha"]
+        del proof["after"]["alpha"]
+        errs = prove_ingest.validate_proof(proof, Path("changed.json"))
+        assert any("at least one other document" in e for e in errs)
+
+    def test_other_document_moved_rejected(self) -> None:
+        proof = _changed_proof()
+        proof["after"]["alpha"] = ["a9"]
+        errs = prove_ingest.validate_proof(proof, Path("changed.json"))
+        assert any("other documents changed too" in e for e in errs)
+
+
+class TestDeletedAndRestoredProofs:
+    def test_count_before_zero_rejected(self) -> None:
+        proof = {"doc_id": "x", "count_before": 0,
+                 "count_after": 0, "orphan_chunks_after": 0}
+        errs = prove_ingest.validate_proof(proof, Path("deleted.json"))
+        assert any("count_before" in e for e in errs)
+
+    def test_valid_restored_proof(self) -> None:
+        assert prove_ingest.validate_proof(
+            _restored_proof(), Path("restored.json")) == []
+
+    def test_before_versions_must_be_exactly_the_replaced_one(self) -> None:
+        proof = _restored_proof()
+        proof["retrieved_versions_before"] = ["2026-06", "2023-08"]
+        errs = prove_ingest.validate_proof(proof, Path("restored.json"))
+        assert any("retrieved_versions_before" in e for e in errs)
+
+    def test_after_versions_must_be_exactly_the_restored_one(self) -> None:
+        proof = _restored_proof()
+        proof["retrieved_versions_after"] = []
+        errs = prove_ingest.validate_proof(proof, Path("restored.json"))
+        assert any("retrieved_versions_after" in e for e in errs)
+
+
+class TestIngestZeroPairing:
+    def test_missing_lake_state_id_rejected(self) -> None:
+        run = _ingest_result()
+        del run["lake_state_id"]
+        errs = prove_ingest.validate_ingest(run, Path("i.json"))
+        assert any("lake_state_id" in e for e in errs)
+
+    def test_zero_embed_pair_found(self) -> None:
+        first = _ingest_result(run_id="r1")
+        second = {**_ingest_result(run_id="r2"),
+                  "started_at": "2026-11-27T11:00:00Z",
+                  "counts": {"chunks_embedded": 0, "documents_unchanged": 12}}
+        assert prove_ingest._zero_embed_pair([first, second]) is True
+
+    def test_zero_embed_pair_needs_same_lake_state(self) -> None:
+        first = _ingest_result(run_id="r1")
+        second = {**_ingest_result(run_id="r2"),
+                  "started_at": "2026-11-27T11:00:00Z",
+                  "lake_state_id": "different",
+                  "counts": {"chunks_embedded": 0, "documents_unchanged": 12}}
+        assert prove_ingest._zero_embed_pair([first, second]) is False

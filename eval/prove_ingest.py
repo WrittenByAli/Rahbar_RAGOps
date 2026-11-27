@@ -22,8 +22,10 @@ The script copies:
   ingest/*.json        ->  eval/results/ingest/
   proofs/*.json        ->  eval/results/proofs/
 
-It validates each proof's shape against the harness contract before copying, so a
-bad copy (truncated kubectl cp, wrong file) is caught early.
+It validates each proof's shape before copying, so a bad copy (truncated kubectl cp,
+wrong file) is caught early. The rules mirror check_verification_report, check_ingest_zero
+and check_proof in harness/checks.py and must stay in step with them: harness/verify.py
+remains the authoritative judge, this script is only the pre-flight gate.
 
 Exit codes: 0 all files accepted, 1 validation failed, 2 argument or file error.
 """
@@ -40,6 +42,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DEST = ROOT / "eval" / "results"
 
 FOUR_CHECKS = ("quality", "completeness", "recency", "uniqueness")
+MIN_DOCUMENTS = 10          # A1.2: the largest verification report must cover this many
 
 
 def _fail(msg: str, code: int = 1) -> int:
@@ -60,12 +63,21 @@ def validate_verification(data: dict, path: Path) -> list[str]:
     for doc in data.get("documents", []):
         f = doc.get("file", "?")
         checks = doc.get("checks") or {}
+        statuses = []
         for check in FOUR_CHECKS:
             entry = checks.get(check) or {}
+            statuses.append(entry.get("status"))
             if entry.get("status") not in ("pass", "fail"):
                 errors.append(f"{path.name}/{f}: {check} has no pass/fail status")
             if not str(entry.get("reason", "")).strip():
                 errors.append(f"{path.name}/{f}: {check} has no reason text")
+        decision = doc.get("decision")
+        if decision not in ("accepted", "quarantined", "unchanged"):
+            errors.append(f"{path.name}/{f}: decision '{decision}' is not "
+                          "accepted/quarantined/unchanged")
+        elif (decision == "quarantined") != ("fail" in statuses):
+            errors.append(f"{path.name}/{f}: decision '{decision}' contradicts "
+                          f"check results {statuses}")
     return errors
 
 
@@ -74,6 +86,12 @@ def validate_ingest(data: dict, path: Path) -> list[str]:
     for key in ("run_id", "collection", "counts"):
         if not data.get(key):
             errors.append(f"{path.name}: missing {key}")
+    if not data.get("lake_state_id"):
+        errors.append(f"{path.name}: missing lake_state_id (A2.1 pairs runs by it)")
+    counts = data.get("counts") or {}
+    for key in ("chunks_embedded", "documents_unchanged"):
+        if key not in counts:
+            errors.append(f"{path.name}: counts.{key} missing (A2.1 needs it)")
     return errors
 
 
@@ -90,25 +108,40 @@ def validate_proof(data: dict, path: Path) -> list[str]:
             if d.get("indexed_chunks") != 0:
                 errors.append(f"quarantine.json: {d.get('file','')} still has indexed chunks")
     elif name == "changed":
-        for key in ("changed_doc_id", "before", "after"):
-            if not data.get(key):
-                errors.append(f"changed.json: missing {key}")
-        target = data.get("changed_doc_id", "")
-        if target and target not in (data.get("before") or {}):
-            errors.append(f"changed.json: changed_doc_id '{target}' not in before")
+        before, after = data.get("before") or {}, data.get("after") or {}
+        target = data.get("changed_doc_id")
+        if not target:
+            errors.append("changed.json: missing changed_doc_id")
+        elif target not in before or target not in after:
+            errors.append(f"changed.json: changed_doc_id '{target}' missing from before/after")
+        elif sorted(before[target]) == sorted(after[target]):
+            errors.append(f"changed.json: chunks of '{target}' are unchanged")
+        others = (set(before) | set(after)) - {target}
+        if not others:
+            errors.append("changed.json: proof must include at least one other document")
+        moved = [d for d in others if sorted(before.get(d, [])) != sorted(after.get(d, []))]
+        if moved:
+            errors.append(f"changed.json: other documents changed too: {moved[:5]}")
     elif name == "deleted":
-        for key in ("doc_id", "count_before", "count_after", "orphan_chunks_after"):
-            if data.get(key) is None:
-                errors.append(f"deleted.json: missing {key}")
+        if not data.get("doc_id"):
+            errors.append("deleted.json: missing doc_id")
+        if not isinstance(data.get("count_before"), int) or data["count_before"] <= 0:
+            errors.append("deleted.json: count_before must be a positive count")
         if data.get("count_after") != 0:
             errors.append("deleted.json: count_after must be 0")
         if data.get("orphan_chunks_after") != 0:
             errors.append("deleted.json: orphan_chunks_after must be 0")
     elif name == "restored":
-        for key in ("restored_version", "replaced_version",
-                    "retrieved_versions_before", "retrieved_versions_after"):
-            if not data.get(key):
-                errors.append(f"restored.json: missing {key}")
+        old, new = data.get("restored_version"), data.get("replaced_version")
+        if not (old and new and old != new):
+            errors.append("restored.json: restored_version and replaced_version "
+                          "must both be set and differ")
+        if data.get("retrieved_versions_before") != [new]:
+            errors.append(f"restored.json: retrieved_versions_before must be exactly [{new!r}], "
+                          f"got {data.get('retrieved_versions_before')!r}")
+        if data.get("retrieved_versions_after") != [old]:
+            errors.append(f"restored.json: retrieved_versions_after must be exactly [{old!r}], "
+                          f"got {data.get('retrieved_versions_after')!r}")
         if data.get("chunks_embedded") != 0:
             errors.append("restored.json: chunks_embedded must be 0 (restore re-uses existing chunks)")
     return errors
@@ -140,6 +173,48 @@ def copy_tree(src: Path, dest: Path, validator, label: str) -> int:
     return 0
 
 
+def _load_dir(folder: Path) -> list[dict]:
+    loaded: list[dict] = []
+    for f in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+        try:
+            loaded.append(json.loads(f.read_text(encoding="utf-8")))
+        except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+            continue
+    return loaded
+
+
+def _zero_embed_pair(runs: list[dict]) -> bool:
+    """A 0-embed run following a real one on the same collection and lake state (A2.1)."""
+    ordered = sorted(runs, key=lambda r: str(r.get("started_at", "")))
+    for i, later in enumerate(ordered):
+        counts = later.get("counts") or {}
+        if counts.get("chunks_embedded") != 0 or not counts.get("documents_unchanged"):
+            continue
+        for earlier in ordered[:i]:
+            if (earlier.get("collection") == later.get("collection")
+                    and (earlier.get("counts") or {}).get("chunks_embedded", 0) > 0
+                    and earlier.get("lake_state_id") == later.get("lake_state_id")):
+                return True
+    return False
+
+
+def cross_file_notes() -> None:
+    """Conditions the harness checks across files; a single file cannot satisfy them."""
+    reports = _load_dir(DEST / "verification")
+    if reports:
+        biggest = max(len(r.get("documents", [])) for r in reports)
+        tag = "ok  " if biggest >= MIN_DOCUMENTS else "NOTE"
+        print(f"  {tag}A1.2: largest verification report covers {biggest} document(s), "
+              f"needs {MIN_DOCUMENTS}")
+    runs = _load_dir(DEST / "ingest")
+    if runs:
+        if _zero_embed_pair(runs):
+            print("  ok  A2.1: a re-run embedded 0 chunks on the same lake state")
+        else:
+            print("  NOTE A2.1: no 0-embed re-run yet — run the ingestion Job a second "
+                  "time without changing the lake")
+
+
 def run(src: Path) -> int:
     failures = 0
     failures += copy_tree(src / "verification", DEST / "verification", validate_verification, "verification")
@@ -147,6 +222,7 @@ def run(src: Path) -> int:
     failures += copy_tree(src / "proofs",        DEST / "proofs",        validate_proof,         "proofs")
     if failures:
         return _fail(f"{failures} validation error(s) — no invalid files were copied")
+    cross_file_notes()
     try:
         dest_display = DEST.relative_to(ROOT).as_posix()
     except ValueError:
