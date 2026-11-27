@@ -1,0 +1,88 @@
+# Promote one suite result to the gate baseline.
+#
+# The eval Job runs gate.py only when /results/baseline/baseline.json exists, and nothing else
+# writes it: the suite writes /results/suite, and datalake-shell mounts the evaldata PVC
+# read-only, so kubectl cp cannot put a file there. This Job is the only writer of the baseline.
+#
+# Per IMPLEMENTATION-PLAN section 1.1 the baseline is the S1 run: corpus A + Batch B, golden v1,
+# release v1. Take it before any candidate runs.
+#
+#   # see the result names on the PVC
+#   kubectl cp -n rahbar-a3 -c shell datalake-shell:/data/evaldata/suite ./suite-out
+#
+#   # promote one of them
+#   sed 's|__SUITE_RESULT__|/results/suite/<name>.json|' k8s/a3/jobs/promote-baseline.yaml \
+#     | kubectl apply -f -
+#   kubectl -n rahbar-a3 wait --for=condition=complete job/promote-baseline --timeout=120s
+#   kubectl -n rahbar-a3 logs job/promote-baseline
+#
+# It refuses to replace an existing baseline unless BASELINE_REPLACE is "yes". Replacing one
+# invalidates every gate comparison made against the old one, so say so in the report when you do
+# (plan section 1.1 rule 4: after the golden set changes, take a new baseline).
+#
+# Delete the Job before running it again:
+#   kubectl -n rahbar-a3 delete job promote-baseline --ignore-not-found
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: promote-baseline
+  namespace: rahbar-a3
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        # Deliberately not app: rahbar-eval. This Job only copies a file on the volume, so it
+        # should keep the default-deny egress rather than the eval Job's API and Ollama access.
+        app: promote-baseline
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: promote
+          image: rahbar-eval:a3
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              if [ ! -f "$BASELINE_SRC" ]; then
+                echo "promote-baseline: no such result: $BASELINE_SRC"
+                echo "promote-baseline: results on the volume:"
+                ls -1 /results/suite 2>/dev/null || echo "  (none)"
+                exit 2
+              fi
+              if [ -f "$BASELINE_DEST" ] && [ "$BASELINE_REPLACE" != "yes" ]; then
+                echo "promote-baseline: $BASELINE_DEST already exists."
+                echo "promote-baseline: set BASELINE_REPLACE=yes to replace it; every gate"
+                echo "promote-baseline: comparison against the old baseline stops being valid."
+                exit 1
+              fi
+              mkdir -p "$(dirname "$BASELINE_DEST")"
+              cp "$BASELINE_SRC" "$BASELINE_DEST"
+              echo "promote-baseline: $BASELINE_SRC -> $BASELINE_DEST"
+          env:
+            - {name: BASELINE_SRC, value: "__SUITE_RESULT__"}
+            - {name: BASELINE_DEST, value: /results/baseline/baseline.json}
+            - {name: BASELINE_REPLACE, value: "no"}
+            - {name: HOME, value: /tmp}
+          resources:
+            requests: {cpu: "10m", memory: "32Mi"}
+            limits: {cpu: "200m", memory: "128Mi"}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: results, mountPath: /results}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: results
+          persistentVolumeClaim: {claimName: rahbar-evaldata}
+        - name: tmp
+          emptyDir: {}

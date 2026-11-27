@@ -88,6 +88,24 @@ The eval Job runs the suite, then the gate when `/results/baseline/baseline.json
 with the gate's code (0 pass, 1 fail, 2 invalid). `backoffLimit: 0`, so a failure is not retried.
 To change the target or label, edit `EVAL_TARGET` and `EVAL_LABEL` in `k8s/eval-job.yaml`.
 
+**The baseline.** On a fresh cluster there is none, so the first runs log "no baseline, gate not
+run" and the gate never fires. Nothing else writes it: the suite writes `/results/suite`, and
+`datalake-shell` mounts the evaldata PVC read-only, so `kubectl cp` cannot put a file there.
+Promote one suite result with `k8s/a3/jobs/promote-baseline.yaml`:
+
+```bash
+kubectl cp -n rahbar-a3 -c shell datalake-shell:/data/evaldata/suite ./suite-out   # see the names
+sed 's|__SUITE_RESULT__|/results/suite/<name>.json|' k8s/a3/jobs/promote-baseline.yaml \
+  | kubectl apply -f -
+kubectl -n rahbar-a3 wait --for=condition=complete job/promote-baseline --timeout=120s
+kubectl -n rahbar-a3 logs job/promote-baseline
+```
+
+The baseline is the S1 run: corpus A + Batch B, golden v1, release v1
+(`docs/a3/IMPLEMENTATION-PLAN.md` section 1.1). Take it before any candidate runs. The Job refuses
+to replace an existing baseline unless `BASELINE_REPLACE` is `yes`, because every gate comparison
+made against the old one stops being valid.
+
 ## 4. Checks
 
 ```bash
