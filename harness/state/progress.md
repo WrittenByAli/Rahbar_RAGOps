@@ -215,3 +215,66 @@ abstention_correctness drop ≤ 0 | answerable_answer_rate min 0.55
 - Push feature/ali-eval-baseline (blocked by auto-mode; run: git push origin feature/ali-eval-baseline)
 
 **Next:** harness evidence stage: capture.py for ingest logs, API traces, PVC restart survival
+
+---
+
+## 2026-11-27 - closing the gaps that blocked the cluster evidence (Shahzad, `main`)
+
+No cluster on this machine (no minikube, no Ollama, kubectl has no context), so nothing here
+produced evidence. The work was to find and close the gaps that would have made the cluster
+session fail, since the run happens on a second laptop.
+
+**Done**
+
+1. `eval/prove_release.py`, `eval/prove_ingest.py`, `eval/demo_checklist.py` and
+   `eval/tests/test_prove.py` (27 tests). `73322fe`
+2. Aligned both prove scripts with `harness/checks.py`. They were looser than the harness, so
+   they would have accepted evidence `verify.py` then rejects. `1a761de`
+   - verification: `decision` must be valid and agree with the four check results
+   - ingest: `lake_state_id` and `counts.{chunks_embedded,documents_unchanged}` required
+   - changed: target's chunks must differ, one other document present, no other document moved
+   - deleted: `count_before` > 0; restored: the version lists must be exact
+   - undo: `embed_model` and `embed_version` must match after the undo, not only `collection`
+   - reports the two cross-file conditions: A1.2 needs 10 documents, A2.1 needs a 0-embed re-run
+3. `k8s/a3/jobs/admin.yaml`. **A1.7, A2.2, A2.3 and A2.4 could not be produced at all**: the
+   ingestion Job runs only a bare `ingest`, and `datalake-shell` mounts the lake read-only with no
+   network. The new Job runs one `pipeline.run` command from `ADMIN_ARGS`, carries `app: indexer`
+   (what `allow-chroma` and `allow-indexer` select on) and mounts the lake read-write. `delete` and
+   `restore` take the same ingestion lock, so the single-writer invariant holds. `e6361b4`, `c64624e`
+4. `k8s/a3/jobs/promote-baseline.yaml`. **The gate could never fire on a fresh cluster**: it runs
+   only when `/results/baseline/baseline.json` exists, the suite never writes that path, and
+   `datalake-shell` mounts evaldata read-only so `kubectl cp` cannot either. `54fe36f`
+5. `docs/a3/RUNBOOK.md` section 1 was A2-era and would have failed outright: namespace `rahbar`,
+   `kubectl apply -k k8s/overlays/a3` (the A2 tree), manifest paths that do not exist. Replaced by
+   a pointer to `k8s/README.md`, plus the `fresh-cluster-ready` capture command, which no document
+   had and which is the only one of the ten capture names still missing. `8566a65`
+6. `k8s/README.md`: how to copy traces off the PVC (C3 and F3.4 had no such step, so
+   `prove_release.py` had nothing to read), and that corpus A and Batch B must be ingested in
+   separate runs, since the batch name comes from the inbox folder and AB.2 wants one report per
+   batch. `2c7b0a0`
+7. A test for the retrieval rail against the real Batch B injected document. Every guardrail test
+   used a synthetic string; nothing exercised `id-card-replacement-procedure.md`. `5e9d3be`
+
+**Evidence**
+
+- 666 tests pass locally (51 harness, 165 eval + 27 new, 223 api, 228 indexer). Ruff clean.
+- `python harness/verify.py` unchanged at FAIL=13 PASS=39 PENDING_HUMAN=28. Nothing regressed, and
+  nothing was made to pass without a run: all 13 failures need the cluster or a member.
+- The rail was checked against the real injected paragraph both as raw markdown and flattened the
+  way the chunker emits it. Flattened (what the pipeline gives it) the whole dictated clause is
+  removed and the real charges survive; on raw markdown the hard wraps leave part behind. The rail
+  is correct for its real input; the test pins the flattened form.
+
+**Open**
+
+Nothing code-shaped is left among the 13 failures. 11 need the cluster, 2 need a member.
+
+- Cluster, in plan order S0 → T → S1 → C → R: A1.2, A1.7, A2.1, A2.2, A2.3, AB.2 (ingest and the
+  admin Job), A2.4, C3 and F3.4 (three traces, then `prove_release.py`), D4 (ask about the ID card
+  replacement fee after Batch B is in), F6 (`capture.py fresh-cluster-ready`)
+- `harness/members.toml`: both members fill `git_emails`. G.4 fails until then
+- B.G2: 8 hand-written golden questions and 8 `reviewed_by` labels
+- B.E2 judge labels, D5 root cause, drift causes, attestations, report, screenshots
+
+**Next:** on the cluster laptop, follow `k8s/README.md` sections 1, 2, 3, 8, 9 in that order.
+Promote the S1 baseline before any candidate runs, and copy the traces only after the undo.
