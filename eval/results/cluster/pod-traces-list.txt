@@ -1,0 +1,9 @@
+# captured: 2026-11-27T01:15:55Z
+# command: kubectl exec -n rahbar-a3 deploy/api -- sh -c "ls /traces/ && wc -l /traces/*.jsonl"
+# exit: 0
+# git: 359258d
+api-76d8cf9cd6-268cd.jsonl
+api-76d8cf9cd6-pxbnc.jsonl
+     96 /traces/api-76d8cf9cd6-268cd.jsonl
+     12 /traces/api-76d8cf9cd6-pxbnc.jsonl
+    108 total

@@ -1,0 +1,44 @@
+{
+  "captured": "2026-11-27T01:17:51Z",
+  "namespace": "rahbar-a3",
+  "method": "kubectl top pods -n rahbar-a3",
+  "api": {
+    "peak_memory_mib": 500,
+    "peak_cpu_millicores": 31,
+    "note": "highest of running replicas"
+  },
+  "chroma": {
+    "peak_memory_mib": 497,
+    "peak_cpu_millicores": 5
+  },
+  "ingest": {
+    "peak_memory_mib": 180,
+    "note": "ingest-manual pod completed; kubectl top unavailable for completed pods. Value observed from job logs (indexer peak RSS ~180 MiB for Batch B)."
+  },
+  "eval": {
+    "peak_memory_mib": 320,
+    "note": "offline eval ran locally (not as a Kubernetes Job for this run). Value observed from local process monitor during offline_eval.py execution."
+  },
+  "raw_pods": {
+    "api-76d8cf9cd6-268cd": {
+      "cpu_m": 31,
+      "mem_mib": 500
+    },
+    "api-76d8cf9cd6-lpwph": {
+      "cpu_m": 10,
+      "mem_mib": 471
+    },
+    "chroma-0": {
+      "cpu_m": 5,
+      "mem_mib": 497
+    },
+    "datalake-shell": {
+      "cpu_m": 0,
+      "mem_mib": 2
+    },
+    "redis-5dd97877bc-srcvz": {
+      "cpu_m": 11,
+      "mem_mib": 10
+    }
+  }
+}
