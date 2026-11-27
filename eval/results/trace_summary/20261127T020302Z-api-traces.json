@@ -1,0 +1,124 @@
+{
+  "generated_at": "2026-11-27T02:03:02.344472Z",
+  "window": {
+    "since": "2026-11-26T00:00:00Z",
+    "until": "2026-11-28T00:00:00Z",
+    "rule": "since <= ts < until"
+  },
+  "trace_files": [
+    "traces/api-76d8cf9cd6-268cd.jsonl"
+  ],
+  "records": 96,
+  "skipped": {
+    "not_json": 0,
+    "broken_trace_line": 0,
+    "not_a_trace": 0,
+    "no_trace_id": 0,
+    "duplicate": 0,
+    "bad_timestamp": 0,
+    "outside_window": 0
+  },
+  "top1_similarity": {
+    "count": 94,
+    "min": 0.5093994,
+    "p50": 0.72196853,
+    "mean": 0.7257414178723403,
+    "max": 0.85916698,
+    "histogram": [
+      {
+        "from": -1.0,
+        "to": 0.0,
+        "count": 0
+      },
+      {
+        "from": 0.0,
+        "to": 0.1,
+        "count": 0
+      },
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "count": 0
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "count": 0
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "count": 0
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "count": 0
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "count": 7
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "count": 29
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "count": 32
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "count": 26
+      },
+      {
+        "from": 0.9,
+        "to": 1.0,
+        "count": 0
+      }
+    ]
+  },
+  "abstention_rate": 0.3125,
+  "abstention": {
+    "abstained": 30,
+    "n": 96
+  },
+  "cache_hit_rate": 0.13333333333333333,
+  "cache": {
+    "status_counts": {
+      "bypass": 81,
+      "miss": 13,
+      "hit": 2
+    },
+    "n": 15
+  },
+  "percentile_method": "nearest-rank",
+  "latency_ms_p95_by_stage": {
+    "cache": 62.47,
+    "embed": 170.018,
+    "retrieve": 47.878,
+    "guardrail": 12.973,
+    "prompt": 27.298,
+    "generate": 7012.347,
+    "total": 7459.919
+  },
+  "latency_n_by_stage": {
+    "cache": 15,
+    "embed": 94,
+    "retrieve": 94,
+    "guardrail": 96,
+    "prompt": 93,
+    "generate": 93,
+    "total": 96
+  },
+  "injection_flagged": {
+    "total": 0,
+    "records_flagged": 0,
+    "by_rail_action": {},
+    "other_guardrail_actions": 0
+  }
+}
