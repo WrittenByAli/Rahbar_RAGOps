@@ -1,0 +1,40 @@
+# captured: 2026-11-27T01:15:27Z
+# command: kubectl exec -n rahbar-a3 datalake-shell -- sh -c "find /data -maxdepth 3 -type d"
+# exit: 0
+# git: 359258d
+Defaulted container "shell" out of: shell, make-inbox (init)
+/data
+/data/lake
+/data/lake/archive
+/data/lake/archive/fee-structure
+/data/lake/archive/ug-academic-rules
+/data/lake/inbox
+/data/lake/inbox/B
+/data/lake/inbox/A
+/data/lake/lake
+/data/lake/lake/makerspace-equipment-loan-rules
+/data/lake/lake/grading
+/data/lake/lake/student-locker-allocation
+/data/lake/lake/plain-language-grades-guide
+/data/lake/lake/annual-report-2023-24
+/data/lake/lake/student-cloud-credits
+/data/lake/lake/prospectus-academic-rules
+/data/lake/lake/fee-structure
+/data/lake/lake/ug-academic-rules
+/data/lake/lake/industrial-internship-guidelines
+/data/lake/lake/annual-report-2019-20
+/data/lake/lake/student-id-card-replacement
+/data/lake/lake/student-handbook
+/data/lake/lake/faculty-entrepreneurship-policy
+/data/lake/quarantine
+/data/lake/quarantine/20261126T213304Z-493ac
+/data/lake/reports
+/data/lake/reports/ingest
+/data/lake/reports/verification
+/data/lake/reports/proofs
+/data/lake/state
+/data/lake/state/staging
+/data/lake/state/verify-cache
+/data/lake/state/extract-cache
+/data/traces
+/data/evaldata

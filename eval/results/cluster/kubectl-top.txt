@@ -1,0 +1,10 @@
+# captured: 2026-11-27T01:09:53Z
+# command: kubectl top pods -n rahbar-a3
+# exit: 0
+# git: 359258d
+NAME                     CPU(cores)   MEMORY(bytes)   
+api-76d8cf9cd6-268cd     18m          409Mi           
+api-76d8cf9cd6-lpwph     12m          344Mi           
+chroma-0                 7m           140Mi           
+datalake-shell           0m           0Mi             
+redis-5dd97877bc-srcvz   12m          8Mi             

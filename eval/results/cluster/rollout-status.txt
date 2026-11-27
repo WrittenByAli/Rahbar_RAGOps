@@ -1,0 +1,5 @@
+# captured: 2026-11-27T01:09:45Z
+# command: kubectl rollout status deployment/api -n rahbar-a3 --timeout=60s
+# exit: 0
+# git: 359258d
+deployment "api" successfully rolled out

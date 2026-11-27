@@ -1,0 +1,333 @@
+# captured: 2026-11-27T01:09:32Z
+# command: kubectl exec -n rahbar-a3 deploy/api -- python -c "import urllib.request; print(urllib.request.urlopen('http://localhost:8000/metrics').read().decode())"
+# exit: 0
+# git: 359258d
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 49697.0
+python_gc_objects_collected_total{generation="1"} 8313.0
+python_gc_objects_collected_total{generation="2"} 612.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 321.0
+python_gc_collections_total{generation="1"} 29.0
+python_gc_collections_total{generation="2"} 2.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="12",patchlevel="14",version="3.12.14"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 1.311748096e+09
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 4.01227776e+08
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.79574063451e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 18.09
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 463.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP rahbar_requests_total HTTP requests
+# TYPE rahbar_requests_total counter
+rahbar_requests_total{path="/healthz",status="200"} 115.0
+rahbar_requests_total{path="/readyz",status="200"} 225.0
+rahbar_requests_total{path="/readyz",status="503"} 1.0
+rahbar_requests_total{path="/metrics",status="200"} 1.0
+rahbar_requests_total{path="unmatched",status="404"} 1.0
+rahbar_requests_total{path="unmatched",status="200"} 1.0
+rahbar_requests_total{path="/api/ask",status="200"} 1.0
+# HELP rahbar_requests_created HTTP requests
+# TYPE rahbar_requests_created gauge
+rahbar_requests_created{path="/healthz",status="200"} 1.7957406409426463e+09
+rahbar_requests_created{path="/readyz",status="200"} 1.7957406460654128e+09
+rahbar_requests_created{path="/readyz",status="503"} 1.7957416108921225e+09
+rahbar_requests_created{path="/metrics",status="200"} 1.7957417067835293e+09
+rahbar_requests_created{path="unmatched",status="404"} 1.795741713608214e+09
+rahbar_requests_created{path="unmatched",status="200"} 1.795741722397122e+09
+rahbar_requests_created{path="/api/ask",status="200"} 1.795741743615889e+09
+# HELP rahbar_request_seconds HTTP request latency
+# TYPE rahbar_request_seconds histogram
+rahbar_request_seconds_bucket{le="0.05",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="0.1",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="0.25",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="0.5",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="1.0",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="2.0",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="5.0",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="10.0",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="30.0",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="60.0",path="/healthz"} 115.0
+rahbar_request_seconds_bucket{le="+Inf",path="/healthz"} 115.0
+rahbar_request_seconds_count{path="/healthz"} 115.0
+rahbar_request_seconds_sum{path="/healthz"} 0.16555978202086408
+rahbar_request_seconds_bucket{le="0.05",path="/readyz"} 30.0
+rahbar_request_seconds_bucket{le="0.1",path="/readyz"} 219.0
+rahbar_request_seconds_bucket{le="0.25",path="/readyz"} 223.0
+rahbar_request_seconds_bucket{le="0.5",path="/readyz"} 223.0
+rahbar_request_seconds_bucket{le="1.0",path="/readyz"} 225.0
+rahbar_request_seconds_bucket{le="2.0",path="/readyz"} 225.0
+rahbar_request_seconds_bucket{le="5.0",path="/readyz"} 226.0
+rahbar_request_seconds_bucket{le="10.0",path="/readyz"} 226.0
+rahbar_request_seconds_bucket{le="30.0",path="/readyz"} 226.0
+rahbar_request_seconds_bucket{le="60.0",path="/readyz"} 226.0
+rahbar_request_seconds_bucket{le="+Inf",path="/readyz"} 226.0
+rahbar_request_seconds_count{path="/readyz"} 226.0
+rahbar_request_seconds_sum{path="/readyz"} 18.54027014497842
+rahbar_request_seconds_bucket{le="0.05",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="0.1",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="0.25",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="0.5",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="1.0",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="2.0",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="5.0",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="10.0",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="30.0",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="60.0",path="/metrics"} 1.0
+rahbar_request_seconds_bucket{le="+Inf",path="/metrics"} 1.0
+rahbar_request_seconds_count{path="/metrics"} 1.0
+rahbar_request_seconds_sum{path="/metrics"} 0.028288736997637898
+rahbar_request_seconds_bucket{le="0.05",path="unmatched"} 1.0
+rahbar_request_seconds_bucket{le="0.1",path="unmatched"} 1.0
+rahbar_request_seconds_bucket{le="0.25",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="0.5",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="1.0",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="2.0",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="5.0",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="10.0",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="30.0",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="60.0",path="unmatched"} 2.0
+rahbar_request_seconds_bucket{le="+Inf",path="unmatched"} 2.0
+rahbar_request_seconds_count{path="unmatched"} 2.0
+rahbar_request_seconds_sum{path="unmatched"} 0.11017479699512478
+rahbar_request_seconds_bucket{le="0.05",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="0.1",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="0.25",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="0.5",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="1.0",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="2.0",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="5.0",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="10.0",path="/api/ask"} 0.0
+rahbar_request_seconds_bucket{le="30.0",path="/api/ask"} 1.0
+rahbar_request_seconds_bucket{le="60.0",path="/api/ask"} 1.0
+rahbar_request_seconds_bucket{le="+Inf",path="/api/ask"} 1.0
+rahbar_request_seconds_count{path="/api/ask"} 1.0
+rahbar_request_seconds_sum{path="/api/ask"} 16.294198014998983
+# HELP rahbar_request_seconds_created HTTP request latency
+# TYPE rahbar_request_seconds_created gauge
+rahbar_request_seconds_created{path="/healthz"} 1.795740640942687e+09
+rahbar_request_seconds_created{path="/readyz"} 1.7957406460654433e+09
+rahbar_request_seconds_created{path="/metrics"} 1.7957417067837174e+09
+rahbar_request_seconds_created{path="unmatched"} 1.7957417136082509e+09
+rahbar_request_seconds_created{path="/api/ask"} 1.7957417436159277e+09
+# HELP rahbar_top1_similarity Similarity of the best retrieved candidate, before the relevance floor
+# TYPE rahbar_top1_similarity histogram
+rahbar_top1_similarity_bucket{le="0.1"} 0.0
+rahbar_top1_similarity_bucket{le="0.2"} 0.0
+rahbar_top1_similarity_bucket{le="0.3"} 0.0
+rahbar_top1_similarity_bucket{le="0.4"} 0.0
+rahbar_top1_similarity_bucket{le="0.45"} 0.0
+rahbar_top1_similarity_bucket{le="0.5"} 0.0
+rahbar_top1_similarity_bucket{le="0.55"} 0.0
+rahbar_top1_similarity_bucket{le="0.6"} 0.0
+rahbar_top1_similarity_bucket{le="0.65"} 0.0
+rahbar_top1_similarity_bucket{le="0.7"} 0.0
+rahbar_top1_similarity_bucket{le="0.75"} 1.0
+rahbar_top1_similarity_bucket{le="0.8"} 1.0
+rahbar_top1_similarity_bucket{le="0.85"} 1.0
+rahbar_top1_similarity_bucket{le="0.9"} 1.0
+rahbar_top1_similarity_bucket{le="0.95"} 1.0
+rahbar_top1_similarity_bucket{le="1.0"} 1.0
+rahbar_top1_similarity_bucket{le="+Inf"} 1.0
+rahbar_top1_similarity_count 1.0
+rahbar_top1_similarity_sum 0.73654407
+# HELP rahbar_top1_similarity_created Similarity of the best retrieved candidate, before the relevance floor
+# TYPE rahbar_top1_similarity_created gauge
+rahbar_top1_similarity_created 1.7957406369675255e+09
+# HELP rahbar_abstentions_total Queries answered with answered_from_context=false, by reason
+# TYPE rahbar_abstentions_total counter
+rahbar_abstentions_total{reason="no_passage_above_floor"} 0.0
+rahbar_abstentions_total{reason="rail_dropped_all"} 0.0
+rahbar_abstentions_total{reason="model_declined"} 0.0
+# HELP rahbar_abstentions_created Queries answered with answered_from_context=false, by reason
+# TYPE rahbar_abstentions_created gauge
+rahbar_abstentions_created{reason="no_passage_above_floor"} 1.79574063696788e+09
+rahbar_abstentions_created{reason="rail_dropped_all"} 1.7957406369678948e+09
+rahbar_abstentions_created{reason="model_declined"} 1.795740636967904e+09
+# HELP rahbar_cache_requests_total Queries by cache outcome. Hit rate is hit / (hit + miss)
+# TYPE rahbar_cache_requests_total counter
+rahbar_cache_requests_total{status="hit"} 0.0
+rahbar_cache_requests_total{status="miss"} 1.0
+rahbar_cache_requests_total{status="bypass"} 0.0
+rahbar_cache_requests_total{status="disabled"} 0.0
+# HELP rahbar_cache_requests_created Queries by cache outcome. Hit rate is hit / (hit + miss)
+# TYPE rahbar_cache_requests_created gauge
+rahbar_cache_requests_created{status="hit"} 1.7957406369679127e+09
+rahbar_cache_requests_created{status="miss"} 1.7957406369679205e+09
+rahbar_cache_requests_created{status="bypass"} 1.7957406369679277e+09
+rahbar_cache_requests_created{status="disabled"} 1.7957406369679341e+09
+# HELP rahbar_stage_latency_seconds Time in one pipeline stage, observed only for queries in which that stage ran
+# TYPE rahbar_stage_latency_seconds histogram
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="cache"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="cache"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="cache"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="cache"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="cache"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="cache"} 1.0
+rahbar_stage_latency_seconds_count{stage="cache"} 1.0
+rahbar_stage_latency_seconds_sum{stage="cache"} 0.026403
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="embed"} 0.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="embed"} 1.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="embed"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="embed"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="embed"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="embed"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="embed"} 1.0
+rahbar_stage_latency_seconds_count{stage="embed"} 1.0
+rahbar_stage_latency_seconds_sum{stage="embed"} 8.005448
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="retrieve"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="retrieve"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="retrieve"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="retrieve"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_count{stage="retrieve"} 1.0
+rahbar_stage_latency_seconds_sum{stage="retrieve"} 0.047878
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="guardrail"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="guardrail"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_count{stage="guardrail"} 1.0
+rahbar_stage_latency_seconds_sum{stage="guardrail"} 0.005509
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="prompt"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="prompt"} 1.0
+rahbar_stage_latency_seconds_count{stage="prompt"} 1.0
+rahbar_stage_latency_seconds_sum{stage="prompt"} 0.004976
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="generate"} 0.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="generate"} 1.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="generate"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="generate"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="generate"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="generate"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="generate"} 1.0
+rahbar_stage_latency_seconds_count{stage="generate"} 1.0
+rahbar_stage_latency_seconds_sum{stage="generate"} 8.044444
+rahbar_stage_latency_seconds_bucket{le="0.001",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.005",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.01",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.025",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.05",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.1",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.25",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="0.5",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="1.0",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="2.5",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="5.0",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="10.0",stage="total"} 0.0
+rahbar_stage_latency_seconds_bucket{le="20.0",stage="total"} 1.0
+rahbar_stage_latency_seconds_bucket{le="30.0",stage="total"} 1.0
+rahbar_stage_latency_seconds_bucket{le="60.0",stage="total"} 1.0
+rahbar_stage_latency_seconds_bucket{le="120.0",stage="total"} 1.0
+rahbar_stage_latency_seconds_bucket{le="+Inf",stage="total"} 1.0
+rahbar_stage_latency_seconds_count{stage="total"} 1.0
+rahbar_stage_latency_seconds_sum{stage="total"} 16.259453999999998
+# HELP rahbar_stage_latency_seconds_created Time in one pipeline stage, observed only for queries in which that stage ran
+# TYPE rahbar_stage_latency_seconds_created gauge
+rahbar_stage_latency_seconds_created{stage="cache"} 1.7957406369679475e+09
+rahbar_stage_latency_seconds_created{stage="embed"} 1.7957406369679909e+09
+rahbar_stage_latency_seconds_created{stage="retrieve"} 1.7957406369680243e+09
+rahbar_stage_latency_seconds_created{stage="guardrail"} 1.795740636968056e+09
+rahbar_stage_latency_seconds_created{stage="prompt"} 1.7957406369680874e+09
+rahbar_stage_latency_seconds_created{stage="generate"} 1.79574063696813e+09
+rahbar_stage_latency_seconds_created{stage="total"} 1.7957406369681609e+09
+# HELP rahbar_injection_flagged_total Chunks (retrieval rail) or questions (input rail) flagged as instruction-like
+# TYPE rahbar_injection_flagged_total counter
+rahbar_injection_flagged_total{action="redact_span",rail="retrieval.injection"} 0.0
+rahbar_injection_flagged_total{action="drop_chunk",rail="retrieval.injection"} 0.0
+rahbar_injection_flagged_total{action="flag",rail="input.injection"} 0.0
+# HELP rahbar_injection_flagged_created Chunks (retrieval rail) or questions (input rail) flagged as instruction-like
+# TYPE rahbar_injection_flagged_created gauge
+rahbar_injection_flagged_created{action="redact_span",rail="retrieval.injection"} 1.7957406369681935e+09
+rahbar_injection_flagged_created{action="drop_chunk",rail="retrieval.injection"} 1.7957406369682014e+09
+rahbar_injection_flagged_created{action="flag",rail="input.injection"} 1.7957406369682097e+09
+
