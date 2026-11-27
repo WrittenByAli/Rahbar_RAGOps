@@ -1,0 +1,57 @@
+{
+  "run_id": "20261126T213304Z-493ac",
+  "started_at": "2026-11-26T21:33:04.493Z",
+  "collections": [
+    "rahbar_v1"
+  ],
+  "counted_by": "chunks in these collections with the file's doc_id and content_sha256",
+  "documents": [
+    {
+      "file": "academic-regulations-booklet.pdf",
+      "reason": "uniqueness: exact copy of prospectus-academic-rules 2026 (prospectus-2026-academic-rules-and-regulations.pdf): same text after extraction and cleaning",
+      "in_quarantine": true,
+      "indexed_chunks": 0,
+      "doc_id": "academic-regulations-booklet",
+      "content_sha256": "efc25889d7aeeeaaf289c0f76dc9a316870f2de76382adf2d02850c8028f7f68",
+      "run_id": "20261126T213304Z-493ac"
+    },
+    {
+      "file": "academic-rules-handbook-revised.pdf",
+      "reason": "quality: extraction failed: PdfminerException: Unexpected EOF; completeness: missing: page count (the file could not be read); truncated or incomplete: no %%EOF marker at the end of the PDF; fails strict PDF parsing (PdfReadError: EOF marker not found); uniqueness: cannot compare the text: no extracted text (the raw bytes match no other document)",
+      "in_quarantine": true,
+      "indexed_chunks": 0,
+      "doc_id": "ug-academic-rules",
+      "content_sha256": "",
+      "run_id": "20261126T213304Z-493ac"
+    },
+    {
+      "file": "annual-report-2020-21.pdf",
+      "reason": "uniqueness: exact copy of annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): same raw bytes",
+      "in_quarantine": true,
+      "indexed_chunks": 0,
+      "doc_id": "annual-report-2020-21",
+      "content_sha256": "006ec990fdc1205f0b08ada757057094d4762fb6273ca729af4b17eadc7b5348",
+      "run_id": "20261126T213304Z-493ac"
+    },
+    {
+      "file": "grading-guide-for-students.html",
+      "reason": "uniqueness: near-duplicate of grading 2026 (grading-page.html): 95% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+      "in_quarantine": true,
+      "indexed_chunks": 0,
+      "doc_id": "student-grading-guide",
+      "content_sha256": "5e1934faa5ae781a5cec6687188f441626ba98fdf586ca743d3eafba3c1d7a0e",
+      "run_id": "20261126T213304Z-493ac"
+    },
+    {
+      "file": "notice-copy.md",
+      "reason": "completeness: missing: source, title, doc_version; recency: cannot compare: no usable doc_version ('')",
+      "in_quarantine": true,
+      "indexed_chunks": 0,
+      "doc_id": "notice-copy-b8cc4fe0",
+      "content_sha256": "0cfdfb7d511aa17f7c2cdc392606930b75b7e24750197010bb622941684d1a5a",
+      "run_id": "20261126T213304Z-493ac"
+    }
+  ],
+  "already_indexed": [],
+  "resolved": []
+}

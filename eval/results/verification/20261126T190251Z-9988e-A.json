@@ -1,0 +1,341 @@
+{
+  "run_id": "20261126T190251Z-9988e",
+  "started_at": "2026-11-26T19:02:51.998Z",
+  "batch": "A",
+  "verify_embed_model": "nomic-embed-text",
+  "verification_embedding_calls": 8,
+  "documents": [
+    {
+      "file": "annual-report-2019-20.pdf",
+      "batch": "A",
+      "doc_id": "annual-report-2019-20",
+      "doc_version": "2019-20",
+      "title": "Annual Report 2019-20",
+      "source": "https://nu.edu.pk/public/downloads/AnnualReportForm/Annual%20Report%202019-20.pdf",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "4d1961e340b13273bb039805ab5fd5e2c7bd0144a5bd5870f2ce4da13becd650",
+      "content_sha256": "006ec990fdc1205f0b08ada757057094d4762fb6273ca729af4b17eadc7b5348",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1273 characters per page, 96% word-like tokens, 0 of 33 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (33) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of annual-report-2019-20 in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "no other document in the data lake to compare with",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "annual-report-2023-24.pdf",
+      "batch": "A",
+      "doc_id": "annual-report-2023-24",
+      "doc_version": "2023-24",
+      "title": "Annual Report 2023-24",
+      "source": "https://nu.edu.pk/public/downloads/AnnualReportForm/Annual%20Report%202023-24.pdf",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "3c9d89e84af24df4b939f10e32c620a3877b276acea1db52f1aae4098e5c057a",
+      "content_sha256": "1c3cf5c62f51567fc94b8efd175fa7f7b8071dfd458455bfb8a596b9baff6cd9",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1976 characters per page, 98% word-like tokens, 0 of 85 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (85) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of annual-report-2023-24 in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 13% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.1334
+        }
+      }
+    },
+    {
+      "file": "faculty-entrepreneurship-and-technical-start-ups-policy.pdf",
+      "batch": "A",
+      "doc_id": "faculty-entrepreneurship-policy",
+      "doc_version": "2022-05",
+      "title": "Faculty Entrepreneurship and Technical Start-ups Policy",
+      "source": "https://nu.edu.pk/OricResources/ResearchPolicies/27.pdf?20220530",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "c2d5c7648d1593daf34d5c0596ede476e8984b0551830cc1690017e6e22f1359",
+      "content_sha256": "00a37635a41c408a3d3bf2e9cafd9c3aa2c9c634a9c60290878538d4a0ee2048",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1240 characters per page, 99% word-like tokens, 0 of 8 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (8) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of faculty-entrepreneurship-policy in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "fee-structure-page.html",
+      "batch": "A",
+      "doc_id": "fee-structure",
+      "doc_version": "2026-27",
+      "title": "Fee Structure page",
+      "source": "https://www.nu.edu.pk/Admissions/FeeStructure",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "ec8872ae77cac7e96e20e6979933f36b00aaeb0ab3f668a2116e521c655e7b90",
+      "content_sha256": "bd33dd2502454c741221f73cb90738c6f92d475d1840fff6f94c9317030b0456",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "5795 characters per page, 97% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of fee-structure in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "grading-page.html",
+      "batch": "A",
+      "doc_id": "grading",
+      "doc_version": "2026",
+      "title": "Grading page",
+      "source": "https://www.nu.edu.pk/Student/Grading",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "66a995b4d8474e914d37bfa14755a5361f47327d5a7314f9b7ec15d9b6176e6e",
+      "content_sha256": "5443d19b5d1dd885cec14df03a350d8cdedb56df47c4fd8b6c7f50d05f4a0aa4",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "6555 characters per page, 96% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of grading in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is fee-structure 2026-27 (fee-structure-page.html): 29% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.2857
+        }
+      }
+    },
+    {
+      "file": "prospectus-2026-academic-rules-and-regulations.pdf",
+      "batch": "A",
+      "doc_id": "prospectus-academic-rules",
+      "doc_version": "2026",
+      "title": "Prospectus 2026 - Academic Rules and Regulations",
+      "source": "https://nu.edu.pk/Admissions/ProspectusUpload/Academic%20Rules%20and%20Regulations.pdf",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "a7e7f6896a59eb9413c9e8826e6c4c018ebe52045d10cebfcba92ded10a3174a",
+      "content_sha256": "efc25889d7aeeeaaf289c0f76dc9a316870f2de76382adf2d02850c8028f7f68",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "3491 characters per page, 100% word-like tokens, 0 of 5 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (5) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of prospectus-academic-rules in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "student-handbook-jun-2026.pdf",
+      "batch": "A",
+      "doc_id": "student-handbook",
+      "doc_version": "2026-06",
+      "title": "Student Handbook (Jun 2026)",
+      "source": "https://nu.edu.pk/public/downloads/Student_Handbook_2026.pdf",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "717eb4b8d37e50185ffe952735c08ef19edd16074d547f10ebd22cf23da67c4d",
+      "content_sha256": "62bc82851ccd312491e6ebe6107f03b06b82c24738b920263b3389512f5a76c1",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "977 characters per page, 98% word-like tokens, 2 of 64 pages without text; OCR returned nothing on 2 page(s)"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (64) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of student-handbook in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2023-24 2023-24 (annual-report-2023-24.pdf): 1% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0143
+        }
+      }
+    },
+    {
+      "file": "undergraduate-academic-rules-aug-2023.pdf",
+      "batch": "A",
+      "doc_id": "ug-academic-rules",
+      "doc_version": "2023-08",
+      "title": "Undergraduate Academic Rules (Aug 2023)",
+      "source": "http://nu.edu.pk/public/downloads/Academic-Rules-Undergrad-Aug-2023.pdf",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "cddfe1f5e9770132e27d686abd1c2e6742ef4732f0c2f431ed514bc1691d2004",
+      "content_sha256": "7d555857352c5f0582e2415c127bcae2d8fccf7e4a2525d0eb2f375a30cb8d7f",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1024 characters per page, 99% word-like tokens, 1 of 26 pages without text; OCR returned nothing on 1 page(s)"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (26) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of ug-academic-rules in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is grading 2026 (grading-page.html): 3% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0309
+        }
+      }
+    },
+    {
+      "file": "academic-rules-handbook-jun-2026.pdf",
+      "batch": "A",
+      "doc_id": "ug-academic-rules",
+      "doc_version": "2026-06",
+      "title": "Academic Rules Handbook (Jun 2026)",
+      "source": "https://nu.edu.pk/public/downloads/Academic_Rules_Handbook_2026.pdf",
+      "decision": "accepted",
+      "action": "newer",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "4cfee3e191b84aeb9168f17656c7642212ff52b90f2780d028b33c154aa74b62",
+      "content_sha256": "6777adbbaf059a150c5dca7c4f029347ee0497fdfb7b35e9dfc29d9c749fcf2d",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "924 characters per page, 99% word-like tokens, 4 of 58 pages without text; OCR returned nothing on 3 page(s)"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (58) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "newer than the active version 2023-08, which will be archived as superseded"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "same document family as a version in the data lake: no near-duplicate test, because a new version is expected to resemble the old one"
+        }
+      }
+    }
+  ]
+}

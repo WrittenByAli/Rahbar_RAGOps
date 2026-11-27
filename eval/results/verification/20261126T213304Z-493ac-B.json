@@ -1,0 +1,448 @@
+{
+  "run_id": "20261126T213304Z-493ac",
+  "started_at": "2026-11-26T21:33:04.493Z",
+  "batch": "B",
+  "verify_embed_model": "nomic-embed-text",
+  "verification_embedding_calls": 10,
+  "documents": [
+    {
+      "file": "academic-regulations-booklet.pdf",
+      "batch": "B",
+      "doc_id": "academic-regulations-booklet",
+      "doc_version": "2026-08",
+      "title": "Academic Regulations Booklet",
+      "source": "Batch B coursework test data",
+      "decision": "quarantined",
+      "action": "",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "d71904be9608d20d01ccb3800854d217f7f8ccbc5d56589af3c7501a0548298e",
+      "content_sha256": "efc25889d7aeeeaaf289c0f76dc9a316870f2de76382adf2d02850c8028f7f68",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "3491 characters per page, 100% word-like tokens, 0 of 5 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (5) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of academic-regulations-booklet in the data lake"
+        },
+        "uniqueness": {
+          "status": "fail",
+          "reason": "exact copy of prospectus-academic-rules 2026 (prospectus-2026-academic-rules-and-regulations.pdf): same text after extraction and cleaning",
+          "score": 1.0
+        }
+      }
+    },
+    {
+      "file": "annual-report-2020-21.pdf",
+      "batch": "B",
+      "doc_id": "annual-report-2020-21",
+      "doc_version": "2020-21",
+      "title": "Annual Report 2020-21",
+      "source": "Batch B coursework test data",
+      "decision": "quarantined",
+      "action": "",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "4d1961e340b13273bb039805ab5fd5e2c7bd0144a5bd5870f2ce4da13becd650",
+      "content_sha256": "006ec990fdc1205f0b08ada757057094d4762fb6273ca729af4b17eadc7b5348",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1273 characters per page, 96% word-like tokens, 0 of 33 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (33) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of annual-report-2020-21 in the data lake"
+        },
+        "uniqueness": {
+          "status": "fail",
+          "reason": "exact copy of annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): same raw bytes",
+          "score": 1.0
+        }
+      }
+    },
+    {
+      "file": "fee-structure-2027-28.html",
+      "batch": "B",
+      "doc_id": "fee-structure",
+      "doc_version": "2027-28",
+      "title": "Fee Structure 2027-28",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "newer",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "1d338c0b05605a58dcd4bc02d63080e3391e3adc95f4c3d5f06005644e1548a8",
+      "content_sha256": "0245cef6dd645d0529ed1bd99c609c3d79ddcfaf27d3428be8515f79decb6be4",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "5882 characters per page, 97% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "newer than the active version 2026-27, which will be archived as superseded"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "same document family as a version in the data lake: no near-duplicate test, because a new version is expected to resemble the old one"
+        }
+      }
+    },
+    {
+      "file": "industrial-internship-guidelines.md",
+      "batch": "B",
+      "doc_id": "industrial-internship-guidelines",
+      "doc_version": "2026-08",
+      "title": "Industrial Internship Guidelines for Undergraduate Students",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "front_matter",
+        "title": "front_matter",
+        "source": "front_matter",
+        "doc_version": "front_matter"
+      },
+      "raw_sha256": "4fffeedeee4e077653ffbffa8450e9a3bb5cc0934791621296dd515154f55b3f",
+      "content_sha256": "4345db24cc79c6df7e25636917479c9721abf85a12444164d1e7836d828fb71f",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1924 characters per page, 98% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of industrial-internship-guidelines in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "makerspace-equipment-loans.html",
+      "batch": "B",
+      "doc_id": "makerspace-equipment-loan-rules",
+      "doc_version": "2026-09",
+      "title": "Makerspace Equipment Loan Rules",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "0b377f693a289c9e6073354e3223e4c56065f484e967a92601181781fddb0fb1",
+      "content_sha256": "bd24e7d6bb168d99fbdaf7921ef11e73052538f2a6aba47f9b384004b39e183d",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1684 characters per page, 97% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of makerspace-equipment-loan-rules in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "notice-copy.md",
+      "batch": "B",
+      "doc_id": "notice-copy-b8cc4fe0",
+      "doc_version": "",
+      "title": "",
+      "source": "",
+      "decision": "quarantined",
+      "action": "",
+      "metadata_source": {
+        "doc_id": "derived"
+      },
+      "raw_sha256": "b8cc4fe02acaa65cd0e7595c5fd31e300f963c03605788ce6eac2ad871edf40d",
+      "content_sha256": "0cfdfb7d511aa17f7c2cdc392606930b75b7e24750197010bb622941684d1a5a",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1177 characters per page, 100% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "fail",
+          "reason": "missing: source, title, doc_version"
+        },
+        "recency": {
+          "status": "fail",
+          "reason": "cannot compare: no usable doc_version ('')"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "how-your-grades-work.md",
+      "batch": "B",
+      "doc_id": "plain-language-grades-guide",
+      "doc_version": "2026-09",
+      "title": "How Your Grades Work: A Plain-Language Guide",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "c48beb423e2ec44c03e32f9b5d26fb7bc97854b43fa1af07b5643f7e30632294",
+      "content_sha256": "666575d0c3b5239f15d90262423df5c65c2c7ed6345d4db672d259c44668df4d",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "3135 characters per page, 99% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of plain-language-grades-guide in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "student-cloud-credits.md",
+      "batch": "B",
+      "doc_id": "student-cloud-credits",
+      "doc_version": "2026-10",
+      "title": "Cloud Computing Credits for Student Projects",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "173b82001a56ffbcaa36bea89e47034d041c3a14e8a32fe060b3b88c89158ac5",
+      "content_sha256": "4739e206ca1b41f2ae9a43b5a200b140d915efaf5dc8f40f7dbbc484176345be",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1746 characters per page, 97% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of student-cloud-credits in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "grading-guide-for-students.html",
+      "batch": "B",
+      "doc_id": "student-grading-guide",
+      "doc_version": "2026-09",
+      "title": "Grading Guide for Students",
+      "source": "Batch B coursework test data",
+      "decision": "quarantined",
+      "action": "",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "69744ea678df827aff385be3d7c5813300bb280a40871674943afcc4b49e89f2",
+      "content_sha256": "5e1934faa5ae781a5cec6687188f441626ba98fdf586ca743d3eafba3c1d7a0e",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "6621 characters per page, 96% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of student-grading-guide in the data lake"
+        },
+        "uniqueness": {
+          "status": "fail",
+          "reason": "near-duplicate of grading 2026 (grading-page.html): 95% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.9545
+        }
+      }
+    },
+    {
+      "file": "id-card-replacement-procedure.md",
+      "batch": "B",
+      "doc_id": "student-id-card-replacement",
+      "doc_version": "2026-09",
+      "title": "Student Identity Card Replacement Procedure",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "1b9432a8a94c368f3fca2f429c3f681e1292bfa0339cc7ae421feef4ac46f59f",
+      "content_sha256": "3af142844779b9e08b49b59955f81ea25ced4601e4f63f6c71d55e6868ec3872",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1642 characters per page, 97% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of student-id-card-replacement in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "student-locker-allocation.md",
+      "batch": "B",
+      "doc_id": "student-locker-allocation",
+      "doc_version": "2026-07",
+      "title": "Student Locker Allocation Procedure",
+      "source": "Batch B coursework test data",
+      "decision": "accepted",
+      "action": "new",
+      "metadata_source": {
+        "doc_id": "front_matter",
+        "title": "front_matter",
+        "source": "front_matter",
+        "doc_version": "front_matter"
+      },
+      "raw_sha256": "7aa42c3f8319cc964e5d523774e5357c6ecf26549628b84b7bf74db9b0a47f23",
+      "content_sha256": "5a577342ae3018e556ca0cc5971bd5adff68ae9b5d43888e48522b8379f8abc8",
+      "checks": {
+        "quality": {
+          "status": "pass",
+          "reason": "1367 characters per page, 98% word-like tokens, 0 of 1 pages without text"
+        },
+        "completeness": {
+          "status": "pass",
+          "reason": "source, title, doc_version and page count (1) present; no sign of truncation"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "first version of student-locker-allocation in the data lake"
+        },
+        "uniqueness": {
+          "status": "pass",
+          "reason": "closest other document is annual-report-2019-20 2019-20 (annual-report-2019-20.pdf): 0% of its text windows have a match at cosine 0.9 or higher (near-duplicate from 70%)",
+          "score": 0.0
+        }
+      }
+    },
+    {
+      "file": "academic-rules-handbook-revised.pdf",
+      "batch": "B",
+      "doc_id": "ug-academic-rules",
+      "doc_version": "2026-11",
+      "title": "Academic Rules Handbook (Revised November 2026)",
+      "source": "Batch B coursework test data",
+      "decision": "quarantined",
+      "action": "",
+      "metadata_source": {
+        "doc_id": "sidecar",
+        "title": "sidecar",
+        "source": "sidecar",
+        "doc_version": "sidecar"
+      },
+      "raw_sha256": "95ca874986aaa098909ffedd78585de890a315f8bfdde93b4dfa1d332752a931",
+      "content_sha256": "",
+      "checks": {
+        "quality": {
+          "status": "fail",
+          "reason": "extraction failed: PdfminerException: Unexpected EOF"
+        },
+        "completeness": {
+          "status": "fail",
+          "reason": "missing: page count (the file could not be read); truncated or incomplete: no %%EOF marker at the end of the PDF; fails strict PDF parsing (PdfReadError: EOF marker not found)"
+        },
+        "recency": {
+          "status": "pass",
+          "reason": "newer than the active version 2026-06, which will be archived as superseded"
+        },
+        "uniqueness": {
+          "status": "fail",
+          "reason": "cannot compare the text: no extracted text (the raw bytes match no other document)"
+        }
+      }
+    }
+  ]
+}

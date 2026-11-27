@@ -1,0 +1,24 @@
+{
+  "run_id": "20261126T190251Z-9988e",
+  "started_at": "2026-11-26T19:06:44.168Z",
+  "collection": "rahbar_v1",
+  "lake_state_id": "2c5e752d37c4cfadb9061a15b83698da5844989904745683e928bbbe0f3ae913",
+  "batch": "A",
+  "embed_model": "nomic-embed-text",
+  "chunk_size": 400,
+  "chunk_overlap": 50,
+  "counts": {
+    "documents_scanned": 9,
+    "documents_new": 9,
+    "documents_changed": 0,
+    "documents_unchanged": 0,
+    "documents_deleted": 0,
+    "documents_superseded": 1,
+    "chunks_embedded": 412,
+    "chunks_upserted": 412,
+    "chunks_deleted": 0,
+    "orphan_chunks": 0,
+    "documents_quarantined": 0,
+    "verification_embedding_calls": 8
+  }
+}

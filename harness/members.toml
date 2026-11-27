@@ -4,11 +4,11 @@
 # and keeps them stable. Assignment 02 history shows several identities for two people.
 
 [members.M1]
-name = ""
-roll_no = ""
-git_emails = []
+name = "Ali"
+roll_no = "24I-3158"
+git_emails = ["programmerbusiness2@gmail.com", "136846620+WrittenByAli@users.noreply.github.com"]
 
 [members.M2]
-name = ""
-roll_no = ""
-git_emails = []
+name = "Shahzad Ahmad"
+roll_no = "24I-3090"
+git_emails = ["shahzad.tech.v@gmail.com", "codewithshahzad2@gmail.com"]
