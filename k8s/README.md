@@ -179,6 +179,9 @@ kubectl cp -n rahbar-a3 -c shell \
     datalake-shell:/data/lake/reports/ ./tmp-reports/
 python eval/prove_ingest.py --src ./tmp-reports
 
+# Copy the traces off the traces PVC, one file per API pod, into the local traces/:
+kubectl cp -n rahbar-a3 -c shell datalake-shell:/data/traces ./traces
+
 # Assemble the rollout-undo proof (after capturing three traces: before, released, after):
 python eval/prove_release.py \
     --before   <TRACE_ID_BEFORE_ROLLOUT> \
@@ -186,7 +189,20 @@ python eval/prove_release.py \
     --after    <TRACE_ID_AFTER_UNDO>
 ```
 
-Both scripts validate the proof shape against the harness contract before writing.
+Copy the traces **after** the undo, so all three are on the PVC in one go. A replaced pod starts a
+new trace file and the old files stay, so the before-rollout trace survives the rollout.
+
+To get the three trace ids, ask one question at each stage — before the rolling update, while the
+candidate is live, after `kubectl rollout undo` — and take `trace_id` from each answer:
+`/api/ask` returns it in the response body. Read any of them back in full with
+
+```bash
+python eval/trace_tool.py --traces traces/ <TRACE_ID>
+```
+
+Both scripts validate the proof shape before writing, with the same rules as `harness/checks.py`:
+after the undo, the collection, embedding model and embedding version must all match the ones from
+before it, and the candidate must have used a different collection.
 
 ## Notes
 
