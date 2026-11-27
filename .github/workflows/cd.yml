@@ -54,25 +54,28 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push images
+        env:
+          REGISTRY: ghcr.io/${{ github.repository_owner }}
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-api:${{ github.sha }} -f api/Dockerfile api/
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:${{ github.sha }} -f indexer/Dockerfile indexer/
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-ui:${{ github.sha }} ui/
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-api:latest
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:latest
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-ui:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-ui:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-api:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-api:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-ui:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rahbar-ui:latest
+          docker build -t $REGISTRY/rahbar-api:${{ github.sha }} -f api/Dockerfile api/
+          docker build -t $REGISTRY/rahbar-indexer:${{ github.sha }} -f indexer/Dockerfile indexer/
+          docker build -t $REGISTRY/rahbar-ui:${{ github.sha }} ui/
+          docker tag $REGISTRY/rahbar-api:${{ github.sha }} $REGISTRY/rahbar-api:latest
+          docker tag $REGISTRY/rahbar-indexer:${{ github.sha }} $REGISTRY/rahbar-indexer:latest
+          docker tag $REGISTRY/rahbar-ui:${{ github.sha }} $REGISTRY/rahbar-ui:latest
+          docker push $REGISTRY/rahbar-api:${{ github.sha }}
+          docker push $REGISTRY/rahbar-api:latest
+          docker push $REGISTRY/rahbar-indexer:${{ github.sha }}
+          docker push $REGISTRY/rahbar-indexer:latest
+          docker push $REGISTRY/rahbar-ui:${{ github.sha }}
+          docker push $REGISTRY/rahbar-ui:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -92,11 +95,13 @@ jobs:
         with:
           cluster_name: kind
       - name: Deploy the published images to kind
+        env:
+          REGISTRY: ghcr.io/${{ github.repository_owner }}
         run: |
           kubectl kustomize k8s/overlays/prod/ | sed \
-            "s|rahbar-api:dev|${{ secrets.DOCKERHUB_USERNAME }}/rahbar-api:${{ github.sha }}|g; \
-             s|rahbar-indexer:dev|${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:${{ github.sha }}|g; \
-             s|rahbar-ui:dev|${{ secrets.DOCKERHUB_USERNAME }}/rahbar-ui:${{ github.sha }}|g" \
+            "s|rahbar-api:dev|$REGISTRY/rahbar-api:${{ github.sha }}|g; \
+             s|rahbar-indexer:dev|$REGISTRY/rahbar-indexer:${{ github.sha }}|g; \
+             s|rahbar-ui:dev|$REGISTRY/rahbar-ui:${{ github.sha }}|g" \
             | kubectl apply -f -
           kubectl create secret generic rahbar-secret -n rahbar --from-literal=LLM_API_KEY=unused --dry-run=client -o yaml | kubectl apply -f -
           # 3 api replicas + chroma + redis starve a single shared runner node, so run
@@ -123,7 +128,7 @@ jobs:
           # and the HPA removed above.
           kubectl kustomize k8s/overlays/prod/ \
             | yq 'select(.kind == "Job")' \
-            | sed "s|rahbar-indexer:dev|${{ secrets.DOCKERHUB_USERNAME }}/rahbar-indexer:${{ github.sha }}|g" \
+            | sed "s|rahbar-indexer:dev|ghcr.io/${{ github.repository_owner }}/rahbar-indexer:${{ github.sha }}|g" \
             | kubectl apply -f -
           if ! kubectl wait --for=condition=complete job/indexer-initial -n rahbar --timeout=120s; then
             echo "::group::Diagnostics: indexer-initial did not complete"
