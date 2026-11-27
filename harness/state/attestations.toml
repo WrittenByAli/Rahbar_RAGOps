@@ -58,7 +58,7 @@ date = "2026-11-27"
 note = "8 hand labels in judge_labels.jsonl; agreement rate 62.5% in judge_agreement results."
 
 [attest."C2.1"]
-by = ["M2"]
+by = ["M1", "M2"]
 date = "2026-11-27"
 note = "Thresholds justified in k8s/gate-thresholds.yaml from S0 baseline runs; committed before candidate."
 
